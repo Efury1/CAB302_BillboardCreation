@@ -39,45 +39,69 @@ public class GUI  {
 
         //Creating the panel at bottom and adding components
         JPanel panel = new JPanel(); // the panel is not visible in output
-        //Text box
-        JLabel label1 = new JLabel("Enter Text");
+        JLabel label = new JLabel("Enter Text");
         JTextField tf = new JTextField(10); // accepts upto 10 characters
-        JButton submit = new JButton("Submit");
+        JButton send = new JButton("Send");
         JButton clear = new JButton("Clear");
         /*Color button */
         JButton color = new JButton("Color");
-        panel.add(label1); // Components Added using Flow Layout
+        panel.add(label); // Components Added using Flow Layout
         panel.add(tf);
-        panel.add(submit);
+        panel.add(send);
         panel.add(clear);
         panel.add(color);
+        //Do I do something like: color.addActionListener(this);
+
+
+
+
+        /*Implementation for color button */
 
 
         // Text Area at the Center
-        JTextArea ta = new JTextArea();
+        //JTextArea ta = new JTextArea();
 
-        //add action listener to button
-        //submit.addActionListener();
+        int FRAME_WIDTH = 2000;
 
+        String message = "Welcome to today's fundraiser!";
+        String info = "Please take your seats in the ballroom. Seats are assigned, so please make use of the seating plan";
+
+        JLabel LTitle = new JLabel(message, JLabel.CENTER);
+        JLabel LInfo = new JLabel(info, JLabel.CENTER);
+
+        frame.add(LTitle);
+        frame.pack();
+        frame.setSize(FRAME_WIDTH, 700);
+
+        Dimension dim = frame.getSize();
+        int x = dim.width;
+        //int x = 1000;
+        int y = dim.height;
+
+        LTitle.setSize(x, y);
+        Font TitleFont = LTitle.getFont();
+        int size = TitleFont.getSize();
+        int width = LTitle.getFontMetrics(TitleFont).stringWidth(message);
+        System.out.println("Width :" + width);
+        System.out.println("x :" + x);
+
+        while(width<x-10){
+            size++;
+            LTitle.setFont(new Font("Serif", Font.PLAIN, size));
+            width = LTitle.getFontMetrics(LTitle.getFont()).stringWidth(message);
+            System.out.println("Width :" + width);
+        }
+
+        //set font back to smaller to not overflowing
+        LTitle.setFont(new Font("Serif", Font.PLAIN, size-2));
+        width = LTitle.getFontMetrics(LTitle.getFont()).stringWidth(message);
+        System.out.println("Width :" + width);
 
         //Adding Components to the frame.
         frame.getContentPane().add(BorderLayout.SOUTH, panel);
         frame.getContentPane().add(BorderLayout.NORTH, mb);
-        //Centre
-        frame.getContentPane().add(BorderLayout.CENTER, ta);
+        //frame.getContentPane().add(BorderLayout.CENTER, ta);
         frame.setVisible(true);
-
-
-
-    }
-
-    public void actionPerformed(ActionEvent e)
-    {
-        String s = e.getActionCommand();
-        if (s.equals("submit")){
-            //setting text of label to text of the field
-            l.setText(ta.getText());
-        }
     }
 
 
