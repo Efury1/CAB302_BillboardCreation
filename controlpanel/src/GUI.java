@@ -39,33 +39,45 @@ public class GUI  {
 
         //Creating the panel at bottom and adding components
         JPanel panel = new JPanel(); // the panel is not visible in output
-        JLabel label = new JLabel("Enter Text");
+        //Text box
+        JLabel label1 = new JLabel("Enter Text");
         JTextField tf = new JTextField(10); // accepts upto 10 characters
-        JButton send = new JButton("Send");
+        JButton submit = new JButton("Submit");
         JButton clear = new JButton("Clear");
         /*Color button */
         JButton color = new JButton("Color");
-        panel.add(label); // Components Added using Flow Layout
+        panel.add(label1); // Components Added using Flow Layout
         panel.add(tf);
-        panel.add(send);
+        panel.add(submit);
         panel.add(clear);
         panel.add(color);
-        //Do I do something like: color.addActionListener(this);
-
-
-
-
-        /*Implementation for color button */
 
 
         // Text Area at the Center
         JTextArea ta = new JTextArea();
 
+        //add action listener to button
+        //submit.addActionListener();
+
+
         //Adding Components to the frame.
         frame.getContentPane().add(BorderLayout.SOUTH, panel);
         frame.getContentPane().add(BorderLayout.NORTH, mb);
+        //Centre
         frame.getContentPane().add(BorderLayout.CENTER, ta);
         frame.setVisible(true);
+
+
+
+    }
+
+    public void actionPerformed(ActionEvent e)
+    {
+        String s = e.getActionCommand();
+        if (s.equals("submit")){
+            //setting text of label to text of the field
+            l.setText(ta.getText());
+        }
     }
 
 
