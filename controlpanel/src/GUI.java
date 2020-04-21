@@ -59,12 +59,48 @@ public class GUI  {
 
 
         // Text Area at the Center
-        JTextArea ta = new JTextArea();
+        //JTextArea ta = new JTextArea();
+
+        int FRAME_WIDTH = 2000;
+
+        String message = "Welcome to today's fundraiser!";
+        String info = "Please take your seats in the ballroom. Seats are assigned, so please make use of the seating plan";
+
+        JLabel LTitle = new JLabel(message, JLabel.CENTER);
+        JLabel LInfo = new JLabel(info, JLabel.CENTER);
+
+        frame.add(LTitle);
+        frame.pack();
+        frame.setSize(FRAME_WIDTH, 700);
+
+        Dimension dim = frame.getSize();
+        int x = dim.width;
+        //int x = 1000;
+        int y = dim.height;
+
+        LTitle.setSize(x, y);
+        Font TitleFont = LTitle.getFont();
+        int size = TitleFont.getSize();
+        int width = LTitle.getFontMetrics(TitleFont).stringWidth(message);
+        System.out.println("Width :" + width);
+        System.out.println("x :" + x);
+
+        while(width<x-10){
+            size++;
+            LTitle.setFont(new Font("Serif", Font.PLAIN, size));
+            width = LTitle.getFontMetrics(LTitle.getFont()).stringWidth(message);
+            System.out.println("Width :" + width);
+        }
+
+        //set font back to smaller to not overflowing
+        LTitle.setFont(new Font("Serif", Font.PLAIN, size-2));
+        width = LTitle.getFontMetrics(LTitle.getFont()).stringWidth(message);
+        System.out.println("Width :" + width);
 
         //Adding Components to the frame.
         frame.getContentPane().add(BorderLayout.SOUTH, panel);
         frame.getContentPane().add(BorderLayout.NORTH, mb);
-        frame.getContentPane().add(BorderLayout.CENTER, ta);
+        //frame.getContentPane().add(BorderLayout.CENTER, ta);
         frame.setVisible(true);
     }
 
