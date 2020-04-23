@@ -41,27 +41,21 @@ public class GUI  {
         JPanel panel = new JPanel(); // the panel is not visible in output
         JLabel label = new JLabel("Enter Text");
         JTextField tf = new JTextField(10); // accepts upto 10 characters
-        JButton send = new JButton("Send");
-        JButton clear = new JButton("Clear");
+        JButton submit = new JButton("Submit");
         /*Color button */
         JButton color = new JButton("Color");
         panel.add(label); // Components Added using Flow Layout
         panel.add(tf);
-        panel.add(send);
-        panel.add(clear);
+        panel.add(submit);
         panel.add(color);
-        //Do I do something like: color.addActionListener(this);
 
-
-
-
-        /*Implementation for color button */
 
 
         // Text Area at the Center
         //JTextArea ta = new JTextArea();
+        //String message = "Welcome to today's fundraiser!";
 
-        int FRAME_WIDTH = 2000;
+        //int FRAME_WIDTH = 2000;
 
         String message = "Welcome to today's fundraiser!";
         String info = "Please take your seats in the ballroom. Seats are assigned, so please make use of the seating plan";
@@ -69,9 +63,9 @@ public class GUI  {
         JLabel LTitle = new JLabel(message, JLabel.CENTER);
         JLabel LInfo = new JLabel(info, JLabel.CENTER);
 
-        frame.add(LTitle);
-        frame.pack();
-        frame.setSize(FRAME_WIDTH, 700);
+        //frame.add(LTitle);
+        //frame.pack();
+        //frame.setSize(FRAME_WIDTH, 700);
 
         Dimension dim = frame.getSize();
         int x = dim.width;
@@ -100,10 +94,20 @@ public class GUI  {
         //Adding Components to the frame.
         frame.getContentPane().add(BorderLayout.SOUTH, panel);
         frame.getContentPane().add(BorderLayout.NORTH, mb);
+        frame.getContentPane().add(BorderLayout.CENTER, LInfo);
         //frame.getContentPane().add(BorderLayout.CENTER, ta);
         frame.setVisible(true);
-    }
 
+
+       //Class doesn't work
+       class ClickListener implements ActionListener{
+           public void actionPerformed(ActionEvent e)
+           {
+               if(e.getSource() == submit)
+                   submit.setText("ta");
+           }
+       }
+    }
 
 }
 
