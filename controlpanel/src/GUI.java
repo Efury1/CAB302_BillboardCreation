@@ -22,26 +22,27 @@ public class GUI  {
         //Creating the MenuBar and adding components
         /*Across tab */
         JMenuBar mb = new JMenuBar();
-        JMenu m1 = new JMenu("FILE");
-        JMenu m2 = new JMenu("Background");
-        JMenu m3 = new JMenu("Image upload");
-        JMenu m4 = new JMenu("Modify");
-        JMenu m5 = new JMenu("Delete");
+        JMenu m1 = new JMenu("File");
+        JMenu m2 = new JMenu("Edit");
+        JMenu m3 = new JMenu("View Billboards");
         /*Adding menu */
         mb.add(m1);
         mb.add(m2);
         mb.add(m3);
-        mb.add(m4);
-        mb.add(m5);
         /*Under file */
         JMenuItem m11 = new JMenuItem("Import");
         JMenuItem m22 = new JMenuItem("Export");
-        JMenuItem m33 = new JMenuItem("Billboards");
         JMenuItem m44 = new JMenuItem("Schedule and Save");
         m1.add(m11);
         m1.add(m22);
-        m1.add(m33);
         m1.add(m44);
+        /*Under edit */
+        JMenuItem menuBackground = new JMenuItem("Background");
+        JMenuItem menuImageLoad = new JMenuItem("Upload Image");
+        m2.add(menuBackground);
+        m2.add(menuImageLoad);
+
+
 
         JLabel resultLabel = new JLabel("--");
 
