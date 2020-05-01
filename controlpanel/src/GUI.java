@@ -17,6 +17,8 @@ public class GUI  {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(Width, Height);
 
+
+
         //Creating the MenuBar and adding components
         /*Across tab */
         JMenuBar mb = new JMenuBar();
@@ -41,6 +43,8 @@ public class GUI  {
         m1.add(m33);
         m1.add(m44);
 
+        JLabel resultLabel = new JLabel("--");
+
         //Creating the panel at bottom and adding components
         JPanel panel = new JPanel(); // the panel is not visible in output
         //Appears next to JTextField
@@ -60,7 +64,9 @@ public class GUI  {
         tf.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                System.out.println("The entered text is: " + tf.getText());
+                String text = tf.getText();
+                resultLabel.setText(text);
+                //System.out.println("The entered text is: " + tf.getText());
             }
         });
 
@@ -109,8 +115,8 @@ public class GUI  {
         //Adding Components to the frame.
         frame.getContentPane().add(BorderLayout.SOUTH, panel);
         frame.getContentPane().add(BorderLayout.NORTH, mb);
-        frame.getContentPane().add(BorderLayout.CENTER, LInfo);
-        //frame.getContentPane().add(BorderLayout.CENTER, ta);
+        //frame.getContentPane().add(BorderLayout.CENTER, LInfo);
+        frame.getContentPane().add(BorderLayout.CENTER, resultLabel);
         frame.setVisible(true);
 
 
