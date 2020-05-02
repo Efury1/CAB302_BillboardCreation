@@ -19,7 +19,7 @@ public class GUI {
 
         //Creating the MenuBar and adding components
         /*Across tab */
-        JMenu x = new JMenu("Background");
+        JMenu bkMenu = new JMenu("Background");
         JMenuBar mb = new JMenuBar();
         JMenu m1 = new JMenu("File");
         JMenu m2 = new JMenu("Edit");
@@ -32,18 +32,18 @@ public class GUI {
         JMenuItem m11 = new JMenuItem("Import");
         JMenuItem m22 = new JMenuItem("Export");
         JMenuItem m44 = new JMenuItem("Schedule and Save");
-        JMenuItem s2 = new JMenuItem("Pink");
-        //JMenuItem sub = new JMenuItem("Pink");
+        JMenuItem colorPink = new JMenuItem("Pink");
+
         m1.add(m11);
         m1.add(m22);
         m1.add(m44);
-        x.add(s2);
+        bkMenu.add(colorPink);
         /*Under edit */
         //JMenuItem menuBackground = new JMenuItem("Background");
         JMenuItem menuImageLoad = new JMenuItem("Upload Image");
         //m2.add(menuBackground);
         m2.add(menuImageLoad);
-        m2.add(x);
+        m2.add(bkMenu);
 
 
 
@@ -109,7 +109,7 @@ public class GUI {
 
         Dimension dim = frame.getSize();
         Width = dim.width;
-        //int x = 1000;
+        //int bkMenu = 1000;
         Height = dim.height;
 
         LTitle.setSize(Width, Height);
@@ -117,7 +117,7 @@ public class GUI {
         int size = TitleFont.getSize();
         int width = LTitle.getFontMetrics(TitleFont).stringWidth(message);
         System.out.println("Width :" + width);
-        System.out.println("x :" + Width);
+        System.out.println("bkMenu :" + Width);
 
         while (width < Width - 10) {
             size++;
