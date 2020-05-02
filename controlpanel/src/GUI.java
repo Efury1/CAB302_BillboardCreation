@@ -2,8 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class GUI  {
-
+public class GUI {
 
 
     //Usually you will require both swing and awt packages
@@ -16,7 +15,6 @@ public class GUI  {
         JFrame frame = new JFrame("Control Panel Review");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(Width, Height);
-
 
 
         //Creating the MenuBar and adding components
@@ -41,7 +39,6 @@ public class GUI  {
         JMenuItem menuImageLoad = new JMenuItem("Upload Image");
         m2.add(menuBackground);
         m2.add(menuImageLoad);
-
 
 
         JLabel resultLabel = new JLabel("--");
@@ -71,9 +68,24 @@ public class GUI  {
             }
         });
 
+        //public void ssWindow(){
 
-        // Text Area at the Center
-        //JTextArea ta = new JTextArea();
+            final boolean RESIZABLE = true;
+            final boolean CLOSABLE = true;
+            final boolean ICONIFIABLE = true;
+            final boolean MAXIMIZABLE = true;
+
+            JInternalFrame firstWindow = new JInternalFrame("schedule and save", RESIZABLE,
+                    CLOSABLE, MAXIMIZABLE, ICONIFIABLE);
+            firstWindow.setSize(100, 100);
+            firstWindow.setLocation(10, 10);
+            firstWindow.setVisible(true);
+            frame.add(firstWindow);
+
+        //}
+
+
+
         //String message = "Welcome to today's fundraiser!";
 
         //int FRAME_WIDTH = 2000;
@@ -101,7 +113,7 @@ public class GUI  {
         System.out.println("Width :" + width);
         System.out.println("x :" + Width);
 
-        while(width<Width-10){
+        while (width < Width - 10) {
             size++;
             LTitle.setFont(new Font("Serif", Font.PLAIN, size));
             width = LTitle.getFontMetrics(LTitle.getFont()).stringWidth(message);
@@ -109,7 +121,7 @@ public class GUI  {
         }
 
         //set font back to smaller to not overflowing
-        LTitle.setFont(new Font("Serif", Font.PLAIN, size-2));
+        LTitle.setFont(new Font("Serif", Font.PLAIN, size - 2));
         width = LTitle.getFontMetrics(LTitle.getFont()).stringWidth(message);
         System.out.println("Width :" + width);
 
@@ -120,9 +132,11 @@ public class GUI  {
         frame.getContentPane().add(BorderLayout.CENTER, resultLabel);
         frame.setVisible(true);
 
-
-
     }
 
-}
+    //ActionListener will call this class when Schedule and save button is clicked.
+    //Code works, just trying to implement, so it's its own class that can still get frame information
 
+
+
+}
