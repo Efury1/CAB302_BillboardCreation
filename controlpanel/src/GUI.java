@@ -3,12 +3,16 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class GUI {
-
-
-    //Usually you will require both swing and awt packages
-// even if you are working with just swings.
     public static void main(String args[]) {
+        new GUI();
+    }
 
+
+        //Usually you will require both swing and awt packages
+// even if you are working with just swings.
+
+    public GUI() {
+        //JPanel buttonPanel;
         //Creating the Frame
         int Width = 900;
         int Height = 700;
@@ -170,3 +174,4 @@ public class GUI {
             System.out.println("Success");
         }
         }
+
