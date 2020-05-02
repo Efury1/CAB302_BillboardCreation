@@ -35,6 +35,14 @@ public class GUI {
         JMenuItem colorYellow = new JMenuItem("Yellow");
         JMenuItem colorBlue = new JMenuItem("Blue");
         JMenuItem colorRed = new JMenuItem("Red");
+        //Button actions
+        var yellowAction = new ColorAction(Color.YELLOW);
+        var blueAction = new ColorAction(Color.BLUE);
+        var redAction = new ColorAction(Color.RED);
+        //Association
+        colorYellow.addActionListener(yellowAction);
+        colorBlue.addActionListener(blueAction);
+        colorRed.addActionListener(blueAction);
 
         m1.add(m11);
         m1.add(m22);
@@ -150,3 +158,15 @@ public class GUI {
 
 
 }
+
+
+    class ColorAction implements ActionListener{
+        private Color backgroundColor;
+        public ColorAction(Color c) {
+            backgroundColor = c;
+        }
+        public void actionPerformed(ActionEvent event) {
+            //buttonPanel.setBackground(backgroundColor);
+            System.out.println("Success");
+        }
+        }
