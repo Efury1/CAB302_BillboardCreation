@@ -32,12 +32,16 @@ public class GUI {
         JMenuItem m11 = new JMenuItem("Import");
         JMenuItem m22 = new JMenuItem("Export");
         JMenuItem m44 = new JMenuItem("Schedule and Save");
-        JMenuItem colorPink = new JMenuItem("Pink");
+        JMenuItem colorYellow = new JMenuItem("Yellow");
+        JMenuItem colorBlue = new JMenuItem("Blue");
+        JMenuItem colorRed = new JMenuItem("Red");
 
         m1.add(m11);
         m1.add(m22);
         m1.add(m44);
-        bkMenu.add(colorPink);
+        bkMenu.add(colorYellow);
+        bkMenu.add(colorBlue);
+        bkMenu.add(colorRed);
         /*Under edit */
         //JMenuItem menuBackground = new JMenuItem("Background");
         JMenuItem menuImageLoad = new JMenuItem("Upload Image");
