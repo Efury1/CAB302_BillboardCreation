@@ -1,81 +1,119 @@
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
 
-public class LogIn extends JFrame implements ActionListener {
+public class Login extends JFrame implements ActionListener {
 
-    Container container=getContentPane();
-    JLabel userLabel=new JLabel("Username");
-    JLabel passwordLabel=new JLabel("Password");
-    JTextField userTextField = new JTextField();
-    JPasswordField passwordField = new JPasswordField();
-    JButton loginButton = new JButton("Login");
-    JButton cancelButton =new JButton("Cancel");
+    private JTextField userTextField = new JTextField();
+    private JPasswordField passwordField = new JPasswordField();
 
+    Login() {
+        Container container = getContentPane();
+        JLabel userLabel = new JLabel("Username");
+        JLabel passLabel = new JLabel("Password");
 
-
-    LogIn()
-    {
-
-        userLabel = new JLabel();
-        userLabel.setText("Enter Username: ");
+        //  For Username
+        userLabel = new JLabel("Enter Username: ");
         userTextField = new JTextField(10);
-        passwordField = new JPasswordField();
-        //Message Label
-        //var message = new JLabel();
+
+        //  For the password
+        passLabel = new JLabel("Enter Password: ");
+        passwordField = new JPasswordField(10);
+
+        //  Login button
+        JButton loginButton = new JButton("Login");
+        loginButton.addActionListener(this);
+
+        //  Screen set up
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("User Login");
+        setVisible(true);
+        setSize(300, 200);
+        setResizable(true);
 
         //Panels
+        JPanel credentialsPanel = new JPanel(new GridLayout(4, 2));
+        credentialsPanel.add(userLabel);
+        credentialsPanel.add(userTextField);
+        credentialsPanel.add(passLabel);
+        credentialsPanel.add(passwordField);
 
-        var panel = new JPanel();
-        var logPanel = new JPanel();
-        panel.add(loginButton);
-        panel.add(cancelButton);
-        //panel.add(message);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(loginButton);
 
-        logPanel = new JPanel(new GridLayout(4, 2));
-        logPanel.add(userLabel);
-        logPanel.add(userTextField);
-        logPanel.add(passwordLabel);
-        logPanel.add(passwordField);
-        add(logPanel, BorderLayout.NORTH);
-        add(panel, BorderLayout.SOUTH);
-
-        loginButton.addActionListener(this);
-        cancelButton.addActionListener(this);
-
-
+        //  Adding Components to the frame.
+        add(credentialsPanel, BorderLayout.NORTH);
+        add(buttonPanel, BorderLayout.SOUTH);
     }
 
+    //  !! For Testing
+    public static void main(String[] args) throws SQLException {
+        Login yeehawWindow = new Login();
+    }
+
+    /**
+     * //  Code to connect to database
+     * @return
+     */
+    public Connection Connection()
+    {
+        Connection myConnection = DBConnection.getInstance();
+        return myConnection;
+    }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        String username = passwordField.getText();
-        String password = userTextField.getText();
-        if (username.trim().equals("admin") && password.trim().equals("admin")) {
-            System.out.println("successful");
-            //message.setText("Hello" + userTextField + "");
+    public void actionPerformed(ActionEvent e)
+    {
+        Object sauce = e.getSource();
+        //  !! make this better
+        JButton butin = (JButton) sauce;
+
+        String user = userTextField.getText().trim();
+        char[] pass = passwordField.getPassword();
+        try {
+            if( QueryLogin(user, pass))
+            {
+                //  !! Show and error message that the credentials couldn't be matched
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
-        else {
-            System.out.println("Unsuccessful");
-            //message.setText(InvalidUser);
-        }
-
-
-    }
-    public static void main(String[] a){
-        LogIn frame=new LogIn();
-        frame.setTitle("User Login");
-        frame.setVisible(true);
-        frame.setSize(300,200);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(true);
-
-
     }
 
+    public Boolean QueryLogin(String user, char[] pass) throws SQLException
+    {
+        Connection connection = Connection();
 
+        StringBuilder builder = new StringBuilder();
+        for(char s : pass)
+        {
+            builder.append(s);
+        }
 
+        //  Gets the username and password from the database to validate credentials
+        PreparedStatement myStatement = connection.prepareStatement("SELECT COUNT(username) FROM users WHERE username = ? AND password_hash = ?");
+        myStatement.setString(1, user);
+        myStatement.setString(2, builder.toString());
 
+        //  Assigns credentials to a comparable statement
+        ResultSet myResults = myStatement.executeQuery();
+        myResults.next();
+
+        //  Validate credentials
+        if(myResults.getInt(1) == 1)
+        {
+            //  !!
+            System.out.println("Login Successful! we're in");
+            return  true;
+        }
+        else
+        {
+            //  !!
+            System.out.println("Login Failed!");
+        }
+
+        return false;
+    }
 }
