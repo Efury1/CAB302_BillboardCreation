@@ -23,12 +23,16 @@ public class LogIn extends JFrame implements ActionListener {
         userLabel.setText("Enter Username: ");
         userTextField = new JTextField(10);
         passwordField = new JPasswordField();
+        //Message Label
+        //var message = new JLabel();
+
         //Panels
 
         var panel = new JPanel();
         var logPanel = new JPanel();
         panel.add(loginButton);
         panel.add(cancelButton);
+        //panel.add(message);
 
         logPanel = new JPanel(new GridLayout(4, 2));
         logPanel.add(userLabel);
@@ -47,6 +51,16 @@ public class LogIn extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        String username = passwordField.getText();
+        String password = userTextField.getText();
+        if (username.trim().equals("admin") && password.trim().equals("admin")) {
+            System.out.println("successful");
+            //message.setText("Hello" + userTextField + "");
+        }
+        else {
+            System.out.println("Unsuccessful");
+            //message.setText(InvalidUser);
+        }
 
 
     }
@@ -54,7 +68,7 @@ public class LogIn extends JFrame implements ActionListener {
         LogIn frame=new LogIn();
         frame.setTitle("User Login");
         frame.setVisible(true);
-        frame.setSize(400,200);
+        frame.setSize(300,200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(true);
 
