@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS billboard_database;
+
 CREATE TABLE users (
     username VARCHAR(40) PRIMARY KEY NOT NULL, 
     password_hash VARCHAR(255) NOT NULL, 
@@ -13,10 +15,13 @@ CREATE TABLE billboards (
     --  Name given to the billboard
     billboard_name VARCHAR(255) DEFAULT "Unnamed Billboard", 
     --  Main text of the billboard
-    billboard_message VARCHAR(255),
+    title VARCHAR(255),
     --  Body text of billboard
-    billboard_info TEXT,
-    picture MEDIUMBLOB);
+    description TEXT,
+    picture MEDIUMBLOB,
+    background_colour CHAR(6) NOT NULL DEFAULT "FFFFFF",
+    title_colour CHAR(6) DEFAULT "000000",
+    description_colour CHAR(6) DEFAULT "000000");
 
 CREATE TABLE schedules (
     schedule_ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, 
@@ -38,13 +43,11 @@ CREATE TABLE user_billboards (
     billboard_ID INT NOT NULL,
     PRIMARY KEY (username, billboard_ID),
     FOREIGN KEY (username) REFERENCES users(username),
-    FOREIGN KEY (billboard_ID) REFERENCES billboards(billboard_ID)
-);
+    FOREIGN KEY (billboard_ID) REFERENCES billboards(billboard_ID));
 
 CREATE TABLE billboard_schedule (
     schedule_ID INT NOT NULL,
     billboard_ID INT NOT NULL,
     PRIMARY KEY (schedule_ID),
     FOREIGN KEY (schedule_ID) REFERENCES schedules(schedule_ID),
-    FOREIGN KEY (billboard_ID) REFERENCES billboards(billboard_ID)
-);
+    FOREIGN KEY (billboard_ID) REFERENCES billboards(billboard_ID));
