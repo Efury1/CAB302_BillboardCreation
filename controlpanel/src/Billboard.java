@@ -1,29 +1,31 @@
 // java Program to create a simple JList
 import javax.swing.*;
-public class Billboard
+import java.awt.*;
+public class Billboard extends JFrame
+
 {
+    JScrollPane scrollpane;
 
-    Billboard() {
-        //create a new frame
-        JFrame billboardframe = new JFrame("frame");
-        JPanel listPanel =new JPanel();
-        JLabel billboardList = new JLabel("select a test");
-        String test[]= { "1","2"};
-        JList listInstance= new JList(test);
-        listInstance.setSelectedIndex(2);
-        listPanel.add(listInstance);
-        billboardframe.add(listPanel);
-        billboardframe.setSize(400,400);
-        billboardframe.setVisible(true);
+    public Billboard()
+    {
+        super("Billboard Viewer");
+        setSize(300, 200);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        String categories[] = {"Example 1", "Example 2", "Example 3","Example 4", "Example 5", "Example 6", "Example 7", "Example 8", "Example 9" };
+        JList billboardList = new JList(categories);
+        scrollpane = new JScrollPane(billboardList);
+        getContentPane().add(scrollpane, BorderLayout.CENTER);
     }
 
-    //main class
-    public static void main(String[] args) {
-        new Billboard();
+    // Main Method 
+    public static void main(String args[])
+    {
+        Billboard session1 = new Billboard();
+        session1.setVisible(true);
     }
+} 
 
 
-}
 
 
 

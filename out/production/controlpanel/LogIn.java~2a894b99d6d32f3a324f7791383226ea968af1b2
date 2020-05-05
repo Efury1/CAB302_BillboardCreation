@@ -4,7 +4,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+<<<<<<< HEAD
+public class LogIn extends JFrame implements ActionListener {
+=======
 public class Login extends JFrame implements ActionListener {
+>>>>>>> 4063b428f58ce7cd5058bd4a9ad77cc11c799dd6
 
     Container container=getContentPane();
     JLabel userLabel=new JLabel("Username");
@@ -16,7 +20,11 @@ public class Login extends JFrame implements ActionListener {
 
 
 
+<<<<<<< HEAD
+    LogIn()
+=======
     Login()
+>>>>>>> 4063b428f58ce7cd5058bd4a9ad77cc11c799dd6
     {
 
         userLabel = new JLabel();
@@ -65,7 +73,11 @@ public class Login extends JFrame implements ActionListener {
 
     }
     public static void main(String[] a){
+<<<<<<< HEAD
+        LogIn frame=new LogIn();
+=======
         Login frame=new Login();
+>>>>>>> 4063b428f58ce7cd5058bd4a9ad77cc11c799dd6
         frame.setTitle("User Login");
         frame.setVisible(true);
         frame.setSize(300,200);
