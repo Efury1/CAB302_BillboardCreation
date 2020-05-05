@@ -9,6 +9,9 @@ public class Login extends JFrame implements ActionListener {
     private JTextField userTextField = new JTextField();
     private JPasswordField passwordField = new JPasswordField();
 
+    /**
+     * Default constructor for Login()
+     */
     Login() {
         Container container = getContentPane();
         JLabel userLabel = new JLabel("Username");
@@ -48,14 +51,18 @@ public class Login extends JFrame implements ActionListener {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    //  !! For Testing
+    /**
+     * !! For testing
+     * @param args
+     * @throws SQLException
+     */
     public static void main(String[] args) throws SQLException {
         Login yeehawWindow = new Login();
     }
 
     /**
-     * //  Code to connect to database
-     * @return
+     * Code to connect to database
+     * @return  A connection
      */
     public Connection Connection()
     {
@@ -63,15 +70,17 @@ public class Login extends JFrame implements ActionListener {
         return myConnection;
     }
 
+    /**
+     * Action listener of all buttons in the panel.
+     * !! Tweak this so it uses a scalable method (eg. https://youtu.be/P-80XbVFHRU?t=2039)
+     * @param e
+     */
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        Object sauce = e.getSource();
-        //  !! make this better
-        JButton butin = (JButton) sauce;
-
         String user = userTextField.getText().trim();
         char[] pass = passwordField.getPassword();
+
         try {
             if( QueryLogin(user, pass))
             {
@@ -80,8 +89,26 @@ public class Login extends JFrame implements ActionListener {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
+//      //  !! Example ActionListener code for multiple buttons
+//        Object source = e.getSource();
+//        if (source == loginButton)
+//        {
+//            JButton sourceJButton = (JButton) source;
+//        }
+//        else if (source == cancelButton)
+//        {
+//            JButton sourceJButton = (JButton) source;
+//        }
     }
 
+    /**
+     * Compares the parameters user and pass to the database and returns true if successfully validated.
+     * @param user Username that's sent to server
+     * @param pass Password that's sent to server
+     * @return True if credentials successfully authenticated
+     * @throws SQLException
+     */
     public Boolean QueryLogin(String user, char[] pass) throws SQLException
     {
         Connection connection = Connection();
