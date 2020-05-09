@@ -1,10 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 
 /*Note: we may need threading when it comes to refreshing the ratios.
 * So, it doesn't interfere with the programming logic */
-public class GUI {
+public class GUI extends Component {
     public static void main(String args[]) {
         new GUI();
     }
@@ -56,16 +57,11 @@ public class GUI {
         bkMenu.add(colorBlue);
         bkMenu.add(colorRed);
         /*Under edit */
-        //JMenuItem menuBackground = new JMenuItem("Background");
         JMenuItem menuImageLoad = new JMenuItem("Upload Image");
-        //m2.add(menuBackground);
         m2.add(menuImageLoad);
         m2.add(bkMenu);
-
-
         //Currently not in use, because I'm trying to implement another feature (Eliza)
         JLabel resultLabel = new JLabel("--");
-
         //Creating the panel at bottom and adding components
         JPanel panel = new JPanel(); // the panel is not visible in output
         //Appears next to JTextField
@@ -75,6 +71,10 @@ public class GUI {
         panel.add(label); // Components Added using Flow Layout
         panel.add(tf);
         panel.add(color);
+        //Action
+        menuImageLoad.addActionListener(e -> {
+            selectFile();
+        });
 
 
 
@@ -203,6 +203,18 @@ public class GUI {
             g.setFont(new Font("Monospaced", Font.PLAIN, 12));
             g.drawString("testing", 10, 20);
         }
+    }
+    //Selecting File
+    public void selectFile() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+        }
+
+
     }
 
 
