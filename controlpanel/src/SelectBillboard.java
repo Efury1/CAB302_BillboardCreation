@@ -4,7 +4,7 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 
 public class SelectBillboard {
-    public static void main(String args[]) {
+    public static void showSelectionScreen() {
         JFrame frame = new JFrame("Control Panel");
         int FRAME_WIDTH = 1000;
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
