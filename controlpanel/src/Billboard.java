@@ -1,5 +1,5 @@
 // java Program to create a simple JList
-import javax.swing.*;
+/*import javax.swing.*;
 import java.awt.*;
 public class Billboard extends JFrame
 
@@ -23,7 +23,7 @@ public class Billboard extends JFrame
         Billboard session1 = new Billboard();
         session1.setVisible(true);
     }
-} 
+} */
 
 
 
@@ -31,7 +31,7 @@ public class Billboard extends JFrame
 
 
 
-/*public class Billboard {
+public class Billboard {
     private String BName;
     private String BOwner;
     private boolean scheduled;
@@ -68,4 +68,4 @@ public class Billboard extends JFrame
         scheduled = s;
     }
 
-}*/
+}
