@@ -36,6 +36,11 @@ public class Billboard {
     private String BOwner;
     private boolean scheduled;
 
+    /**
+     * Constructor for billboard
+     * @param name Name of billboard
+     * @param owner Owner/creator of billboard
+     */
     public Billboard(String name, String owner){
         BName = name;
         BOwner = owner;
@@ -44,26 +49,50 @@ public class Billboard {
 
     //for the setters will have to do something to change it in DB
 
+    /**
+     * Returns name of billboard
+     * @return the name of the billboard
+     */
     public String getBName(){
         return BName;
     }
 
+    /**
+     * Changes name of billboard
+     * @param name new name of billboard
+     */
     public void setBName(String name){
         BName = name;
     }
 
+    /**
+     * Returns owner/creator of billboard
+     * @return billboard owner
+     */
     public String getBOwner(){
         return BOwner;
     }
 
+    /**
+     * Changes billboard owner
+     * @param owner new owner
+     */
     public void setBOwner(String owner){
         BOwner = owner;
     }
 
+    /**
+     * Returns whether billboard is scheduled
+     * @return True if scheduled, False if not scheduled
+     */
     public boolean getScheduled(){
         return scheduled;
     }
 
+    /**
+     * Changes whether billboard is recorded as scheduled
+     * @param s True if billboard is scheduled, otherwise False
+     */
     public void setScheduled(boolean s){
         scheduled = s;
     }
