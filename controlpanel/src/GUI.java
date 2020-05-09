@@ -71,9 +71,14 @@ public class GUI extends Component {
         panel.add(label); // Components Added using Flow Layout
         panel.add(tf);
         panel.add(color);
-        //Action
+        //Action Listeners
         menuImageLoad.addActionListener(e -> {
             selectFile();
+        });
+
+        m44.addActionListener(e -> {
+            SaveSchedule session2 = new SaveSchedule();
+            session2.setVisible(true);
         });
 
 
@@ -170,6 +175,20 @@ public class GUI extends Component {
 
     }
 
+    public class SaveSchedule extends JFrame
+
+    {
+
+
+        public SaveSchedule()
+        {
+            super("Save and schedule");
+            setSize(300, 200);
+
+        }
+
+
+    }
 
 
     /*User needs to be able to close this class without exiting all windows, Eliza */
