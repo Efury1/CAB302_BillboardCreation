@@ -12,9 +12,11 @@ public class GUI {
         //Usually you will require both swing and awt packages
 // even if you are working with just swings.
 
-    public GUI() {
+    public GUI () {
+
         //JPanel buttonPanel;
         //Creating the Frame
+
         int Width = 900;
         int Height = 700;
         JFrame frame = new JFrame("Control Panel Review");
@@ -28,7 +30,8 @@ public class GUI {
         JMenuBar mb = new JMenuBar();
         JMenu m1 = new JMenu("File");
         JMenu m2 = new JMenu("Edit");
-        JMenu m3 = new JMenu("View Billboards");
+        JButton m3 = new JButton("View Billboards");
+
         /*Adding menu */
         mb.add(m1);
         mb.add(m2);
@@ -88,6 +91,21 @@ public class GUI {
                 String text = tf.getText();
                 resultLabel.setText(text);
                 //System.out.println("The entered text is: " + tf.getText());
+            }
+        });
+
+
+
+        m3.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                // display/center the jdialog when the button is pressed
+                //JDialog d = new JDialog(frame, "Hello", true);
+                //d.setLocationRelativeTo(frame);
+                //d.setVisible(true);
+                Billboard session1 = new Billboard();
+                session1.setVisible(true);
             }
         });
 
@@ -159,7 +177,24 @@ public class GUI {
 
     //ActionListener will call this class when Schedule and save button is clicked.
     //Code works, just trying to implement, so it's its own class that can still get frame information
+    public class Billboard extends JFrame
 
+    {
+        JScrollPane scrollpane;
+
+        public Billboard()
+        {
+            super("Billboard Viewer");
+            setSize(300, 200);
+            setDefaultCloseOperation(EXIT_ON_CLOSE);
+            String categories[] = {"Example 1", "Example 2", "Example 3","Example 4", "Example 5", "Example 6", "Example 7", "Example 8", "Example 9" };
+            JList billboardList = new JList(categories);
+            scrollpane = new JScrollPane(billboardList);
+            getContentPane().add(scrollpane, BorderLayout.CENTER);
+        }
+
+
+    }
 
 
 }
