@@ -2,20 +2,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-
+/*Note: we may need threading when it comes to refreshing the ratios.
+* So, it doesn't interfere with the programming logic */
 public class GUI {
     public static void main(String args[]) {
         new GUI();
     }
 
 
-        //Usually you will require both swing and awt packages
-// even if you are working with just swings.
-
     public GUI () {
-
-        //JPanel buttonPanel;
-        //Creating the Frame
 
         int Width = 900;
         int Height = 700;
@@ -23,7 +18,7 @@ public class GUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(Width, Height);
 
-
+        JPanel panel1 = new DrawCanvas();
         //Creating the MenuBar and adding components
         /*Across tab */
         JMenu bkMenu = new JMenu("Background");
@@ -43,14 +38,16 @@ public class GUI {
         JMenuItem colorYellow = new JMenuItem("Yellow");
         JMenuItem colorBlue = new JMenuItem("Blue");
         JMenuItem colorRed = new JMenuItem("Red");
+
+
         //Button actions
-        var yellowAction = new ColorAction(Color.YELLOW);
+        /*var yellowAction = new ColorAction(Color.YELLOW);
         var blueAction = new ColorAction(Color.BLUE);
         var redAction = new ColorAction(Color.RED);
         //Association
         colorYellow.addActionListener(yellowAction);
         colorBlue.addActionListener(blueAction);
-        colorRed.addActionListener(blueAction);
+        colorRed.addActionListener(blueAction);*/
 
         m1.add(m11);
         m1.add(m22);
@@ -66,7 +63,7 @@ public class GUI {
         m2.add(bkMenu);
 
 
-
+        //Currently not in use, because I'm trying to implement another feature (Eliza)
         JLabel resultLabel = new JLabel("--");
 
         //Creating the panel at bottom and adding components
@@ -74,13 +71,12 @@ public class GUI {
         //Appears next to JTextField
         JLabel label = new JLabel("Type text and press enter");
         JTextField tf = new JTextField(10); // accepts up to 10 characters
-        //Don't think text button is needed if TextField submits as you type to label
-        //JButton submit = new JButton("Submit");
-        /*Color button */
         JButton color = new JButton("Color");
         panel.add(label); // Components Added using Flow Layout
         panel.add(tf);
         panel.add(color);
+
+
 
         //When you enter text, it submits to terminal
         //Working on printing to screen
@@ -90,6 +86,7 @@ public class GUI {
             public void actionPerformed(ActionEvent event) {
                 String text = tf.getText();
                 resultLabel.setText(text);
+
                 //System.out.println("The entered text is: " + tf.getText());
             }
         });
@@ -100,16 +97,13 @@ public class GUI {
         {
             public void actionPerformed(ActionEvent e)
             {
-                // display/center the jdialog when the button is pressed
-                //JDialog d = new JDialog(frame, "Hello", true);
-                //d.setLocationRelativeTo(frame);
-                //d.setVisible(true);
+
                 Billboard session1 = new Billboard();
                 session1.setVisible(true);
             }
         });
 
-        //public void ssWindow(){
+        /*class ssWindow() {
 
             final boolean RESIZABLE = true;
             final boolean CLOSABLE = true;
@@ -123,7 +117,7 @@ public class GUI {
             firstWindow.setVisible(true);
             frame.add(firstWindow);
 
-        //}
+        }*/
 
 
 
@@ -170,13 +164,15 @@ public class GUI {
         frame.getContentPane().add(BorderLayout.SOUTH, panel);
         frame.getContentPane().add(BorderLayout.NORTH, mb);
         //frame.getContentPane().add(BorderLayout.CENTER, LInfo);
-        frame.getContentPane().add(BorderLayout.CENTER, resultLabel);
+        frame.getContentPane().add(BorderLayout.CENTER, panel1);
+        //frame.getContentPane().add(BorderLayout.CENTER, resultLabel);
         frame.setVisible(true);
 
     }
 
-    //ActionListener will call this class when Schedule and save button is clicked.
-    //Code works, just trying to implement, so it's its own class that can still get frame information
+
+
+    /*User needs to be able to close this class without exiting all windows, Eliza */
     public class Billboard extends JFrame
 
     {
@@ -196,11 +192,27 @@ public class GUI {
 
     }
 
+    public class DrawCanvas extends JPanel {
 
-}
+        // Override paintComponent to perform your own painting
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);     // paint parent's background
+            setBackground(Color.BLACK);  // set background color for this JPanel
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Monospaced", Font.PLAIN, 12));
+            g.drawString("testing", 10, 20);
+        }
+    }
 
 
-    class ColorAction implements ActionListener{
+
+    }
+
+
+
+    //Currently working on another feature and getting back to this
+    /*class ColorAction implements ActionListener{
         private Color backgroundColor;
         public ColorAction(Color c) {
             backgroundColor = c;
@@ -208,6 +220,14 @@ public class GUI {
         public void actionPerformed(ActionEvent event) {
             //buttonPanel.setBackground(backgroundColor);
             System.out.println("Success");
+
+
+
         }
-        }
+    }*/
+
+
+
+
+
 
