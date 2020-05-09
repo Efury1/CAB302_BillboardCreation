@@ -103,8 +103,8 @@ public class GUI extends Component {
             public void actionPerformed(ActionEvent e)
             {
 
-                Billboard session1 = new Billboard();
-                session1.setVisible(true);
+                SelectBillboard session1 = new SelectBillboard();
+                session1.showSelectionScreen();
             }
         });
 
