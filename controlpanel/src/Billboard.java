@@ -34,6 +34,11 @@ public class Billboard extends JFrame
 public class Billboard {
     private String BName;
     private String BOwner;
+    private String BMessage;
+    private String BDescription;
+    private String BBackgroundColour;
+    private String BMessageColour;
+    private String BDescriptionColour;
     private boolean scheduled;
 
     /**
@@ -97,4 +102,83 @@ public class Billboard {
         scheduled = s;
     }
 
+    /**
+     * Returns message
+     * @return optional message for billboard
+     */
+    public String getBMessage() {
+        return BMessage;
+    }
+
+    /**
+     * Adds or changes message
+     * @param BMessage new message
+     */
+    public void setBMessage(String BMessage) {
+        this.BMessage = BMessage;
+    }
+
+    /**
+     * Returns description
+     * @return optional description for billboard
+     */
+    public String getBDescription() {
+        return BDescription;
+    }
+
+    /**
+     * Adds or changes description
+     * @param BDescription new message
+     */
+    public void setBDescription(String BDescription) {
+        this.BDescription = BDescription;
+    }
+
+    /**
+     * Returns billboard background colour
+     * @return optional hexidecimal for billboard background colour
+     */
+    public String getBBackgroundColour() {
+        return BBackgroundColour;
+    }
+
+    /**
+     * Adds or changes billboard background colour
+     * @param BBackgroundColour hexidecimal for billboard background colour
+     */
+    public void setBBackgroundColour(String BBackgroundColour) {
+        this.BBackgroundColour = BBackgroundColour;
+    }
+
+    /**
+     * Returns message text colour
+     * @return optional hexidecimal for message text colour
+     */
+    public String getBMessageColour() {
+        return BMessageColour;
+    }
+
+    /**
+     * Adds or changes message text colour
+     * @param BMessageColour hexidecimal for message text colour
+     */
+    public void setBMessageColour(String BMessageColour) {
+        this.BMessageColour = BMessageColour;
+    }
+
+    /**
+     * Returns description text colour
+     * @return optional hexidecimal for description text colour
+     */
+    public String getBDescriptionColour() {
+        return BDescriptionColour;
+    }
+
+    /**
+     * Adds or changes description text colour
+     * @param BDescriptionColour hexidecimal for description colour
+     */
+    public void setBDescriptionColour(String BDescriptionColour) {
+        this.BDescriptionColour = BDescriptionColour;
+    }
 }
