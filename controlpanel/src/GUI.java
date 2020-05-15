@@ -99,9 +99,12 @@ public class GUI extends Component {
                 String text = tf.getText();
                 resultLabel.setText(text);
 
+
                 //System.out.println("The entered text is: " + tf.getText());
             }
         });
+
+        panel1.add(resultLabel);
 
         class Listener extends JPanel implements ActionListener {
             public void actionPerformed(ActionEvent event) {
