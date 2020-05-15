@@ -13,13 +13,19 @@ public class GUI extends Component {
 
     public GUI () {
 
-        int Width = 900;
-        int Height = 700;
+        //int Width = 900;
+        //int Height = 700;
         JFrame frame = new JFrame("Control Panel Review");
+        frame.setBounds(30, 30, 400, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(Width, Height);
+        //frame.setSize(Width, Height);
 
-        JPanel panel1 = new DrawCanvas();
+        //JPanel panel1 = new DrawCanvas();
+        JPanel panel = new JPanel();
+        JPanel panel1 = new JPanel();
+
+
+
         //Creating the MenuBar and adding components
         /*Across tab */
         JMenu bkMenu = new JMenu("Background");
@@ -63,7 +69,7 @@ public class GUI extends Component {
         //Currently not in use, because I'm trying to implement another feature (Eliza)
         JLabel resultLabel = new JLabel("--");
         //Creating the panel at bottom and adding components
-        JPanel panel = new JPanel(); // the panel is not visible in output
+        //JPanel panel = new JPanel(); // the panel is not visible in output
         //Appears next to JTextField
         JLabel label = new JLabel("Type text and press enter");
         JTextField tf = new JTextField(10); // accepts up to 10 characters
@@ -83,6 +89,7 @@ public class GUI extends Component {
 
 
 
+
         //When you enter text, it submits to terminal
         //Working on printing to screen
         String testing = tf.getText();
@@ -96,17 +103,45 @@ public class GUI extends Component {
             }
         });
 
+        class Listener extends JPanel implements ActionListener {
+            public void actionPerformed(ActionEvent event) {
+                Color color = null;
+                if (event.getSource() == colorYellow) {
+                    color = Color.YELLOW;
+                    colorYellow.setBackground(color);
+                    panel1.setBackground(color);
+                } else if (event.getSource() == colorBlue) {
+                    color = Color.BLUE;
+                    colorBlue.setBackground(color);
+                    panel1.setBackground(color);
+                }
+                /*Color Red doesn't work, unsure what's happening */
+                //(event.getSource() == colorRed)
+                else  {
+                    color = Color.BLUE;
+                    colorRed.setBackground(color);
+                    panel1.setBackground(color);
+                }
 
+                setBackground(color);
+                repaint();
+            }
+        }
 
         m3.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
 
-                SelectBillboard session1 = new SelectBillboard();
-                session1.showSelectionScreen();
+                //SelectBillboard session1 = new SelectBillboard();
+                //session1.showSelectionScreen();
             }
         });
+
+        colorYellow.addActionListener(new Listener());
+        colorBlue.addActionListener(new Listener());
+        colorBlue.addActionListener(new Listener());
+
 
         /*class ssWindow() {
 
@@ -130,7 +165,7 @@ public class GUI extends Component {
 
         //int FRAME_WIDTH = 2000;
         //Sorting out the ratio
-        String message = "Welcome to today's fundraiser!";
+        /*String message = "Welcome to today's fundraiser!";
         String info = "Please take your seats in the ballroom. Seats are assigned, so please make use of the seating plan";
         //String info = "Please take your seats in the ballroom. Seats are assigned, so please make use of the seating plan";
 
@@ -163,13 +198,14 @@ public class GUI extends Component {
         //set font back to smaller to not overflowing
         LTitle.setFont(new Font("Serif", Font.PLAIN, size - 2));
         width = LTitle.getFontMetrics(LTitle.getFont()).stringWidth(message);
-        System.out.println("Width :" + width);
+        System.out.println("Width :" + width);*/
 
         //Adding Components to the frame.
         frame.getContentPane().add(BorderLayout.SOUTH, panel);
         frame.getContentPane().add(BorderLayout.NORTH, mb);
-        //frame.getContentPane().add(BorderLayout.CENTER, LInfo);
         frame.getContentPane().add(BorderLayout.CENTER, panel1);
+        //frame.getContentPane().add(BorderLayout.CENTER, LInfo);
+        //frame.getContentPane().add(BorderLayout.CENTER, NewPanel);
         //frame.getContentPane().add(BorderLayout.CENTER, resultLabel);
         frame.setVisible(true);
 
@@ -211,7 +247,7 @@ public class GUI extends Component {
 
     }
 
-    public class DrawCanvas extends JPanel {
+    /*public class DrawCanvas extends JPanel {
 
         // Override paintComponent to perform your own painting
         @Override
@@ -222,7 +258,7 @@ public class GUI extends Component {
             g.setFont(new Font("Monospaced", Font.PLAIN, 12));
             g.drawString("testing", 10, 20);
         }
-    }
+    }*/
     //Selecting File
     public void selectFile() {
         JFileChooser fileChooser = new JFileChooser();
