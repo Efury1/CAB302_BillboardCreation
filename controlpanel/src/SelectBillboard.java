@@ -2,27 +2,14 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class SelectBillboard {
     public static void showSelectionScreen() {
         JFrame frame = new JFrame("Control Panel");
         int FRAME_WIDTH = 1000;
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        JPanel buttonPanel = new JPanel();
-        JButton BView = new JButton("View");
-        JButton BEdit = new JButton("Edit");
-        JButton BDelete = new JButton("Delete");
-        buttonPanel.add(BView);
-        buttonPanel.add(BEdit);
-        buttonPanel.add(BDelete);
-
-        JPanel labelPanel = new JPanel();
-        labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
-        JLabel LCreator = new JLabel("Billboard Creator:");
-        JLabel LScheduled = new JLabel("Billboard Schedule Status:");
-        labelPanel.add(LCreator);
-        labelPanel.add(LScheduled);
 
         //Import billboards from database (placeholder code)
         Billboard b1 = new Billboard("EOFYParty", "Sam");
@@ -35,6 +22,24 @@ public class SelectBillboard {
         billboards[1] = b2;
         billboards[2] = b3;
         billboards[3] = b4;
+
+        JPanel buttonPanel = new JPanel();
+        JButton BView = new JButton("View");
+
+        JButton BEdit = new JButton("Edit");
+
+        JButton BDelete = new JButton("Delete");
+
+        buttonPanel.add(BView);
+        buttonPanel.add(BEdit);
+        buttonPanel.add(BDelete);
+
+        JPanel labelPanel = new JPanel();
+        labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
+        JLabel LCreator = new JLabel("Billboard Creator:");
+        JLabel LScheduled = new JLabel("Billboard Schedule Status:");
+        labelPanel.add(LCreator);
+        labelPanel.add(LScheduled);
 
 
         DefaultListModel listModel = new DefaultListModel();
@@ -66,8 +71,27 @@ public class SelectBillboard {
         });
         //frame.add(billboardList);
 
+        /*BView.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //View billboard
+            }
+        });
 
+        BEdit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Edit billboard
+            }
+        });
 
+        BDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Delete billboard
+                
+            }
+        });*/
 
         frame.getContentPane().add(BorderLayout.SOUTH, buttonPanel);
         frame.getContentPane().add(BorderLayout.CENTER, billboardList);
