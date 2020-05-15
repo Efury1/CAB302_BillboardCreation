@@ -3,7 +3,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 
-/*public class SelectBillboard {
+public class SelectBillboard {
     public static void main(String args[]) {
         JFrame frame = new JFrame("Control Panel");
         int FRAME_WIDTH = 1000;
@@ -76,4 +76,4 @@ import java.awt.*;
         frame.setVisible(true);
     }
 
-}*/
+}
