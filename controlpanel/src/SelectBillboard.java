@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class SelectBillboard {
-    public static void showSelectionScreen() {
+    public static void main(String args[]) {
         JFrame frame = new JFrame("Control Panel");
         int FRAME_WIDTH = 1000;
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

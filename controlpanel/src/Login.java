@@ -1,54 +1,61 @@
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 
 public class Login extends JFrame implements ActionListener {
 
-    private JTextField userTextField = new JTextField();
+    private JTextField textField = new JTextField();
     private JPasswordField passwordField = new JPasswordField();
+    private JButton loginButton;
+    private JLabel label;
+    private JPanel contentPane;
+
 
     /**
      * Default constructor for Login()
      */
     Login() {
-        Container container = getContentPane();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 500, 400);
+        setResizable(false);
+        contentPane = new JPanel();
+        setContentPane(contentPane);
+        contentPane.setLayout(null);
+
+        JLabel lblNewLabel = new JLabel("Login to continue");
+        lblNewLabel.setBounds(195, 110, 120, 40);
+        contentPane.add(lblNewLabel);
+        textField = new JTextField();
+        //Username text field
+        textField.setBounds(200, 170, 200, 35);
+        contentPane.add(textField);
+        textField.setColumns(10);
+
+        passwordField = new JPasswordField();
+        passwordField.setBounds(200, 230, 200, 35);
+        contentPane.add(passwordField);
+
         JLabel userLabel = new JLabel("Username");
+        userLabel.setBounds(50, 166, 193, 52);
+        contentPane.add(userLabel);
+
         JLabel passLabel = new JLabel("Password");
 
-        //  For Username
-        userLabel = new JLabel("Enter Username: ");
-        userTextField = new JTextField(10);
+        passLabel.setBounds(50, 230, 193, 52);
+        contentPane.add(passLabel);
 
-        //  For the password
-        passLabel = new JLabel("Enter Password: ");
-        passwordField = new JPasswordField(10);
-
-        //  Login button
-        JButton loginButton = new JButton("Login");
+        loginButton = new JButton("Login");
+        loginButton.setBounds(200, 300, 90, 20);
+        contentPane.add(loginButton);
         loginButton.addActionListener(this);
 
         //  Screen set up
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("User Login");
         setVisible(true);
-        setSize(300, 200);
-        setResizable(true);
-
-        //Panels
-        JPanel credentialsPanel = new JPanel(new GridLayout(4, 2));
-        credentialsPanel.add(userLabel);
-        credentialsPanel.add(userTextField);
-        credentialsPanel.add(passLabel);
-        credentialsPanel.add(passwordField);
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(loginButton);
-
-        //  Adding Components to the frame.
-        add(credentialsPanel, BorderLayout.NORTH);
-        add(buttonPanel, BorderLayout.SOUTH);
+        setSize(500, 400);
+        setResizable(false);
     }
 
     /**
@@ -78,7 +85,7 @@ public class Login extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        String user = userTextField.getText().trim();
+        String user = textField.getText().trim();
         char[] pass = passwordField.getPassword();
 
         try {
