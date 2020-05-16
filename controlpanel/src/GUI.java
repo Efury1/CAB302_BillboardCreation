@@ -12,12 +12,20 @@ public class GUI extends Component {
 
 
     public GUI () {
+        JTextArea jt;
 
         JFrame frame = new JFrame("Control Panel Review");
-        frame.setBounds(30, 30, 400, 400);
+        frame.setBounds(30, 30, 1000, 800);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel panel = new JPanel();
         JPanel panel1 = new JPanel();
+
+        JPanel infoPanel = new JPanel();
+        JLabel info = new JLabel("Waiting for information");
+
+
+        jt = new JTextArea(80, 20);
+        infoPanel.add(jt);
 
 
         JMenu bkMenu = new JMenu("Background");
@@ -51,7 +59,7 @@ public class GUI extends Component {
         m2.add(bkMenu);
 
         JLabel resultLabel = new JLabel("--");
-        JLabel label = new JLabel("Type text and press enter");
+        JLabel label = new JLabel("Type Message and press enter");
         JTextField tf = new JTextField(10); // accepts up to 10 characters
         JButton color = new JButton("Color");
         panel.add(label); // Components Added using Flow Layout
@@ -126,6 +134,7 @@ public class GUI extends Component {
         frame.getContentPane().add(BorderLayout.SOUTH, panel);
         frame.getContentPane().add(BorderLayout.NORTH, mb);
         frame.getContentPane().add(BorderLayout.CENTER, panel1);
+        frame.getContentPane().add(BorderLayout.EAST, infoPanel);
         frame.setVisible(true);
 
     }
