@@ -13,21 +13,13 @@ public class GUI extends Component {
 
     public GUI () {
 
-        //int Width = 900;
-        //int Height = 700;
         JFrame frame = new JFrame("Control Panel Review");
         frame.setBounds(30, 30, 400, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //frame.setSize(Width, Height);
-
-        //JPanel panel1 = new DrawCanvas();
         JPanel panel = new JPanel();
         JPanel panel1 = new JPanel();
 
 
-
-        //Creating the MenuBar and adding components
-        /*Across tab */
         JMenu bkMenu = new JMenu("Background");
         JMenuBar mb = new JMenuBar();
         JMenu m1 = new JMenu("File");
@@ -47,15 +39,6 @@ public class GUI extends Component {
         JMenuItem colorRed = new JMenuItem("Red");
 
 
-        //Button actions
-        /*var yellowAction = new ColorAction(Color.YELLOW);
-        var blueAction = new ColorAction(Color.BLUE);
-        var redAction = new ColorAction(Color.RED);
-        //Association
-        colorYellow.addActionListener(yellowAction);
-        colorBlue.addActionListener(blueAction);
-        colorRed.addActionListener(blueAction);*/
-
         m1.add(m11);
         m1.add(m22);
         m1.add(m44);
@@ -66,17 +49,16 @@ public class GUI extends Component {
         JMenuItem menuImageLoad = new JMenuItem("Upload Image");
         m2.add(menuImageLoad);
         m2.add(bkMenu);
-        //Currently not in use, because I'm trying to implement another feature (Eliza)
+
         JLabel resultLabel = new JLabel("--");
-        //Creating the panel at bottom and adding components
-        //JPanel panel = new JPanel(); // the panel is not visible in output
-        //Appears next to JTextField
         JLabel label = new JLabel("Type text and press enter");
         JTextField tf = new JTextField(10); // accepts up to 10 characters
         JButton color = new JButton("Color");
         panel.add(label); // Components Added using Flow Layout
         panel.add(tf);
         panel.add(color);
+        panel1.add(resultLabel);
+
         //Action Listeners
         menuImageLoad.addActionListener(e -> {
             selectFile();
@@ -88,10 +70,6 @@ public class GUI extends Component {
         });
 
 
-
-
-        //When you enter text, it submits to terminal
-        //Working on printing to screen
         String testing = tf.getText();
         tf.addActionListener(new ActionListener() {
             @Override
@@ -99,12 +77,10 @@ public class GUI extends Component {
                 String text = tf.getText();
                 resultLabel.setText(text);
 
-
-                //System.out.println("The entered text is: " + tf.getText());
             }
         });
 
-        panel1.add(resultLabel);
+
 
         class Listener extends JPanel implements ActionListener {
             public void actionPerformed(ActionEvent event) {
@@ -146,70 +122,10 @@ public class GUI extends Component {
         colorBlue.addActionListener(new Listener());
 
 
-        /*class ssWindow() {
-
-            final boolean RESIZABLE = true;
-            final boolean CLOSABLE = true;
-            final boolean ICONIFIABLE = true;
-            final boolean MAXIMIZABLE = true;
-
-            JInternalFrame firstWindow = new JInternalFrame("schedule and save", RESIZABLE,
-                    CLOSABLE, MAXIMIZABLE, ICONIFIABLE);
-            firstWindow.setSize(100, 100);
-            firstWindow.setLocation(10, 10);
-            firstWindow.setVisible(true);
-            frame.add(firstWindow);
-
-        }*/
-
-
-
-        //String message = "Welcome to today's fundraiser!";
-
-        //int FRAME_WIDTH = 2000;
-        //Sorting out the ratio
-        /*String message = "Welcome to today's fundraiser!";
-        String info = "Please take your seats in the ballroom. Seats are assigned, so please make use of the seating plan";
-        //String info = "Please take your seats in the ballroom. Seats are assigned, so please make use of the seating plan";
-
-        JLabel LTitle = new JLabel(message, JLabel.CENTER);
-        JLabel LInfo = new JLabel(info, JLabel.CENTER);
-
-        //frame.add(LTitle);
-        //frame.pack();
-        //frame.setSize(FRAME_WIDTH, 700);
-
-        Dimension dim = frame.getSize();
-        Width = dim.width;
-        //int bkMenu = 1000;
-        Height = dim.height;
-
-        LTitle.setSize(Width, Height);
-        Font TitleFont = LTitle.getFont();
-        int size = TitleFont.getSize();
-        int width = LTitle.getFontMetrics(TitleFont).stringWidth(message);
-        System.out.println("Width :" + width);
-        System.out.println("bkMenu :" + Width);
-
-        while (width < Width - 10) {
-            size++;
-            LTitle.setFont(new Font("Serif", Font.PLAIN, size));
-            width = LTitle.getFontMetrics(LTitle.getFont()).stringWidth(message);
-            System.out.println("Width :" + width);
-        }
-
-        //set font back to smaller to not overflowing
-        LTitle.setFont(new Font("Serif", Font.PLAIN, size - 2));
-        width = LTitle.getFontMetrics(LTitle.getFont()).stringWidth(message);
-        System.out.println("Width :" + width);*/
-
         //Adding Components to the frame.
         frame.getContentPane().add(BorderLayout.SOUTH, panel);
         frame.getContentPane().add(BorderLayout.NORTH, mb);
         frame.getContentPane().add(BorderLayout.CENTER, panel1);
-        //frame.getContentPane().add(BorderLayout.CENTER, LInfo);
-        //frame.getContentPane().add(BorderLayout.CENTER, NewPanel);
-        //frame.getContentPane().add(BorderLayout.CENTER, resultLabel);
         frame.setVisible(true);
 
     }
@@ -280,24 +196,62 @@ public class GUI extends Component {
     }
 
 
+/*class ssWindow() {
 
-    //Currently working on another feature and getting back to this
-    /*class ColorAction implements ActionListener{
-        private Color backgroundColor;
-        public ColorAction(Color c) {
-            backgroundColor = c;
+            final boolean RESIZABLE = true;
+            final boolean CLOSABLE = true;
+            final boolean ICONIFIABLE = true;
+            final boolean MAXIMIZABLE = true;
+
+            JInternalFrame firstWindow = new JInternalFrame("schedule and save", RESIZABLE,
+                    CLOSABLE, MAXIMIZABLE, ICONIFIABLE);
+            firstWindow.setSize(100, 100);
+            firstWindow.setLocation(10, 10);
+            firstWindow.setVisible(true);
+            frame.add(firstWindow);
+
+        }*/
+
+
+
+//String message = "Welcome to today's fundraiser!";
+
+//int FRAME_WIDTH = 2000;
+//Sorting out the ratio
+        /*String message = "Welcome to today's fundraiser!";
+        String info = "Please take your seats in the ballroom. Seats are assigned, so please make use of the seating plan";
+        //String info = "Please take your seats in the ballroom. Seats are assigned, so please make use of the seating plan";
+
+        JLabel LTitle = new JLabel(message, JLabel.CENTER);
+        JLabel LInfo = new JLabel(info, JLabel.CENTER);
+
+        //frame.add(LTitle);
+        //frame.pack();
+        //frame.setSize(FRAME_WIDTH, 700);
+
+        Dimension dim = frame.getSize();
+        Width = dim.width;
+        //int bkMenu = 1000;
+        Height = dim.height;
+
+        LTitle.setSize(Width, Height);
+        Font TitleFont = LTitle.getFont();
+        int size = TitleFont.getSize();
+        int width = LTitle.getFontMetrics(TitleFont).stringWidth(message);
+        System.out.println("Width :" + width);
+        System.out.println("bkMenu :" + Width);
+
+        while (width < Width - 10) {
+            size++;
+            LTitle.setFont(new Font("Serif", Font.PLAIN, size));
+            width = LTitle.getFontMetrics(LTitle.getFont()).stringWidth(message);
+            System.out.println("Width :" + width);
         }
-        public void actionPerformed(ActionEvent event) {
-            //buttonPanel.setBackground(backgroundColor);
-            System.out.println("Success");
 
-
-
-        }
-    }*/
-
-
-
+        //set font back to smaller to not overflowing
+        LTitle.setFont(new Font("Serif", Font.PLAIN, size - 2));
+        width = LTitle.getFontMetrics(LTitle.getFont()).stringWidth(message);
+        System.out.println("Width :" + width);*/
 
 
 
