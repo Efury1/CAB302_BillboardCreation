@@ -21,7 +21,7 @@ public class GUI extends Component {
         JPanel panel1 = new JPanel();
 
         JPanel infoPanel = new JPanel();
-        JLabel info = new JLabel("Waiting for information");
+        JLabel info = new JLabel(" ");
 
 
         jt = new JTextArea(80, 20);
@@ -60,13 +60,22 @@ public class GUI extends Component {
         m2.add(menuImageLoad);
         m2.add(bkMenu);
 
-        JLabel resultLabel = new JLabel("--");
-        JLabel label = new JLabel("Type Message and press enter");
+        JLabel resultLabel = new JLabel(" ");
+        JLabel label = new JLabel("Type message and press enter");
         JTextField tf = new JTextField(10); // accepts up to 10 characters
-        JButton color = new JButton("Color");
+        JLabel label1 = new JLabel("Type information");
+        //To button b where I want it.
+        JLabel spacer = new JLabel("                                                                                             ");
         panel.add(label); // Components Added using Flow Layout
         panel.add(tf);
-        panel.add(color);
+        //panel.add(color);
+        JRadioButton r1 = new JRadioButton("Yellow");
+        JRadioButton r2 = new JRadioButton("Blue");
+        JRadioButton r3 = new JRadioButton("Red");
+        panel.add(r1);
+        panel.add(r2);
+        panel.add(r3);
+        panel.add(spacer);
         panel.add(b);
         panel1.add(resultLabel);
         panel1.add(info);
@@ -105,15 +114,11 @@ public class GUI extends Component {
                     color = Color.BLUE;
                     colorBlue.setBackground(color);
                     panel1.setBackground(color);
-                }
-                /*Color Red doesn't work, unsure what's happening */
-                //(event.getSource() == colorRed)
-                else  {
-                    color = Color.BLUE;
+                } else if (event.getSource() == colorRed) {
+                    color = Color.RED;
                     colorRed.setBackground(color);
                     panel1.setBackground(color);
                 }
-
                 setBackground(color);
                 repaint();
             }
