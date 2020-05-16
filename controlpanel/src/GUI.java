@@ -27,6 +27,8 @@ public class GUI extends Component {
         jt = new JTextArea(80, 20);
         infoPanel.add(jt);
 
+        JButton b = new JButton("Submit");
+
 
         JMenu bkMenu = new JMenu("Background");
         JMenuBar mb = new JMenuBar();
@@ -65,7 +67,9 @@ public class GUI extends Component {
         panel.add(label); // Components Added using Flow Layout
         panel.add(tf);
         panel.add(color);
+        panel.add(b);
         panel1.add(resultLabel);
+        panel1.add(info);
 
         //Action Listeners
         menuImageLoad.addActionListener(e -> {
@@ -114,6 +118,20 @@ public class GUI extends Component {
                 repaint();
             }
         }
+
+        b.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                String s = e.getActionCommand();
+                if(s.equals("Submit")) {
+                    info.setText(jt.getText());
+                }
+                //SelectBillboard session1 = new SelectBillboard();
+                //session1.showSelectionScreen();
+            }
+        });
+
 
         m3.addActionListener(new ActionListener()
         {
