@@ -1,4 +1,7 @@
+package server;
+
 import java.sql.*;
+import server.DBConnection;
 
 public class Connect {
     public static void main (String[] args) throws SQLException {
