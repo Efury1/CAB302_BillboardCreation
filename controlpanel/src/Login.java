@@ -7,9 +7,6 @@ public class Login extends JFrame implements ActionListener {
 
     private JTextField textField = new JTextField();
     private JPasswordField passwordField = new JPasswordField();
-    private JButton loginButton;
-    private JLabel label;
-    private JPanel contentPane;
 
 
     /**
@@ -19,7 +16,7 @@ public class Login extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 500, 400);
         setResizable(false);
-        contentPane = new JPanel();
+        JPanel contentPane = new JPanel();
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
@@ -45,7 +42,7 @@ public class Login extends JFrame implements ActionListener {
         passLabel.setBounds(50, 230, 193, 52);
         contentPane.add(passLabel);
 
-        loginButton = new JButton("Login");
+        JButton loginButton = new JButton("Login");
         loginButton.setBounds(200, 300, 90, 20);
         contentPane.add(loginButton);
         loginButton.addActionListener(this);
@@ -73,8 +70,7 @@ public class Login extends JFrame implements ActionListener {
      */
     public Connection Connection()
     {
-        Connection myConnection = DBConnection.getInstance();
-        return myConnection;
+        return DBConnection.getInstance();
     }
 
     /**
@@ -89,10 +85,7 @@ public class Login extends JFrame implements ActionListener {
         char[] pass = passwordField.getPassword();
 
         try {
-            if( QueryLogin(user, pass))
-            {
-                //  !! Show and error message that the credentials couldn't be matched
-            }
+            QueryLogin(user, pass);//  !! Show and error message that the credentials couldn't be matched
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
