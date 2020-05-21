@@ -1,8 +1,4 @@
-package server;
-
 /* */
-
-import server.DBConnection;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

@@ -1,0 +1,2 @@
+Use one and zero as true and false because mysql
+doesn't save booleans.
