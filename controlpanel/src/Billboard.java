@@ -39,6 +39,8 @@ public class Billboard {
     private String BBackgroundColour;
     private String BMessageColour;
     private String BDescriptionColour;
+    private String BImageLink;
+    private String BBlobData;
     private boolean scheduled;
 
     /**
@@ -180,5 +182,38 @@ public class Billboard {
      */
     public void setBDescriptionColour(String BDescriptionColour) {
         this.BDescriptionColour = BDescriptionColour;
+    }
+
+    /**
+     * Returns url of image -- only 1 of two image types allowed
+     * @return url for image
+     */
+    public String getBImageLink() {
+        return BImageLink;
+    }
+
+    /**
+     * Adds url image link and deletes any blob data
+     * @param BImageLink url link for image
+     */
+    public void setBImageLink(String BImageLink) {
+        this.BImageLink = BImageLink;
+        this.BBlobData = null;
+    }
+
+    /**
+     * Returns blob data of image -- only 1 of two image types allowed
+     * @return blob data for image
+     */
+    public String getBBlobData() {
+        return BBlobData;
+    }
+
+    /**
+     * Adds blob data and deletes any url link
+     * @param BBlobData blob data for image
+     */
+    public void setBBlobData(String BBlobData) {
+        this.BBlobData = BBlobData;
     }
 }

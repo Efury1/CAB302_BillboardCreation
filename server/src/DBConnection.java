@@ -1,5 +1,3 @@
-package server;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -31,9 +29,10 @@ public class DBConnection {
             String password = props.getProperty("jdbc.password");
             String schema = props.getProperty("jdbc.schema");
 
+            System.out.println(url);
+
             // get a connection
-            instance = DriverManager.getConnection(url + "/" + schema,
-                    username, password);
+            instance = DriverManager.getConnection(url, username, password);
         } catch (SQLException sqle) {
             System.err.println(sqle);
         } catch (FileNotFoundException fnfe) {
