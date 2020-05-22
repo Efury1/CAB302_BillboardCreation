@@ -31,8 +31,14 @@ public class DBConnection {
 
             System.out.println(url);
 
-            // get a connection
+            // get a connection to the server (BUT NOT THE SCHEMA)
             instance = DriverManager.getConnection(url, username, password);
+
+            //TODO
+            //Put code to add to the database
+
+
+
         } catch (SQLException sqle) {
             System.err.println(sqle);
         } catch (FileNotFoundException fnfe) {
