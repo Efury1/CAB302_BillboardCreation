@@ -22,38 +22,38 @@ public class InitDatabase {
                 "perm_schedule BOOLEAN NOT NULL)");
         myStatement.executeQuery(
                 "CREATE TABLE IF NOT EXISTS billboards (" +
-                "    billboard_ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, " +
-                "    billboard_name VARCHAR(255) DEFAULT \"Unnamed Billboard\", " +
-                "    title VARCHAR(255)," +
-                "    description TEXT," +
-                "    picture MEDIUMBLOB," +
-                "    background_colour CHAR(6) NOT NULL DEFAULT \"FFFFFF\"," +
-                "    title_colour CHAR(6) DEFAULT \"000000\"," +
-                "    description_colour CHAR(6) DEFAULT \"000000\")");
+                "billboard_ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, " +
+                "billboard_name VARCHAR(255) UNIQUE NOT NULL, " +
+                "title VARCHAR(255)," +
+                "description TEXT," +
+                "picture MEDIUMBLOB," +
+                "background_colour CHAR(6) NOT NULL DEFAULT \"FFFFFF\"," +
+                "title_colour CHAR(6) DEFAULT \"000000\"," +
+                "description_colour CHAR(6) DEFAULT \"000000\")");
         myStatement.executeQuery(
                 "CREATE TABLE IF NOT EXISTS schedules (" +
-                "    schedule_ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, " +
-                "    schedule_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP," +
-                "    start_date DATE NOT NULL, " +
-                "    end_date DATE NOT NULL, " +
-                "    time_start TIME NOT NULL, " +
-                "    time_end TIME NOT NULL," +
-                "    repeat_frequency SET('Mon', 'Tue', 'Wed', " +
-                "    'Thur', 'Fri', 'Sat', 'Sun', 'Daily') NOT NULL)");
+                "schedule_ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, " +
+                "schedule_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP," +
+                "start_date DATE NOT NULL, " +
+                "end_date DATE NOT NULL, " +
+                "time_start TIME NOT NULL, " +
+                "duration INT NOT NULL," +
+                "repeat BOOLEAN NOT NULL" +
+                "repeat_frequency INT");
         myStatement.executeQuery(
                 "CREATE TABLE IF NOT EXISTS user_billboards (" +
-                "    username VARCHAR(40) NOT NULL," +
-                "    billboard_ID INT NOT NULL," +
-                "    PRIMARY KEY (username, billboard_ID)," +
-                "    FOREIGN KEY (username) REFERENCES users(username)," +
-                "    FOREIGN KEY (billboard_ID) REFERENCES billboards(billboard_ID))");
+                "username VARCHAR(40) NOT NULL," +
+                "billboard_ID INT NOT NULL," +
+                "PRIMARY KEY (username, billboard_ID)," +
+                "FOREIGN KEY (username) REFERENCES users(username)," +
+                "FOREIGN KEY (billboard_ID) REFERENCES billboards(billboard_ID))");
         myStatement.executeQuery(
                 "CREATE TABLE IF NOT EXISTS billboard_schedule (" +
-                "    schedule_ID INT NOT NULL," +
-                "    billboard_ID INT NOT NULL," +
-                "    PRIMARY KEY (schedule_ID)," +
-                "    FOREIGN KEY (schedule_ID) REFERENCES schedules(schedule_ID)," +
-                "    FOREIGN KEY (billboard_ID) REFERENCES billboards(billboard_ID))");
+                "schedule_ID INT NOT NULL," +
+                "billboard_ID INT NOT NULL," +
+                "PRIMARY KEY (schedule_ID)," +
+                "FOREIGN KEY (schedule_ID) REFERENCES schedules(schedule_ID)," +
+                "FOREIGN KEY (billboard_ID) REFERENCES billboards(billboard_ID))");
 
 
 //        myResults.next();
