@@ -3,9 +3,9 @@ import java.awt.*;
 
 public class ViewBillboard {
     public static void main(String args[]) {
-        //MessageAndInfo();
+        MessageAndInfo();
         //MessageImageInfo();
-        MessageAndImage();
+        //MessageAndImage();
     }
 
     public static void MessageAndInfo(){
@@ -13,13 +13,33 @@ public class ViewBillboard {
         frame.setSize(1000, 700);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Dimension messageDim = frame.getSize();
+        double w = messageDim.width;
+
+        String messageText = "Message text";
 
         JPanel messagePanel = new JPanel();
         messagePanel.setLayout(new GridBagLayout());
 
 
-        JLabel message = new JLabel("Message", JLabel.CENTER);
+        JLabel message = new JLabel(messageText, JLabel.CENTER);
         messagePanel.add(message);
+
+        Font TitleFont = message.getFont();
+        int messageSize = TitleFont.getSize();
+        int messageWidth = message.getFontMetrics(TitleFont).stringWidth(messageText);
+
+        while (messageWidth < w - 10) {
+            messageSize++;
+            message.setFont(new Font("Serif", Font.PLAIN, messageSize));
+            messageWidth= message.getFontMetrics(message.getFont()).stringWidth(messageText);
+        }
+
+        //set font back to smaller to not overflowing
+        message.setFont(new Font("Serif", Font.PLAIN, messageSize - 2));
+        messageWidth = message.getFontMetrics(message.getFont()).stringWidth(messageText);
+        System.out.println("Width :" + messageWidth);
+
 
 
 
