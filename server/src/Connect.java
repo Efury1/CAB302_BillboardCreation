@@ -12,18 +12,28 @@ public class Connect {
 
         Statement myStatement = myConnection.createStatement();
 
+      //"FOREIGN KEY (billboard_ID) REFERENCES billboards(billboard_ID))");
+
+       // myStatement.executeQuery("INSERT INTO billboard_database.billboards (billboard_name, title) VALUES ('HelloWorldBillboard', 'Hello World')");
+        //myStatement.executeQuery("INSERT INTO billboard_database.user_billboards (username, billboard_name) VALUES ('fudog', 'HelloWorldBillboard')");
+
         ResultSet myResults = myStatement.executeQuery("SELECT * FROM billboard_database.users;");
+        ResultSet billboardResults = myStatement.executeQuery("SELECT username, billboard_name FROM billboard_database.user_billboards");
         //myResults.next();
         while(myResults.next()){
             String user = myResults.getString("Username");
             String pass = myResults.getString("password_hash");
 
-            System.out.println("User " + user + " has password " + pass);
+            //System.out.println("User " + user + " has password " + pass);
             //System.out.println("Username: " + user);
         }
 
-        System.out.println(myResults);
+        while(billboardResults.next()){
+            String bOwner = billboardResults.getString("username");
+            String bName = billboardResults.getString("billboard_name");
 
+            System.out.println(bName + "   " + bOwner);
+        }
 
 
 
