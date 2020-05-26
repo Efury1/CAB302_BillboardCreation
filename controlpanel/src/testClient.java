@@ -52,7 +52,8 @@ public class testClient{
             OutputStream output = socket.getOutputStream();
             ObjectOutputStream objectOutput = new ObjectOutputStream(output);
             ///send info
-            objectOutput.writeInt(9);
+            objectOutput.writeInt(2);
+            objectOutput.writeUTF("tokenString");
             objectOutput.flush();
 
 
@@ -61,12 +62,15 @@ public class testClient{
             InputStream input = socket.getInputStream();
             ObjectInputStream objectInput = new ObjectInputStream(input);
             int myInt = 0;
+            String myString = "";
             if(objectInput.available() > 0){
                 myInt = objectInput.readInt();
+                myString = objectInput.readUTF();
             } else {
                 Thread.sleep(500);
             }
-            System.out.println("Received byte " + myInt);
+            //System.out.println("Received byte " + myInt);
+            System.out.println("Message from server: " + myString);
             objectInput.close();
             socket.close();
         }
