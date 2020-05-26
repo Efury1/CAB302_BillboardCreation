@@ -12,8 +12,17 @@ public class Connect {
 
         Statement myStatement = myConnection.createStatement();
 
-        ResultSet myResults = myStatement.executeQuery("select * from users");
-        myResults.next();
+        ResultSet myResults = myStatement.executeQuery("SELECT * FROM billboard_database.users;");
+        //myResults.next();
+        while(myResults.next()){
+            String user = myResults.getString("Username");
+            String pass = myResults.getString("password_hash");
+
+            System.out.println("User " + user + " has password " + pass);
+            //System.out.println("Username: " + user);
+        }
+
+        System.out.println(myResults);
 
 
 
