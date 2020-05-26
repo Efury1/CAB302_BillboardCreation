@@ -38,8 +38,7 @@ public class InitDatabase {
                 "end_date DATE NOT NULL, " +
                 "time_start TIME NOT NULL, " +
                 "duration INT NOT NULL, " +
-                        //TODO Find out why repeat BOOLEAN NOT NULL below causes an exception if run
-                //"repeat BOOLEAN NOT NULL, " +
+                "repeats BOOLEAN NOT NULL, " +
                 "repeat_frequency INT)");
         myStatement.executeQuery(
                 "CREATE TABLE IF NOT EXISTS user_billboards (" +
