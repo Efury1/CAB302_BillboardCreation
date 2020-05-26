@@ -3,21 +3,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 
-public class Login extends JFrame implements ActionListener {
+public class Login {
+
 
     private JTextField textField = new JTextField();
     private JPasswordField passwordField = new JPasswordField();
-
 
     /**
      * Default constructor for Login()
      */
     Login() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 500, 400);
-        setResizable(false);
+        JFrame frame = new JFrame("Control Panel Review");
+        frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+        frame.setBounds(100, 100, 500, 400);
+        frame.setResizable(false);
         JPanel contentPane = new JPanel();
-        setContentPane(contentPane);
+        frame.setContentPane(contentPane);
         contentPane.setLayout(null);
 
         JLabel lblNewLabel = new JLabel("Login to continue");
@@ -45,22 +46,48 @@ public class Login extends JFrame implements ActionListener {
         JButton loginButton = new JButton("Login");
         loginButton.setBounds(200, 300, 90, 20);
         contentPane.add(loginButton);
-        loginButton.addActionListener(this);
+        //loginButton.addActionListener((ActionListener) this);
 
         //  Screen set up
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("User Login");
-        setVisible(true);
-        setSize(500, 400);
-        setResizable(false);
+        frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+        frame.setTitle("User Login");
+        frame.setVisible(true);
+        frame.setSize(500, 400);
+        frame.setResizable(false);
+
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String uName = textField.getText();
+                String pass = passwordField.getText();
+                /*Tutor will now be able to login in with name and password */
+                if(uName.equals("name") && pass.equals("password"))
+                {
+                    JOptionPane.showMessageDialog(frame, "You have successfully login!");
+                    //Create object
+                    GUI gui = new GUI();
+
+                }
+                else
+                {
+                    //This currently works
+                    JOptionPane.showMessageDialog(frame,"Invalid username and/or password!");
+                }
+            }
+        });
     }
 
-    /**
+    public static void main(String[] args) throws SQLException {
+        Login testing = new Login();
+    }
+}
+
+    /*
      * !! For testing
      * @param args
      * @throws SQLException
      */
-    public static void main(String[] args) throws SQLException {
+    /*public static void main(String[] args) throws SQLException {
         Login yeehawWindow = new Login();
     }
 
@@ -68,7 +95,7 @@ public class Login extends JFrame implements ActionListener {
      * Code to connect to database
      * @return  A connection
      */
-    public Connection Connection()
+    /*public Connection Connection()
     {
         return DBConnection.getInstance();
     }
@@ -78,11 +105,13 @@ public class Login extends JFrame implements ActionListener {
      * !! Tweak this so it uses a scalable method (eg. https://youtu.be/P-80XbVFHRU?t=2039)
      * @param e
      */
-    @Override
+   /* @Override
     public void actionPerformed(ActionEvent e)
     {
         String user = textField.getText().trim();
         char[] pass = passwordField.getPassword();
+
+
 
         try {
             QueryLogin(user, pass);//  !! Show and error message that the credentials couldn't be matched
@@ -109,7 +138,7 @@ public class Login extends JFrame implements ActionListener {
      * @return True if credentials successfully authenticated
      * @throws SQLException
      */
-    public Boolean QueryLogin(String user, char[] pass) throws SQLException
+   /* public Boolean QueryLogin(String user, char[] pass) throws SQLException
     {
         Connection connection = Connection();
 
@@ -143,4 +172,4 @@ public class Login extends JFrame implements ActionListener {
 
         return false;
     }
-}
+}*/
