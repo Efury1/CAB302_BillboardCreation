@@ -9,10 +9,10 @@ public class testClient{
         //Get the network info from the 'network.props' file
         Properties properties = new Properties();
         FileInputStream in = null;
-
+        /*I'm assuming we want to be reading from local host */
         String host = null;
         String port = null;
-
+        //Connects through socket object
         try{
             in = new FileInputStream("./network.props");
             properties.load(in);

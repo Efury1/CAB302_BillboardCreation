@@ -3,6 +3,7 @@ import java.awt.*;
 
 public class ViewBillboard {
     public static void main(String args[]) {
+        //TODO closes all frames on exit, need to fix this. Not main propriety though.
         //MessageAndInfo();
         //MessageImageInfo();
         //MessageAndImage();
@@ -10,11 +11,11 @@ public class ViewBillboard {
     }
 
     public static void Message(){
-        JFrame frame = new JFrame("View Billboard");
-        frame.setSize(1000, 700);
+        JFrame frame1 = new JFrame("View Billboard");
+        frame1.setSize(1000, 700);
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Dimension messageDim = frame.getSize();
+        frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Dimension messageDim = frame1.getSize();
         double w = messageDim.width;
 
         String messageText = "Message text";
@@ -41,11 +42,11 @@ public class ViewBillboard {
         messageWidth = message.getFontMetrics(message.getFont()).stringWidth(messageText);
         System.out.println("Width :" + messageWidth);
 
-        frame.add(messagePanel);
+        frame1.add(messagePanel);
 
-        frame.pack();
-        frame.setSize(1000, 700);
-        frame.setVisible(true);
+        frame1.pack();
+        frame1.setSize(1000, 700);
+        frame1.setVisible(true);
     }
 
 
