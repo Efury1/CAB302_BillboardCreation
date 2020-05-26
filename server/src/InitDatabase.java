@@ -22,8 +22,8 @@ public class InitDatabase {
                 "perm_schedule BOOLEAN NOT NULL)");
         myStatement.executeQuery(
                 "CREATE TABLE IF NOT EXISTS billboards (" +
-                "billboard_ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, " +
-                "billboard_name VARCHAR(255) UNIQUE NOT NULL, " +
+                //"billboard_ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, " +
+                "billboard_name VARCHAR(255) PRIMARY KEY NOT NULL, " +
                 "title VARCHAR(255)," +
                 "description TEXT," +
                 "picture MEDIUMBLOB," +
@@ -37,23 +37,28 @@ public class InitDatabase {
                 "start_date DATE NOT NULL, " +
                 "end_date DATE NOT NULL, " +
                 "time_start TIME NOT NULL, " +
-                "duration INT NOT NULL," +
-                "repeat BOOLEAN NOT NULL" +
-                "repeat_frequency INT");
+                "duration INT NOT NULL, " +
+                        //TODO Find out why repeat BOOLEAN NOT NULL below causes an exception if run
+                //"repeat BOOLEAN NOT NULL, " +
+                "repeat_frequency INT)");
         myStatement.executeQuery(
                 "CREATE TABLE IF NOT EXISTS user_billboards (" +
                 "username VARCHAR(40) NOT NULL," +
-                "billboard_ID INT NOT NULL," +
+                //"billboard_ID INT NOT NULL," +
+                "billboard_name VARCHAR(255) NOT NULL,"+
                 "PRIMARY KEY (username, billboard_ID)," +
                 "FOREIGN KEY (username) REFERENCES users(username)," +
-                "FOREIGN KEY (billboard_ID) REFERENCES billboards(billboard_ID))");
+                "FOREIGN KEY (billboard_name) REFERENCES billboards(billboard_name))");
+                //"FOREIGN KEY (billboard_ID) REFERENCES billboards(billboard_ID))");
         myStatement.executeQuery(
                 "CREATE TABLE IF NOT EXISTS billboard_schedule (" +
                 "schedule_ID INT NOT NULL," +
-                "billboard_ID INT NOT NULL," +
+                //"billboard_ID INT NOT NULL," +
+                "billboard_name VARCHAR(255) NOT NULL,"+
                 "PRIMARY KEY (schedule_ID)," +
                 "FOREIGN KEY (schedule_ID) REFERENCES schedules(schedule_ID)," +
-                "FOREIGN KEY (billboard_ID) REFERENCES billboards(billboard_ID))");
+                "FOREIGN KEY (billboard_name) REFERENCES billboards(billboard_name))");
+                //"FOREIGN KEY (billboard_ID) REFERENCES billboards(billboard_ID))");
 
 
 //        myResults.next();
