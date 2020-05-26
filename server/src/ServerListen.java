@@ -20,8 +20,11 @@ public class ServerListen {
         } catch (FileNotFoundException fnfe) {
             System.err.println(fnfe);
         } catch (IOException e) {
+            //TODO get ride of ex.printStackTrace, In lec3 he says it's not acceptable error handling.
             e.printStackTrace();
+            System.exit(1);
         }
+
         //Return the port (if all is well)
         return Integer.parseInt(port);
     }
