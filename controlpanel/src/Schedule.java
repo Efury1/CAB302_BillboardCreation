@@ -24,12 +24,18 @@ public class Schedule extends JPanel {
         f.setTitle("JTable Example");
 
         String[][] data = {
-                { "  ", " ", "  ", " ", " ", " ", " " },
-                { " ", " ", " ", " ", " ", " ", " "}
+                { "5:00pm", " ", "  ", " ", " ", " ", " ", " "},
+                { "6:00pm", " ", " ", " ", " ", " ", " ", " "},
+                { "7:00pm", " ", "  ", " ", " ", " ", " ", " "},
+                { "8:00pm", " ", " ", " ", " ", " ", " ", " "},
+                { "9:00pm", " ", "  ", " ", " ", " ", " ", " "},
+                { "10:00pm", " ", " ", " ", " ", " ", " ", " "},
+                { "11:00pm", " ", "  ", " ", " ", " ", " ", " "},
+                { "12:00pm", " ", " ", " ", " ", " ", " ", " "}
         };
 
         // Column Names
-        String[] columnNames = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+        String[] columnNames = { "Times", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
 
         j = new JTable(data, columnNames);
         j.setBounds(30, 40, 200, 300);
@@ -43,8 +49,5 @@ public class Schedule extends JPanel {
         f.setVisible(true);
 
     }
-    public static void main(String[] args)
-    {
-        new Schedule();
-    }
+
 }

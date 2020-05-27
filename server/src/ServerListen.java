@@ -20,8 +20,11 @@ public class ServerListen {
         } catch (FileNotFoundException fnfe) {
             System.err.println(fnfe);
         } catch (IOException e) {
+            //TODO get ride of ex.printStackTrace, In lec3 he says it's not acceptable error handling.
             e.printStackTrace();
+            System.exit(1);
         }
+
         //Return the port (if all is well)
         return Integer.parseInt(port);
     }
@@ -42,15 +45,19 @@ public class ServerListen {
                 InputStream input = socket.getInputStream();
                 ObjectInputStream objectInput = new ObjectInputStream(input);
                 int myInt = objectInput.readInt();
-                System.out.println("Read byte " + myInt);
+                String token = objectInput.readUTF();
+                //System.out.println("Read byte " + myInt);
+                System.out.println("Request ID: " + myInt);
+                System.out.println("Token string: " + token);
 
                 //
-                ProcessRequest.ProcessRequest(myInt, "token");
+                ProcessRequest.ProcessRequest(myInt, token);
 
                 //Send a reply (based on info)
                 OutputStream output = socket.getOutputStream();
                 ObjectOutputStream objectOutput = new ObjectOutputStream(output);
                 objectOutput.writeInt(myInt*10);
+                objectOutput.writeUTF("Received request ID: " + myInt + " and token: " + token);
                 objectOutput.flush();
 
 

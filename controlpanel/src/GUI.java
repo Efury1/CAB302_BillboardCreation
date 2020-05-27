@@ -4,11 +4,12 @@ import java.awt.event.*;
 import java.io.File;
 
 /*Note: we may need threading when it comes to refreshing the ratios.
-* So, it doesn't interfere with the programming logic */
+* So, it doesn't interfere with the programming logic. */
+
 public class GUI extends Component {
-    public static void main(String args[]) {
+    /*public static void main(String args[]) {
         new GUI();
-    }
+    }*/
 
 
     public GUI () {
@@ -86,8 +87,9 @@ public class GUI extends Component {
         });
 
         m44.addActionListener(e -> {
-            SaveSchedule session2 = new SaveSchedule();
-            session2.setVisible(true);
+            Schedule session1 = new Schedule();
+            //SaveSchedule session2 = new SaveSchedule();
+            session1.setVisible(true);
         });
 
 
@@ -143,8 +145,8 @@ public class GUI extends Component {
             public void actionPerformed(ActionEvent e)
             {
 
-                //SelectBillboard session1 = new SelectBillboard();
-                //session1.showSelectionScreen();
+                SelectBillboard session1 = new SelectBillboard();
+                session1.showSelectionScreen();
             }
         });
 
@@ -162,20 +164,23 @@ public class GUI extends Component {
 
     }
 
-    public class SaveSchedule extends JFrame
+    //public class SaveSchedule extends JFrame
 
-    {
-
-
-        public SaveSchedule()
+    //{
+        //Schedule schedule = new Scheudle();
+        /*public SaveSchedule()
         {
             super("Save and schedule");
             setSize(300, 200);
+            /*Handling use clicks */
+            //JTextField l;
 
-        }
 
 
-    }
+        //}
+
+
+    //}
 
 
     /*User needs to be able to close this class without exiting all windows, Eliza */
@@ -198,18 +203,6 @@ public class GUI extends Component {
 
     }
 
-    /*public class DrawCanvas extends JPanel {
-
-        // Override paintComponent to perform your own painting
-        @Override
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);     // paint parent's background
-            setBackground(Color.BLACK);  // set background color for this JPanel
-            g.setColor(Color.WHITE);
-            g.setFont(new Font("Monospaced", Font.PLAIN, 12));
-            g.drawString("testing", 10, 20);
-        }
-    }*/
     //Selecting File
     public void selectFile() {
         JFileChooser fileChooser = new JFileChooser();
