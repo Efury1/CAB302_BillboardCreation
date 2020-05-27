@@ -4,9 +4,17 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class SelectBillboard {
-    public static void showSelectionScreen() {
+
+    public static void main(String[] args) throws IOException {
+        showSelectionScreen();
+    }
+
+    public static void showSelectionScreen() throws IOException {
+        String token = "";
         JFrame frame = new JFrame("Control Panel");
         int FRAME_WIDTH = 1000;
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -17,11 +25,22 @@ public class SelectBillboard {
         Billboard b3 = new Billboard("MyBillboard1", "Sam");
         Billboard b4 = new Billboard("BirthdayMessage", "Dave");
         int totalBoards = 4;
-        Billboard[] billboards = new Billboard[totalBoards];
-        billboards[0] = b1;
-        billboards[1] = b2;
-        billboards[2] = b3;
-        billboards[3] = b4;
+        ArrayList<Billboard> billboards = new ArrayList<Billboard>();
+        billboards.add(b1);
+        billboards.add(b2);
+        billboards.add(b3);
+        billboards.add(b4);
+        String[] requestData = {};
+        /*Object[] billboardData = SendReceive.SendReceive(2,token, requestData);
+
+        //unpack data, create billboard from data, and append billboard to array of billboards
+        for(int i = 0; i<billboardData.length; i++){
+            String billboardName = billboardData[i].toString();
+            i++;
+            String billboardCreator = billboardData[i].toString();
+            billboards.add(new Billboard(billboardName, billboardCreator));
+            totalBoards++;
+        }*/
 
         JPanel buttonPanel = new JPanel();
         JButton BView = new JButton("View");
@@ -37,14 +56,12 @@ public class SelectBillboard {
         JPanel labelPanel = new JPanel();
         labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
         JLabel LCreator = new JLabel("Billboard Creator:");
-        JLabel LScheduled = new JLabel("Billboard Schedule Status:");
         labelPanel.add(LCreator);
-        labelPanel.add(LScheduled);
 
 
         DefaultListModel listModel = new DefaultListModel();
         for(int i=0; i<totalBoards; i++){
-            listModel.addElement(billboards[i].getBName());
+            listModel.addElement(billboards.get(i).getBName());
         }
 
         JList billboardList = new JList(listModel);
@@ -62,9 +79,9 @@ public class SelectBillboard {
                         BDelete.setEnabled(false);
 
                     } else {
-                        //Selection, enable the fire button.
-                        LCreator.setText("Billboard Creator: " + billboards[billboardList.getSelectedIndex()].getBOwner());
-                        LScheduled.setText("Billboard Schedule Status: " + billboards[billboardList.getSelectedIndex()].getScheduled());
+                        //Update text when billboard selected
+                        LCreator.setText("Billboard Creator: " + billboards.get(billboardList.getSelectedIndex()).getBOwner());
+
                     }
                 }
             }

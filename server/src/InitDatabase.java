@@ -40,7 +40,7 @@ public class InitDatabase {
                 "schedule_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP," +
                 "start_date DATE NOT NULL, " +
                 "end_date DATE NOT NULL, " +
-                "time_start TIME NOT NULL, " +
+                "start_time TIME NOT NULL, " +
                 "duration INT NOT NULL, " +
                 "repeats BOOLEAN NOT NULL, " +
                 "repeat_frequency INT)");

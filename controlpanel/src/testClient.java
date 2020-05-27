@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.Socket;
+import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
 
 public class testClient{
@@ -32,7 +33,10 @@ public class testClient{
     }
 
     //test client class
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws IOException, InterruptedException, NoSuchAlgorithmException {
+        //  This is to be used after server ReceiveSend(); is created
+        //  SendReceive.SendReceive(1, "token", new Object[]{"testuser", "testpassword"});
+
         String host = null;
         Integer port = null;
         Socket socket;
@@ -64,8 +68,6 @@ public class testClient{
 
 
         socket.close();
-
-
     }
 
     private static void GetServerReply(Socket socket) throws IOException, InterruptedException {
