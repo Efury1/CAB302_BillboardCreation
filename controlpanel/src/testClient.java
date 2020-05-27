@@ -34,9 +34,10 @@ public class testClient{
 
     //test client class
     public static void main(String[] args) throws IOException, InterruptedException, NoSuchAlgorithmException {
-        SendReceive.SendReceive(1, "token", new Object[]{"testuser", "testpassword"});
+        //  This is to be used after server ReceiveSend(); is created
+        //  SendReceive.SendReceive(1, "token", new Object[]{"testuser", "testpassword"});
 
-        /*String host = null;
+        String host = null;
         Integer port = null;
         Socket socket;
         String[] connectionProps = RetrieveConnectionProps();
@@ -66,9 +67,7 @@ public class testClient{
         GetServerReply(socket);
 
 
-        socket.close();*/
-
-
+        socket.close();
     }
 
     private static void GetServerReply(Socket socket) throws IOException, InterruptedException {
