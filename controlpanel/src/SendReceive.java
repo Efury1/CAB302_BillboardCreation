@@ -18,7 +18,7 @@ public class SendReceive {
      * @return  The data that it gets from the server
      * @throws IOException
      */
-    public static Object[] SendReceive(Integer functionID, String token, Object[] dataToSend) throws IOException, NoSuchAlgorithmException {
+    public static Object[] SendReceive(Integer functionID, String token, Object[] dataToSend) throws IOException {
         //  Prepare to connect
         Socket mySocket;
         try {
@@ -51,11 +51,15 @@ public class SendReceive {
      * Hashes an input password with SHA-256
      * @param password
      * @return
-     * @throws NoSuchAlgorithmException
      */
-    private static String HashPassword(Object password) throws NoSuchAlgorithmException {
+    private static String HashPassword(Object password) {
         String inputPassword = password.toString();
-        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+        MessageDigest messageDigest = null;
+        try {
+            messageDigest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            //  do nothing (this will never be caught)
+        }
         byte[] hashedPassword = messageDigest.digest(inputPassword.getBytes());
         StringBuffer stringBuffer = new StringBuffer();
         for (byte b: hashedPassword)
@@ -72,9 +76,8 @@ public class SendReceive {
      * @param functionID
      * @param dataToSend
      * @throws IOException
-     * @throws NoSuchAlgorithmException
      */
-    private static void SendData(ObjectOutputStream objectOutputStream, int functionID, Object[] dataToSend) throws IOException, NoSuchAlgorithmException {
+    private static void SendData(ObjectOutputStream objectOutputStream, int functionID, Object[] dataToSend) throws IOException {
         //  List of things the client sends to the server (comes after the functionID and token)
         switch (functionID)
         {
@@ -106,7 +109,7 @@ public class SendReceive {
                 objectOutputStream.writeUTF((String)dataToSend[0]);   //  billboard name
                 objectOutputStream.writeUTF((String)dataToSend[1]);   //  start time
                 objectOutputStream.writeInt((Integer)dataToSend[2]);  //  duration
-                objectOutputStream.writeBoolean((Boolean)dataToSend[3]);  //  repeat bool
+                objectOutputStream.writeBoolean((Boolean)dataToSend[3]);  //  repeat
                 objectOutputStream.writeInt((Integer)dataToSend[4]);  //  repeat freq
                 objectOutputStream.writeUTF((String)dataToSend[5]);   //  start date
                 objectOutputStream.writeUTF((String)dataToSend[6]);   //  end date
@@ -159,22 +162,24 @@ public class SendReceive {
         {
             if (length == 0)
             {
-                return new Object[] {false};
+                functionID = -1;
+                throw new IOException("Unexpected error occurred.");
             }
             else
             {
                 //  Return with error message
-                return new Object[] {false, objectInputStream.readUTF()};
+                throw new IOException(objectInputStream.readUTF());
                 //  The Format of the error that's sent from the server:
                 //  array[] = {reply(bool), length(int), errorMessage(String)}
             }
         }
-        if (functionID == 11)
-        {
-            //  For case 11, the first item cannot be false
-            //  Increase length to skip first element
-            length++;
-        }
+        //  TODO can be removed but kept for backup reasons..
+//        if (functionID == 11)
+//        {
+//            //  For case 11, the first item cannot be false
+//            //  Increase length to skip first element
+//            length++;
+//        }
         Object[] receivedData = new Object[length]; //  This must be run after the check (in case length == 0)
         switch (functionID)
         {
@@ -227,11 +232,12 @@ public class SendReceive {
                 }
                 break;
             case 11:    //  Get user permissions
-                    receivedData[0] = true; //
-                    receivedData[1] = objectInputStream.readBoolean();  //  permission 1 (perm_create)
-                    receivedData[2] = objectInputStream.readBoolean();  //  permission 2 (perm_edit_all_billboards billboards)
-                    receivedData[3] = objectInputStream.readBoolean();  //  permission 3 (perm_edit_users)
-                    receivedData[4] = objectInputStream.readBoolean();  //  permission 4 (perm_schedule)
+                    //  TODO can remove but kept just in case
+                    // receivedData[0] = true; //
+                    receivedData[0] = objectInputStream.readBoolean();  //  permission 1 (perm_create)
+                    receivedData[1] = objectInputStream.readBoolean();  //  permission 2 (perm_edit_all_billboards billboards)
+                    receivedData[2] = objectInputStream.readBoolean();  //  permission 3 (perm_edit_users)
+                    receivedData[3] = objectInputStream.readBoolean();  //  permission 4 (perm_schedule)
                 break;
             default:
                 break;
