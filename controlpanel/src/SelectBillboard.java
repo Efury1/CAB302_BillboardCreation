@@ -55,6 +55,7 @@ public class SelectBillboard {
 
         JPanel labelPanel = new JPanel();
         labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
+        labelPanel.setPreferredSize(new Dimension(250, 700));
         JLabel LCreator = new JLabel("Billboard Creator:");
         labelPanel.add(LCreator);
 
