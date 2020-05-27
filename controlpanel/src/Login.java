@@ -59,7 +59,7 @@ public class Login {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String uName = textField.getText();
-                String pass = passwordField.getText();
+                String pass = passwordField.getText();  //  getText() is deprecated for JPasswordField (find other method)
                 /*Tutor will now be able to login in with name and password */
                 if(uName.equals("name") && pass.equals("password"))
                 {
@@ -105,7 +105,7 @@ public class Login {
      * !! Tweak this so it uses a scalable method (eg. https://youtu.be/P-80XbVFHRU?t=2039)
      * @param e
      */
-   /* @Override
+   /*@Override
     public void actionPerformed(ActionEvent e)
     {
         String user = textField.getText().trim();

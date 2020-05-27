@@ -1,2 +1,2 @@
-network.ip=localhost
+network.host=localhost
 network.port=12345
