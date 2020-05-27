@@ -4,12 +4,12 @@ import java.util.Properties;
 
 public class testClient{
 
-    //
+    //  This method is copied to SendReceive
     private static String[] RetrieveConnectionProps(){
         //Get the network info from the 'network.props' file
         Properties properties = new Properties();
         FileInputStream in = null;
-        /*I'm assuming we want to be reading from local host */
+        //  I'm assuming we want to be reading from local host
         String host = null;
         String port = null;
         //Connects through socket object
@@ -26,55 +26,74 @@ public class testClient{
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         //Return the host and port as string
         return new String[]{host, port};
     }
+
     //test client class
     public static void main(String[] args) throws IOException, InterruptedException {
         String host = null;
         Integer port = null;
         Socket socket;
-
         String[] connectionProps = RetrieveConnectionProps();
 
-        if(connectionProps[0] == null){
-            //invalid host, treat as localhost
-            host = "localhost";
-        } else {
-            host = connectionProps[0];
-        }
-        //Start the connection
-        if(!(connectionProps[1] == null)){
-            port = Integer.parseInt(connectionProps[1]);
-            socket = new Socket(host, port);
-
-            //prepare to send something
-            OutputStream output = socket.getOutputStream();
-            ObjectOutputStream objectOutput = new ObjectOutputStream(output);
-            ///send info
-            objectOutput.writeInt(2);
-            objectOutput.writeUTF("tokenString");
-            objectOutput.flush();
-
-
-            //get the reply from the server
-
-            InputStream input = socket.getInputStream();
-            ObjectInputStream objectInput = new ObjectInputStream(input);
-            int myInt = 0;
-            String myString = "";
-            if(objectInput.available() > 0){
-                myInt = objectInput.readInt();
-                myString = objectInput.readUTF();
-            } else {
-                Thread.sleep(500);
-            }
-            //System.out.println("Received byte " + myInt);
-            System.out.println("Message from server: " + myString);
-            objectInput.close();
-            socket.close();
+            //  Check if valid connection string
+        if (connectionProps[0] == null || connectionProps[1] == null) {
+            //  Don't connect if there is no valid host/port
+            System.err.println("A valid hostname couldn't be found. No connection was established");
+            return;
         }
 
+        //  Start the connection
+        host = connectionProps[0];
+        port = Integer.parseInt(connectionProps[1]);
+        socket = new Socket(host, port);
 
+        //prepare to send something
+        OutputStream output = socket.getOutputStream();
+        ObjectOutputStream objectOutput = new ObjectOutputStream(output);
+        ///send info
+        objectOutput.writeInt(2);
+        objectOutput.writeUTF("tokenString");
+
+        objectOutput.flush();
+
+
+        GetServerReply(socket);
+
+
+        socket.close();
+
+
+    }
+
+    private static void GetServerReply(Socket socket) throws IOException, InterruptedException {
+        //get the reply from the server
+        int myInt = 0;
+        String myString = "";
+        InputStream input = socket.getInputStream();
+        ObjectInputStream objectInput = new ObjectInputStream(input);
+
+        //  TODO make sure that every piece of data is received before assigning the variables
+        while(objectInput.available() == 0)
+        {
+            Thread.sleep(1);
+        }
+        myInt = objectInput.readInt();
+        myString = objectInput.readUTF();
+
+//        restart:
+//        if(objectInput.available() > 5000000){
+//            myInt = objectInput.readInt();
+//            myString = objectInput.readUTF();
+//        } else {
+//            Thread.sleep(1);
+//            break restart;
+//        }
+
+        //System.out.println("Received byte " + myInt);
+        System.out.println("Message from server: " + myString);
+        objectInput.close();
     }
 }

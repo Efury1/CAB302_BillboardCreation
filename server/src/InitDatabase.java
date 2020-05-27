@@ -3,10 +3,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * Opens a connection to the server then checks and implements the schema to the database.
+ * Initialises the database and contained tables.
+ */
 public class InitDatabase {
+    //  Constructor of InitDatabase
     public static void main(String[] args) throws SQLException {
         Connection myConnection = DBConnection.getInstance();
-
         Statement myStatement = myConnection.createStatement();
 
         myStatement.executeQuery("CREATE DATABASE IF NOT EXISTS billboard_database");
@@ -22,7 +26,7 @@ public class InitDatabase {
                 "perm_schedule BOOLEAN NOT NULL)");
         myStatement.executeQuery(
                 "CREATE TABLE IF NOT EXISTS billboards (" +
-                //"billboard_ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, " +
+                //  "billboard_ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, " +
                 "billboard_name VARCHAR(255) PRIMARY KEY NOT NULL, " +
                 "title VARCHAR(255)," +
                 "description TEXT," +
@@ -43,21 +47,21 @@ public class InitDatabase {
         myStatement.executeQuery(
                 "CREATE TABLE IF NOT EXISTS user_billboards (" +
                 "username VARCHAR(40) NOT NULL," +
-                //"billboard_ID INT NOT NULL," +
+                //  "billboard_ID INT NOT NULL," +
                 "billboard_name VARCHAR(255) NOT NULL,"+
                 "PRIMARY KEY (username, billboard_ID)," +
                 "FOREIGN KEY (username) REFERENCES users(username)," +
                 "FOREIGN KEY (billboard_name) REFERENCES billboards(billboard_name))");
-                //"FOREIGN KEY (billboard_ID) REFERENCES billboards(billboard_ID))");
+                //  "FOREIGN KEY (billboard_ID) REFERENCES billboards(billboard_ID))");
         myStatement.executeQuery(
                 "CREATE TABLE IF NOT EXISTS billboard_schedule (" +
                 "schedule_ID INT NOT NULL," +
-                //"billboard_ID INT NOT NULL," +
+                //  "billboard_ID INT NOT NULL," +
                 "billboard_name VARCHAR(255) NOT NULL,"+
                 "PRIMARY KEY (schedule_ID)," +
                 "FOREIGN KEY (schedule_ID) REFERENCES schedules(schedule_ID)," +
                 "FOREIGN KEY (billboard_name) REFERENCES billboards(billboard_name))");
-                //"FOREIGN KEY (billboard_ID) REFERENCES billboards(billboard_ID))");
+                //  "FOREIGN KEY (billboard_ID) REFERENCES billboards(billboard_ID))");
 
 
 //        myResults.next();

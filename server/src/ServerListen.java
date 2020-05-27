@@ -46,11 +46,11 @@ public class ServerListen {
                 ObjectInputStream objectInput = new ObjectInputStream(input);
                 int myInt = objectInput.readInt();
                 String token = objectInput.readUTF();
+
                 //System.out.println("Read byte " + myInt);
                 System.out.println("Request ID: " + myInt);
                 System.out.println("Token string: " + token);
 
-                //
                 ProcessRequest.ProcessRequest(myInt, token);
 
                 //Send a reply (based on info)
@@ -65,10 +65,5 @@ public class ServerListen {
                 socket.close();
             }
         }
-
-
-
-    }
-
-
+    }   //  end Main()
 }
