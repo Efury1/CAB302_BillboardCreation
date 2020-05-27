@@ -3,8 +3,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.Socket;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.Properties;
+
 
 public class SendReceive {
     /**
@@ -15,13 +18,13 @@ public class SendReceive {
      * @return  The data that it gets from the server
      * @throws IOException
      */
-    public static Object[] SendReceive(Integer functionID, String token, Object[] dataToSend) throws IOException {
+    public static Object[] SendReceive(Integer functionID, String token, Object[] dataToSend) throws IOException, NoSuchAlgorithmException {
         Socket mySocket;
         try {
             mySocket = SocketConnect();
         } catch (IOException e) {
             System.err.println(e);
-            return;
+            throw e;
         }
         OutputStream output = mySocket.getOutputStream();
         ObjectOutputStream objectOutput = new ObjectOutputStream(output);
@@ -34,30 +37,37 @@ public class SendReceive {
         for (Object data:dataToSend) {
             objectOutput.writeUTF((data.toString()));
         }
-        return new Object[];
+        return new Object[]{};
     }
 
-    private static String HashPassword(Object password) {
-        String hashedPassword;
-
-        //  !! TODO:hash code here
-        hashedPassword = (String)password;
-
-        return hashedPassword;
+    private static String HashPassword(Object password) throws NoSuchAlgorithmException {
+        String inputPassword = password.toString();
+        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+        byte[] hashedPassword = messageDigest.digest(inputPassword.getBytes());
+        StringBuffer stringBuffer = new StringBuffer();
+        for (byte b: hashedPassword)
+        {
+            stringBuffer.append(String.format("%1x", b & 255));
+        }
+        return stringBuffer.toString();
     }
 
-    private static void SendData(ObjectOutputStream objectOutput, int functionID, Object[] dataToSend) throws IOException {
+
+
+    private static void SendData(ObjectOutputStream objectOutput, int functionID, Object[] dataToSend) throws IOException, NoSuchAlgorithmException {
         //  List of things the client sends to the server (comes after the functionID and token)
         switch (functionID)
         {
             case 1: //  Login request
+            case 13:    //  Set user password
                 objectOutput.writeUTF((String)dataToSend[0]);   //  username
-                objectOutput.writeUTF(HashPassword(dataToSend[1]));   //  hashed password
+                objectOutput.writeUTF(HashPassword(dataToSend[1])); //  hashed password
                 break;
             case 2: //  List billboards
                 //  nothing required
                 break;
             case 3: //  Get billboard information
+            case 5: //  Delete billboard
                 objectOutput.writeUTF((String)dataToSend[0]);   //  billboard name
                 break;
             case 4: //  Create/edit billboard
@@ -69,18 +79,15 @@ public class SendReceive {
                 objectOutput.writeUTF((String)dataToSend[5]);   //  title colour
                 objectOutput.writeUTF((String)dataToSend[6]);   //  description colour
                 break;
-            case 5: //  Delete billboard
-                objectOutput.writeUTF((String)dataToSend[0]);   //  billboard name
-                break;
             case 6: //  View schedule
                 //  nothing required
                 break;
             case 7: //  Schedule billboard
                 objectOutput.writeUTF((String)dataToSend[0]);   //  billboard name
                 objectOutput.writeUTF((String)dataToSend[1]);   //  start time  //TODO check cast type (time datatype?)
-                objectOutput.writeInt((Integer)dataToSend[2]);   //  duration
-                objectOutput.writeBoolean((Boolean)dataToSend[3]);   //  repeat bool
-                objectOutput.writeInt((Integer)dataToSend[4]);   //  repeat freq
+                objectOutput.writeInt((Integer)dataToSend[2]);  //  duration
+                objectOutput.writeBoolean((Boolean)dataToSend[3]);  //  repeat bool
+                objectOutput.writeInt((Integer)dataToSend[4]);  //  repeat freq
                 objectOutput.writeUTF((String)dataToSend[5]);   //  start date
                 objectOutput.writeUTF((String)dataToSend[6]);   //  end date
                 break;
@@ -94,14 +101,15 @@ public class SendReceive {
                 break;
             case 10:    //  Create User
                 objectOutput.writeUTF((String)dataToSend[0]);   //  username
-                objectOutput.writeBoolean((Boolean)dataToSend[1]);   //  permission 1 (perm_create)
-                objectOutput.writeBoolean((Boolean)dataToSend[2]);   //  permission 2 (perm_edit_all_billboards billboards)
-                objectOutput.writeBoolean((Boolean)dataToSend[3]);   //  permission 3 (perm_edit_users)
-                objectOutput.writeBoolean((Boolean)dataToSend[4]);   //  permission 4 (perm_schedule)
-                objectOutput.writeUTF(HashPassword(dataToSend[5]));   //  hashed password
+                objectOutput.writeBoolean((Boolean)dataToSend[1]);  //  permission 1 (perm_create)
+                objectOutput.writeBoolean((Boolean)dataToSend[2]);  //  permission 2 (perm_edit_all_billboards billboards)
+                objectOutput.writeBoolean((Boolean)dataToSend[3]);  //  permission 3 (perm_edit_users)
+                objectOutput.writeBoolean((Boolean)dataToSend[4]);  //  permission 4 (perm_schedule)
+                objectOutput.writeUTF(HashPassword(dataToSend[5])); //  hashed password
                 break;
             case 11:    //  Get user permissions
-                objectOutput.writeUTF((String)dataToSend[0]);   //  username
+            case 14:    //  Delete user
+                objectOutput.writeUTF(dataToSend[0].toString());   //  username
                 break;
             case 12:   //  Set user permissions
                 objectOutput.writeUTF((String)dataToSend[0]);   //  username
@@ -109,13 +117,6 @@ public class SendReceive {
                 objectOutput.writeBoolean((Boolean)dataToSend[2]);   //  permission 2 (perm_edit_all_billboards billboards)
                 objectOutput.writeBoolean((Boolean)dataToSend[3]);   //  permission 3 (perm_edit_users)
                 objectOutput.writeBoolean((Boolean)dataToSend[4]);   //  permission 4 (perm_schedule)
-                break;
-            case 13:    //  Set user password
-                objectOutput.writeUTF((String)dataToSend[0]);   //  username
-                objectOutput.writeUTF(HashPassword(dataToSend[1]));   //  hashed password
-                break;
-            case 14:    //  Delete user
-                objectOutput.writeUTF((String)dataToSend[0]);   //  username
                 break;
             case 15:    //  Log out (aka delete session token)
                 //  nothing required
