@@ -19,6 +19,7 @@ public class SendReceive {
      * @throws IOException
      */
     public static Object[] SendReceive(Integer functionID, String token, Object[] dataToSend) throws IOException, NoSuchAlgorithmException {
+        //  Prepare to connect
         Socket mySocket;
         try {
             mySocket = SocketConnect();
@@ -26,9 +27,10 @@ public class SendReceive {
             System.err.println(e);
             throw e;
         }
-        OutputStream output = mySocket.getOutputStream();
-        ObjectOutputStream objectOutput = new ObjectOutputStream(output);
 
+        //  Prepare to send
+        OutputStream outputStream = mySocket.getOutputStream();
+        ObjectOutputStream objectOutput = new ObjectOutputStream(outputStream);
         objectOutput.writeInt(functionID);
         objectOutput.writeUTF(token);
 
@@ -37,9 +39,20 @@ public class SendReceive {
         for (Object data:dataToSend) {
             objectOutput.writeUTF((data.toString()));
         }
-        return new Object[]{};
+        objectOutput.flush();
+
+        //  prepare to receive..
+        InputStream inputStream = mySocket.getInputStream();
+        ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+        return ReceiveData(objectInputStream, functionID);
     }
 
+    /**
+     * Hashes an input password with SHA-256
+     * @param password
+     * @return
+     * @throws NoSuchAlgorithmException
+     */
     private static String HashPassword(Object password) throws NoSuchAlgorithmException {
         String inputPassword = password.toString();
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
@@ -47,76 +60,83 @@ public class SendReceive {
         StringBuffer stringBuffer = new StringBuffer();
         for (byte b: hashedPassword)
         {
+            //  "%1x" formats it as a hashed string without the spaces included (could also use "%02x")
             stringBuffer.append(String.format("%1x", b & 255));
         }
         return stringBuffer.toString();
     }
 
-
-
-    private static void SendData(ObjectOutputStream objectOutput, int functionID, Object[] dataToSend) throws IOException, NoSuchAlgorithmException {
+    /**
+     * A collection of all the different "options" that a client can send to the server.
+     * @param objectOutputStream
+     * @param functionID
+     * @param dataToSend
+     * @throws IOException
+     * @throws NoSuchAlgorithmException
+     */
+    private static void SendData(ObjectOutputStream objectOutputStream, int functionID, Object[] dataToSend) throws IOException, NoSuchAlgorithmException {
         //  List of things the client sends to the server (comes after the functionID and token)
         switch (functionID)
         {
             case 1: //  Login request
             case 13:    //  Set user password
-                objectOutput.writeUTF((String)dataToSend[0]);   //  username
-                objectOutput.writeUTF(HashPassword(dataToSend[1])); //  hashed password
+                objectOutputStream.writeUTF((String)dataToSend[0]);   //  username
+                objectOutputStream.writeUTF(HashPassword(dataToSend[1])); //  hashed password
                 break;
             case 2: //  List billboards
                 //  nothing required
                 break;
             case 3: //  Get billboard information
             case 5: //  Delete billboard
-                objectOutput.writeUTF((String)dataToSend[0]);   //  billboard name
+                objectOutputStream.writeUTF((String)dataToSend[0]);   //  billboard name
                 break;
             case 4: //  Create/edit billboard
-                objectOutput.writeUTF((String)dataToSend[0]);   //  billboard name
-                objectOutput.writeUTF((String)dataToSend[1]);   //  title
-                objectOutput.writeUTF((String)dataToSend[2]);   //  description
-                objectOutput.write((byte[])dataToSend[3]);  //  picture data
-                objectOutput.writeUTF((String)dataToSend[4]);   //  background colour   //TODO check if the cast is to string(instead of something like (Int)dataToSend
-                objectOutput.writeUTF((String)dataToSend[5]);   //  title colour
-                objectOutput.writeUTF((String)dataToSend[6]);   //  description colour
+                objectOutputStream.writeUTF((String)dataToSend[0]);   //  billboard name
+                objectOutputStream.writeUTF((String)dataToSend[1]);   //  title
+                objectOutputStream.writeUTF((String)dataToSend[2]);   //  description
+                objectOutputStream.write((byte[])dataToSend[3]);  //  picture data
+                objectOutputStream.writeUTF((String)dataToSend[4]);   //  background colour
+                objectOutputStream.writeUTF((String)dataToSend[5]);   //  title colour
+                objectOutputStream.writeUTF((String)dataToSend[6]);   //  description colour
                 break;
             case 6: //  View schedule
                 //  nothing required
                 break;
             case 7: //  Schedule billboard
-                objectOutput.writeUTF((String)dataToSend[0]);   //  billboard name
-                objectOutput.writeUTF((String)dataToSend[1]);   //  start time  //TODO check cast type (time datatype?)
-                objectOutput.writeInt((Integer)dataToSend[2]);  //  duration
-                objectOutput.writeBoolean((Boolean)dataToSend[3]);  //  repeat bool
-                objectOutput.writeInt((Integer)dataToSend[4]);  //  repeat freq
-                objectOutput.writeUTF((String)dataToSend[5]);   //  start date
-                objectOutput.writeUTF((String)dataToSend[6]);   //  end date
+                objectOutputStream.writeUTF((String)dataToSend[0]);   //  billboard name
+                objectOutputStream.writeUTF((String)dataToSend[1]);   //  start time
+                objectOutputStream.writeInt((Integer)dataToSend[2]);  //  duration
+                objectOutputStream.writeBoolean((Boolean)dataToSend[3]);  //  repeat bool
+                objectOutputStream.writeInt((Integer)dataToSend[4]);  //  repeat freq
+                objectOutputStream.writeUTF((String)dataToSend[5]);   //  start date
+                objectOutputStream.writeUTF((String)dataToSend[6]);   //  end date
                 break;
             case 8: //  Remove billboard from schedule
-                objectOutput.writeUTF((String)dataToSend[0]);   //  billboard name
-                objectOutput.writeUTF((String)dataToSend[1]);   //  start date
-                objectOutput.writeUTF((String)dataToSend[2]);   //  start time   //TODO check casting
+                objectOutputStream.writeUTF((String)dataToSend[0]);   //  billboard name
+                objectOutputStream.writeUTF((String)dataToSend[1]);   //  start date
+                objectOutputStream.writeUTF((String)dataToSend[2]);   //  start time
                 break;
             case 9: //  List users
                 //  nothing required
                 break;
             case 10:    //  Create User
-                objectOutput.writeUTF((String)dataToSend[0]);   //  username
-                objectOutput.writeBoolean((Boolean)dataToSend[1]);  //  permission 1 (perm_create)
-                objectOutput.writeBoolean((Boolean)dataToSend[2]);  //  permission 2 (perm_edit_all_billboards billboards)
-                objectOutput.writeBoolean((Boolean)dataToSend[3]);  //  permission 3 (perm_edit_users)
-                objectOutput.writeBoolean((Boolean)dataToSend[4]);  //  permission 4 (perm_schedule)
-                objectOutput.writeUTF(HashPassword(dataToSend[5])); //  hashed password
+                objectOutputStream.writeUTF((String)dataToSend[0]);   //  username
+                objectOutputStream.writeBoolean((Boolean)dataToSend[1]);  //  permission 1 (perm_create)
+                objectOutputStream.writeBoolean((Boolean)dataToSend[2]);  //  permission 2 (perm_edit_all_billboards billboards)
+                objectOutputStream.writeBoolean((Boolean)dataToSend[3]);  //  permission 3 (perm_edit_users)
+                objectOutputStream.writeBoolean((Boolean)dataToSend[4]);  //  permission 4 (perm_schedule)
+                objectOutputStream.writeUTF(HashPassword(dataToSend[5])); //  hashed password
                 break;
             case 11:    //  Get user permissions
             case 14:    //  Delete user
-                objectOutput.writeUTF(dataToSend[0].toString());   //  username
+                objectOutputStream.writeUTF(dataToSend[0].toString());   //  username
                 break;
             case 12:   //  Set user permissions
-                objectOutput.writeUTF((String)dataToSend[0]);   //  username
-                objectOutput.writeBoolean((Boolean)dataToSend[1]);   //  permission 1 (perm_create)
-                objectOutput.writeBoolean((Boolean)dataToSend[2]);   //  permission 2 (perm_edit_all_billboards billboards)
-                objectOutput.writeBoolean((Boolean)dataToSend[3]);   //  permission 3 (perm_edit_users)
-                objectOutput.writeBoolean((Boolean)dataToSend[4]);   //  permission 4 (perm_schedule)
+                objectOutputStream.writeUTF((String)dataToSend[0]);   //  username
+                objectOutputStream.writeBoolean((Boolean)dataToSend[1]);   //  permission 1 (perm_create)
+                objectOutputStream.writeBoolean((Boolean)dataToSend[2]);   //  permission 2 (perm_edit_all_billboards billboards)
+                objectOutputStream.writeBoolean((Boolean)dataToSend[3]);   //  permission 3 (perm_edit_users)
+                objectOutputStream.writeBoolean((Boolean)dataToSend[4]);   //  permission 4 (perm_schedule)
                 break;
             case 15:    //  Log out (aka delete session token)
                 //  nothing required
@@ -127,8 +147,101 @@ public class SendReceive {
     }
 
     /**
-     *
+     * A collection of all the different "options" that a client can receive from the server.
+     * @param objectInputStream
+     * @param functionID
+     * @return
      */
+    public static Object[] ReceiveData(ObjectInputStream objectInputStream, Integer functionID) throws IOException {
+        Boolean reply = objectInputStream.readBoolean();
+        Integer length = objectInputStream.readInt();
+        if (!reply)
+        {
+            if (length == 0)
+            {
+                return new Object[] {false};
+            }
+            else
+            {
+                //  Return with error message
+                return new Object[] {false, objectInputStream.readUTF()};
+                //  The Format of the error that's sent from the server:
+                //  array[] = {reply(bool), length(int), errorMessage(String)}
+            }
+        }
+        if (functionID == 11)
+        {
+            //  For case 11, the first item cannot be false
+            //  Increase length to skip first element
+            length++;
+        }
+        Object[] receivedData = new Object[length]; //  This must be run after the check (in case length == 0)
+        switch (functionID)
+        {
+            case 1: //  Login request
+                receivedData[0] = objectInputStream.readUTF();  //  token
+                break;
+            case 2: //  List billboards
+                for (int i = 0; i < length; i+=2)
+                {
+                    receivedData[i] = objectInputStream.readUTF();  //  billboard name
+                    receivedData[i+1] = objectInputStream.readUTF();    //  creator name
+                }
+                break;
+            case 3: //  Get billboard information
+                receivedData[0] = objectInputStream.readUTF();  //  title
+                receivedData[1] = objectInputStream.readUTF();  //  description
+                receivedData[2] = objectInputStream.read(); //  picture
+                receivedData[3] = objectInputStream.readUTF();  //  background colour
+                receivedData[4] = objectInputStream.readUTF();  //  title colour
+                receivedData[5] = objectInputStream.readUTF();  //  description colour
+                break;
+            case 4: //  Create/edit billboard
+            case 5: //  Delete billboard
+            case 7: //  Schedule billboard
+            case 8: //  Remove billboard from schedule
+            case 10:    //  Create User
+            case 12:    //  Set user permissions
+            case 13:    //  Set user password
+            case 14:    //  Delete user
+            case 15:    //  Log out (aka delete session token)
+                return new Object[] {true}; //  Creation/Edit/Delete/Schedule successful
+            case 6: //  View schedule
+                for (int i = 0; i < length; i+=9)
+                {
+                    receivedData[i] = objectInputStream.readUTF();  //  billboard name
+                    receivedData[i+1] = objectInputStream.readUTF();    //  creator name
+                    receivedData[i+2] = objectInputStream.readUTF();    //  time stamp
+                    receivedData[i+3] = objectInputStream.readUTF();    //  start date
+                    receivedData[i+4] = objectInputStream.readUTF();    //  end date
+                    receivedData[i+5] = objectInputStream.readUTF();    //  time start
+                    receivedData[i+6] = objectInputStream.readInt();    //  duration
+                    receivedData[i+7] = objectInputStream.readBoolean();    //  repeats
+                    receivedData[i+8] = objectInputStream.readInt();    //  repeat frequency
+                }
+                break;
+            case 9: //  List users
+                for (int i = 0; i < length; i++)
+                {
+                    receivedData[i] = objectInputStream.readUTF();  //  username (eg. "user1", "user2", "user3"
+                }
+                break;
+            case 11:    //  Get user permissions
+                    receivedData[0] = true; //
+                    receivedData[1] = objectInputStream.readBoolean();  //  permission 1 (perm_create)
+                    receivedData[2] = objectInputStream.readBoolean();  //  permission 2 (perm_edit_all_billboards billboards)
+                    receivedData[3] = objectInputStream.readBoolean();  //  permission 3 (perm_edit_users)
+                    receivedData[4] = objectInputStream.readBoolean();  //  permission 4 (perm_schedule)
+                break;
+            default:
+                break;
+        }   //  end switch
+
+
+        //  TODO fix return
+        return new Object[]{};
+    }
+
     private static Socket SocketConnect() throws IOException {
         String host = null;
         Integer port = null;

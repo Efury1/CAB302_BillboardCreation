@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.Socket;
+import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
 
 public class testClient{
@@ -32,8 +33,10 @@ public class testClient{
     }
 
     //test client class
-    public static void main(String[] args) throws IOException, InterruptedException {
-        String host = null;
+    public static void main(String[] args) throws IOException, InterruptedException, NoSuchAlgorithmException {
+        SendReceive.SendReceive(1, "token", new Object[]{"testuser", "testpassword"});
+
+        /*String host = null;
         Integer port = null;
         Socket socket;
         String[] connectionProps = RetrieveConnectionProps();
@@ -63,7 +66,7 @@ public class testClient{
         GetServerReply(socket);
 
 
-        socket.close();
+        socket.close();*/
 
 
     }
