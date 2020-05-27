@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
 
 /*Note: we may need threading when it comes to refreshing the ratios.
 * So, it doesn't interfere with the programming logic. */
@@ -146,7 +147,11 @@ public class GUI extends Component {
             {
 
                 SelectBillboard session1 = new SelectBillboard();
-                session1.showSelectionScreen();
+                try {
+                    session1.showSelectionScreen();
+                } catch (IOException ex) {
+                    ex.printStackTrace(); //TODO remove printStackTrace
+                }
             }
         });
 
