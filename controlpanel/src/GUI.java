@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -87,6 +89,10 @@ public class GUI extends Component {
         //Action Listeners
         menuImageLoad.addActionListener(e -> {
             selectFile();
+        });
+
+        editUserPermission.addActionListener(e -> {
+            editUsers();
         });
 
         m44.addActionListener(e -> {
@@ -220,6 +226,54 @@ public class GUI extends Component {
             System.out.println("Selected file: " + selectedFile.getAbsolutePath());
         }
 
+
+    }
+
+    public void editUsers() {
+        /* Create and set up a frame window */
+        JFrame frame = new JFrame("Edit Users");
+        String data[][]={ {"User1","Permission"},
+                {"User2","Permission"},
+                {"User3","Permission"}};
+        String column[]={"User","PermissionType"};
+        JTable table = new JTable(data, column);
+        JTable userTable=new JTable(data,column);
+        ListSelectionModel select = userTable.getSelectionModel();
+        select.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        select.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                String Data = null;
+                int[] row = userTable.getSelectedRows();
+                int[] columns = userTable.getSelectedColumns();
+                for (int i = 0; i < row.length; i++)
+                {
+                    for (int j = 0; j < columns.length; j++)
+                    {
+                        Data = (String) userTable.getValueAt(row[i], columns[j]);
+                    }
+                    /*Tells you want has been selected, this is more for testing */
+                    System.out.println("The selected table element is: " + Data);
+                }
+
+            }
+        });
+
+
+        userTable.setBounds(30,40,200,300);
+
+        //Scroll
+        JScrollPane sp=new JScrollPane(userTable);
+
+        //frame
+        frame.add(sp);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        frame.setSize(400,400);
+        frame.setVisible(true);
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
 
     }
 
