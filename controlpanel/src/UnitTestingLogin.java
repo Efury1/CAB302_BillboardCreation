@@ -1,5 +1,7 @@
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -11,16 +13,18 @@ import static org.junit.Assert.assertNotNull;
 * 1.Username and password fields are empty, "Enter" is click.
 * and an error dialog appears
 * 2.If username and password fields are invalid, the 'Enter' is pressed.
-* An error dialog appears. */
+* An error dialog appears.
+*
+* ------------------Calculating Testing Effectiveness------------------------
+* */
 
-public class UnitTestingLogin {
+public class UnitTestingLogin extends Login {
     @Test
-    public void testConnectInvalid()
-    {
-        //Login using default user
-        //should return correct vlue
-        //assertNotNull();
-
+    public void testConnectInvalid() throws IOException {
+        String[] processRequest = {};
+        String token = "";
+        //LoginClient();
+        Object[] loginData = SendReceive.SendReceive(1, token, processRequest);
     }
 
     @Test
@@ -35,9 +39,7 @@ public class UnitTestingLogin {
     @Test
     public void testUserPasswordEmpty()
     {
-        //Login using default user
-        //should return correct vlue
-        //assertNotNull();
+
 
     }
 
