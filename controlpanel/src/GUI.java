@@ -1,10 +1,12 @@
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 /*Note: we may need threading when it comes to refreshing the ratios.
 * So, it doesn't interfere with the programming logic. */
@@ -232,14 +234,37 @@ public class GUI extends Component {
     public void editUsers() {
         /* Create and set up a frame window */
         JFrame frame = new JFrame("Edit Users");
+        //Delete Button
+        JButton deleteBtn = new JButton("Delete User");
         String data[][]={ {"User1","Permission"},
                 {"User2","Permission"},
                 {"User3","Permission"}};
         String column[]={"User","PermissionType"};
         //JTable table = new JTable(data, column);
-        JTable userTable=new JTable(data,column);
+        DefaultTableModel model = new DefaultTableModel(data, column);
+        JTable userTable=new JTable(model);
         ListSelectionModel select = userTable.getSelectionModel();
-        select.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        deleteBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String Data = null;
+                int[] row = userTable.getSelectedRows();
+                int[] columns = userTable.getSelectedColumns();
+                for( int i = userTable.getRowCount() - 1; i >= 0; i--)
+                {
+                    System.out.println("a");
+                    DefaultTableModel model =
+                            (DefaultTableModel)userTable.getModel();
+                    model.removeRow(i);
+                }
+            }
+        });
+
+
+
+
+
+        /*select.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         select.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -254,14 +279,23 @@ public class GUI extends Component {
                         Data = (String) userTable.getValueAt(row[i], columns[j]);
                     }
                     /*Tells you want has been selected, this is more for testing */
-                    System.out.println("The selected table element is: " + Data);
-                }
+                    /*System.out.println("The selected table element is: " + Data);*/
+                /*}
 
             }
-        });
+        });*/
 
-        //Delete Button
-        JButton deleteBtn = new JButton("Delete User");
+
+
+        /*do something like this for deleting table
+        int[] selectedRows = getTable().getSelectedRows();
+        if (selectedRows.length > 0) {
+            for (int i = selectedRows.length - 1; i >= 0; i--) {
+                tableModel.removeRow(selectedRows[i]);
+            }
+        }*/
+
+
         //Layout with JLabel
         JScrollPane sp=new JScrollPane(userTable);
         frame.setLayout(new BorderLayout());
