@@ -59,6 +59,8 @@ public class GUI extends Component {
         bkMenu.add(colorRed);
         /*Under edit */
         JMenuItem menuImageLoad = new JMenuItem("Upload Image");
+        JMenuItem editUserPermission = new JMenuItem("Edit Users");
+        m2.add(editUserPermission);
         m2.add(menuImageLoad);
         m2.add(bkMenu);
 
