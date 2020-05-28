@@ -250,7 +250,7 @@ public class GUI extends Component {
                 String Data = null;
                 int[] row = userTable.getSelectedRows();
                 int[] columns = userTable.getSelectedColumns();
-                for( int i = userTable.getRowCount() - 1; i >= 0; i--)
+                for( int i = userTable.getRowCount() - 1; i >= 0; )
                 {
                     System.out.println("a");
                     DefaultTableModel model =
