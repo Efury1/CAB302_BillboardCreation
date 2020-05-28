@@ -5,11 +5,16 @@ public class ViewBillboard {
     public static void main(String args[]) {
         //TODO closes all frames on exit, need to fix this. Not main propriety though.
 
-        Billboard bill = new Billboard("testBillboard", "testUser");
-        bill.setBMessage("Test text");
-        bill.setBDescription("Test description");
-        showBillboard(bill);
+        Billboard TestBill = new Billboard("testBillboard", "testUser");
+        TestBill.setBMessage("Test text");
+        TestBill.setBDescription("Test description");
+        showBillboard(TestBill);
     }
+
+    /**
+     * Given a billboard, chooses which function should be called to display it and calls this function
+     * @param b billboard to be displayed
+     */
     public static void showBillboard(Billboard b){
         if(b.hasMessage()&&b.hasDescription()&&b.hasImage()){
             //All three elements present
@@ -53,6 +58,10 @@ public class ViewBillboard {
         }
     }
 
+    /**
+     * Displays billboard with only Message element
+     * @param messageText Text of message to be displayed on billboard
+     */
     public static void Message(String messageText){
         JFrame frame1 = new JFrame("View Billboard");
         frame1.setSize(1000, 700);
@@ -90,10 +99,15 @@ public class ViewBillboard {
         frame1.setVisible(true);
     }
 
+    /**
+     * Displays billboard with only Information element
+     * @param rawInfoText Text of information to be displayed on billboard
+     */
     public static void Info(String rawInfoText){
         JFrame frame1 = new JFrame("View Billboard");
         frame1.setSize(1000, 700);
 
+        //Wraps in HTML tags so can span multiple lines
         String infoText = "<html>"+ rawInfoText+"</html>";
 
         frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -129,7 +143,11 @@ public class ViewBillboard {
         frame1.setVisible(true);
     }
 
-
+    /**
+     * Displays billboard with message and information elements
+     * @param messageText Text of message to be displayed on billboard
+     * @param infoText Text of information to be displayed on billboard
+     */
     public static void MessageAndInfo(String messageText, String infoText){
         JFrame frame = new JFrame("View Billboard");
         frame.setSize(1000, 700);
