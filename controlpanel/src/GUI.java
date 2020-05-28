@@ -236,7 +236,7 @@ public class GUI extends Component {
                 {"User2","Permission"},
                 {"User3","Permission"}};
         String column[]={"User","PermissionType"};
-        JTable table = new JTable(data, column);
+        //JTable table = new JTable(data, column);
         JTable userTable=new JTable(data,column);
         ListSelectionModel select = userTable.getSelectionModel();
         select.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -246,6 +246,7 @@ public class GUI extends Component {
                 String Data = null;
                 int[] row = userTable.getSelectedRows();
                 int[] columns = userTable.getSelectedColumns();
+                JButton deleteBtn = new JButton("Delete User");
                 for (int i = 0; i < row.length; i++)
                 {
                     for (int j = 0; j < columns.length; j++)
@@ -259,17 +260,16 @@ public class GUI extends Component {
             }
         });
 
-
-        userTable.setBounds(30,40,200,300);
-
-        //Scroll
+        //Delete Button
+        JButton deleteBtn = new JButton("Delete User");
+        //Layout with JLabel
         JScrollPane sp=new JScrollPane(userTable);
-
-        //frame
-        frame.add(sp);
+        frame.setLayout(new BorderLayout());
+        frame.add(new JLabel("Edit Users"), BorderLayout.NORTH);
+        frame.add(userTable, BorderLayout.CENTER);
+        frame.add(deleteBtn, BorderLayout.SOUTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        frame.setSize(400,400);
+        frame.setSize(300, 300);
         frame.setVisible(true);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
