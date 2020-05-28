@@ -97,8 +97,12 @@ public class SelectBillboard {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //View billboard
-                //TODO Get all data about billboard from database
                 Billboard selectedBillboard = billboards.get(billboardList.getSelectedIndex());
+                selectedBillboard.setBMessage("Testing...");
+                selectedBillboard.setBDescription("Test description");
+                System.out.println(selectedBillboard.getBOwner());
+                //TODO Get all data about billboard from database
+                ViewBillboard.showBillboard(selectedBillboard);
             }
         });
 
