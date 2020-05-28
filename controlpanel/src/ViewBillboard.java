@@ -4,10 +4,11 @@ import java.awt.*;
 public class ViewBillboard {
     public static void main(String args[]) {
         //TODO closes all frames on exit, need to fix this. Not main propriety though.
-        MessageAndInfo("Message", "Info text info text");
-        //MessageImageInfo();
-        //MessageAndImage();
-        //Message("Hello World");
+
+        Billboard bill = new Billboard("testBillboard", "testUser");
+        bill.setBMessage("Test text");
+        bill.setBDescription("Test description");
+        showBillboard(bill);
     }
     public static void showBillboard(Billboard b){
         if(b.hasMessage()&&b.hasDescription()&&b.hasImage()){
@@ -42,7 +43,7 @@ public class ViewBillboard {
                             else{
                                 if(b.hasDescription()){
                                     //Info only
-                                    //TODO
+                                    Info(b.getBDescription());
                                 }
                             }
                         }
@@ -83,6 +84,45 @@ public class ViewBillboard {
         System.out.println("Width :" + messageWidth);
 
         frame1.add(messagePanel);
+
+        frame1.pack();
+        frame1.setSize(1000, 700);
+        frame1.setVisible(true);
+    }
+
+    public static void Info(String rawInfoText){
+        JFrame frame1 = new JFrame("View Billboard");
+        frame1.setSize(1000, 700);
+
+        String infoText = "<html>"+ rawInfoText+"</html>";
+
+        frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Dimension infoDim = frame1.getSize();
+        double w = infoDim.width;
+
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new GridBagLayout());
+
+
+        JLabel info = new JLabel(infoText, JLabel.CENTER);
+        infoPanel.add(info);
+
+        Font TitleFont = info.getFont();
+        int infoSize = TitleFont.getSize();
+        int infoWidth = info.getFontMetrics(TitleFont).stringWidth(infoText);
+
+        while (infoWidth < w - 10) {
+            infoSize++;
+            info.setFont(new Font("Serif", Font.PLAIN, infoSize));
+            infoWidth= info.getFontMetrics(info.getFont()).stringWidth(infoText);
+        }
+
+        //set font back to smaller to not overflowing
+        info.setFont(new Font("Serif", Font.PLAIN, infoSize - 2));
+        infoWidth = info.getFontMetrics(info.getFont()).stringWidth(infoText);
+        System.out.println("Width :" + infoWidth);
+
+        frame1.add(infoPanel);
 
         frame1.pack();
         frame1.setSize(1000, 700);
