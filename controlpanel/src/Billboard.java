@@ -21,6 +21,45 @@ public class Billboard {
         scheduled = false;
     }
 
+    /**
+     * Returns whether the billboard contains a message
+     * @return true if message is not blank or null, otherwise false
+     */
+    public boolean hasMessage(){
+        if(getBMessage() == "" || getBMessage() == null){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    /**
+     * Returns whether the billboard contains a description
+     * @return true if description is not blank or null, otherwise false
+     */
+    public boolean hasDescription(){
+        if(getBDescription() == "" || getBDescription() == null){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    /**
+     * Returns whether the billboard contains an image
+     * @return true if image is present, otherwise false
+     */
+    public boolean hasImage(){
+        if((getBBlobData() == "" || getBBlobData() == null) && (getBImageLink() == "" || getBImageLink() == null)){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
     //for the setters will have to do something to change it in DB
 
     /**
