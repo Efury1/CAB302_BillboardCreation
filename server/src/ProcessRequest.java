@@ -26,7 +26,7 @@ public class ProcessRequest {
     }
 
     public static void ProcessRequest(Integer function_id, String token/*, Object[] vars*/) throws SQLException {
-        //
+        //TODO Are we writing more ifs
         if(function_id == 1){
             Login("user", "pass");
         }

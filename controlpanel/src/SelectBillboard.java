@@ -21,7 +21,8 @@ public class SelectBillboard {
         String token = "";
         JFrame frame = new JFrame("Control Panel");
         int FRAME_WIDTH = 1000;
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Import billboards from database (placeholder code)
         Billboard b1 = new Billboard("EOFYParty", "Sam");

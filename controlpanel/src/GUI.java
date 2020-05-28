@@ -270,6 +270,34 @@ public class GUI extends Component {
             }
         });
 
+        /*Add user */
+        addUser.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Create window
+
+                JFrame w1 = new JFrame();
+                // set panel
+                JPanel p = new JPanel();
+                // create a label
+                JLabel l = new JLabel("Testing");
+                // set border
+                p.setBorder(BorderFactory.createLineBorder(Color.darkGray));
+                p.add(l);
+                w1.add(p);
+                // set background
+                p.setBackground(Color.white);
+                //Set Location
+                w1.setLocation(300, 300);
+                // setsize of window
+                w1.setSize(200, 100);
+                // set visibility of window
+                w1.setVisible(true);
+                w1.setDefaultCloseOperation(frame.HIDE_ON_CLOSE);
+            }
+        });
+
         /*You're able to change table value */
         select.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         select.addListSelectionListener(new ListSelectionListener() {
@@ -307,7 +335,7 @@ public class GUI extends Component {
         frame.setSize(1000, 500);
         frame.setVisible(true);
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.setVisible(true);
 
     }

@@ -47,6 +47,7 @@ public class Schedule extends JPanel {
         f.setSize(500, 200);
         // Frame Visible = true
         f.setVisible(true);
+        f.setDefaultCloseOperation(f.HIDE_ON_CLOSE);
 
     }
 

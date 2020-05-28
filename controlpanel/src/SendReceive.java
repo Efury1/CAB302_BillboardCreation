@@ -82,6 +82,9 @@ public class SendReceive {
         switch (functionID)
         {
             case 1: //  Login request
+                //TODO and test in UnitTestingLogin
+                //Current Errors,
+
             case 13:    //  Set user password
                 objectOutputStream.writeUTF((String)dataToSend[0]);   //  username
                 objectOutputStream.writeUTF(HashPassword(dataToSend[1])); //  hashed password
