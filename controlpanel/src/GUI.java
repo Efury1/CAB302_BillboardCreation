@@ -232,10 +232,18 @@ public class GUI extends Component {
     }
 
     public void editUsers() {
+
         /* Create and set up a frame window */
         JFrame frame = new JFrame("Edit Users");
+
         //Delete Button
         JButton deleteBtn = new JButton("Delete User");
+        JButton changePass = new JButton("Change Password");
+        JButton addUser = new JButton("Add User");
+        JPanel panel = new JPanel();
+        panel.add(addUser);
+        panel.add(changePass);
+        panel.add(deleteBtn);
         String data[][]={ {"User1","Permission"},
                 {"User2","Permission"},
                 {"User3","Permission"}};
@@ -244,6 +252,9 @@ public class GUI extends Component {
         DefaultTableModel model = new DefaultTableModel(data, column);
         JTable userTable=new JTable(model);
         ListSelectionModel select = userTable.getSelectionModel();
+
+
+        //TODO ready for sever functionality, needs to get connection
         deleteBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -252,7 +263,6 @@ public class GUI extends Component {
                 int[] columns = userTable.getSelectedColumns();
                 for( int i = userTable.getRowCount() - 1; i >= 0; )
                 {
-                    System.out.println("a");
                     DefaultTableModel model =
                             (DefaultTableModel)userTable.getModel();
                     model.removeRow(i);
@@ -260,11 +270,8 @@ public class GUI extends Component {
             }
         });
 
-
-
-
-
-        /*select.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        /*You're able to change table value */
+        select.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         select.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -278,32 +285,26 @@ public class GUI extends Component {
                     {
                         Data = (String) userTable.getValueAt(row[i], columns[j]);
                     }
-                    /*Tells you want has been selected, this is more for testing */
-                    /*System.out.println("The selected table element is: " + Data);*/
-                /*}
+                    //Tells you want has been selected, this is more for testing
+                    System.out.println("The selected table element is: " + Data);
+                }
 
             }
-        });*/
-
-
-
-        /*do something like this for deleting table
-        int[] selectedRows = getTable().getSelectedRows();
-        if (selectedRows.length > 0) {
-            for (int i = selectedRows.length - 1; i >= 0; i--) {
-                tableModel.removeRow(selectedRows[i]);
-            }
-        }*/
+        });
 
 
         //Layout with JLabel
+
         JScrollPane sp=new JScrollPane(userTable);
+        JPanel panel2 = new JPanel();
+        panel2.add(sp);
         frame.setLayout(new BorderLayout());
-        frame.add(new JLabel("Edit Users"), BorderLayout.NORTH);
-        frame.add(userTable, BorderLayout.CENTER);
-        frame.add(deleteBtn, BorderLayout.SOUTH);
+        //frame.add(new JLabel("Edit Users"), BorderLayout.NORTH);
+        //frame.add(userTable, BorderLayout.CENTER);
+        frame.getContentPane().add(BorderLayout.CENTER, panel2);
+        frame.getContentPane().add(BorderLayout.SOUTH, panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300, 300);
+        frame.setSize(1000, 500);
         frame.setVisible(true);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
