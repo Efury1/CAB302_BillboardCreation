@@ -4,21 +4,22 @@ import java.awt.*;
 public class ViewBillboard {
     public static void main(String args[]) {
         //TODO closes all frames on exit, need to fix this. Not main propriety though.
-        //MessageAndInfo();
+        MessageAndInfo("Message", "Info text info text");
         //MessageImageInfo();
         //MessageAndImage();
-        Message();
+        //Message("Hello World");
+    }
+    public static void showBillboard(Billboard b){
+
     }
 
-    public static void Message(){
+    public static void Message(String messageText){
         JFrame frame1 = new JFrame("View Billboard");
         frame1.setSize(1000, 700);
 
         frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension messageDim = frame1.getSize();
         double w = messageDim.width;
-
-        String messageText = "Message text";
 
         JPanel messagePanel = new JPanel();
         messagePanel.setLayout(new GridBagLayout());
@@ -50,15 +51,13 @@ public class ViewBillboard {
     }
 
 
-    public static void MessageAndInfo(){
+    public static void MessageAndInfo(String messageText, String infoText){
         JFrame frame = new JFrame("View Billboard");
         frame.setSize(1000, 700);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension messageDim = frame.getSize();
         double w = messageDim.width;
-
-        String messageText = "Message text and more text";
 
         JPanel messagePanel = new JPanel();
         messagePanel.setLayout(new GridBagLayout());
@@ -86,7 +85,7 @@ public class ViewBillboard {
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new GridBagLayout());
 
-        JLabel info = new JLabel("Info text info text info text info text");
+        JLabel info = new JLabel(infoText);
         infoPanel.add(info);
 
 
