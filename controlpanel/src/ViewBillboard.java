@@ -10,7 +10,46 @@ public class ViewBillboard {
         //Message("Hello World");
     }
     public static void showBillboard(Billboard b){
-
+        if(b.hasMessage()&&b.hasDescription()&&b.hasImage()){
+            //All three elements present
+            MessageImageInfo(b.getBMessage(), b.getBImageLink(), b.getBDescription());
+        }
+        else{
+            if(b.hasMessage()&&b.hasDescription()){
+                //Message and info only
+                MessageAndInfo(b.getBMessage(), b.getBDescription());
+            }
+            else {
+                if(b.hasDescription()&&b.hasImage()){
+                    //Info and image only
+                    //TODO
+                }
+                else{
+                    if(b.hasMessage()&&b.hasImage()){
+                        //Message and image only
+                        //TODO
+                    }
+                    else{
+                        if(b.hasMessage()){
+                            //Message only
+                            Message(b.getBMessage());
+                        }
+                        else{
+                            if(b.hasImage()){
+                                //Image only
+                                //TODO
+                            }
+                            else{
+                                if(b.hasDescription()){
+                                    //Info only
+                                    //TODO
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static void Message(String messageText){
@@ -101,7 +140,7 @@ public class ViewBillboard {
 
     }
 
-    public static void MessageImageInfo(){
+    public static void MessageImageInfo(String messageText, String imageString, String infoText){
         JFrame frame = new JFrame("View Billboard");
         frame.setSize(1000, 700);
 
@@ -110,19 +149,19 @@ public class ViewBillboard {
         JPanel messagePanel = new JPanel();
         messagePanel.setLayout(new GridBagLayout());
 
-        JLabel message = new JLabel("Message", JLabel.CENTER);
+        JLabel message = new JLabel(messageText, JLabel.CENTER);
         messagePanel.add(message);
 
         JPanel imagePanel = new JPanel();
         imagePanel.setLayout(new GridBagLayout());
 
-        JLabel image = new JLabel("Insert image here", JLabel.CENTER);
+        JLabel image = new JLabel(imageString, JLabel.CENTER);
         imagePanel.add(image);
 
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new GridBagLayout());
 
-        JLabel info = new JLabel("Info text info text info text info text");
+        JLabel info = new JLabel(infoText);
         infoPanel.add(info);
 
 
