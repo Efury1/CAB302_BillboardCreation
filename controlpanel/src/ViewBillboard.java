@@ -4,21 +4,62 @@ import java.awt.*;
 public class ViewBillboard {
     public static void main(String args[]) {
         //TODO closes all frames on exit, need to fix this. Not main propriety though.
-        //MessageAndInfo();
-        //MessageImageInfo();
-        //MessageAndImage();
-        Message();
+
+        Billboard bill = new Billboard("testBillboard", "testUser");
+        bill.setBMessage("Test text");
+        bill.setBDescription("Test description");
+        showBillboard(bill);
+    }
+    public static void showBillboard(Billboard b){
+        if(b.hasMessage()&&b.hasDescription()&&b.hasImage()){
+            //All three elements present
+            MessageImageInfo(b.getBMessage(), b.getBImageLink(), b.getBDescription());
+        }
+        else{
+            if(b.hasMessage()&&b.hasDescription()){
+                //Message and info only
+                MessageAndInfo(b.getBMessage(), b.getBDescription());
+            }
+            else {
+                if(b.hasDescription()&&b.hasImage()){
+                    //Info and image only
+                    //TODO
+                }
+                else{
+                    if(b.hasMessage()&&b.hasImage()){
+                        //Message and image only
+                        //TODO
+                    }
+                    else{
+                        if(b.hasMessage()){
+                            //Message only
+                            Message(b.getBMessage());
+                        }
+                        else{
+                            if(b.hasImage()){
+                                //Image only
+                                //TODO
+                            }
+                            else{
+                                if(b.hasDescription()){
+                                    //Info only
+                                    Info(b.getBDescription());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    public static void Message(){
+    public static void Message(String messageText){
         JFrame frame1 = new JFrame("View Billboard");
         frame1.setSize(1000, 700);
 
         frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension messageDim = frame1.getSize();
         double w = messageDim.width;
-
-        String messageText = "Message text";
 
         JPanel messagePanel = new JPanel();
         messagePanel.setLayout(new GridBagLayout());
@@ -49,16 +90,53 @@ public class ViewBillboard {
         frame1.setVisible(true);
     }
 
+    public static void Info(String rawInfoText){
+        JFrame frame1 = new JFrame("View Billboard");
+        frame1.setSize(1000, 700);
 
-    public static void MessageAndInfo(){
+        String infoText = "<html>"+ rawInfoText+"</html>";
+
+        frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Dimension infoDim = frame1.getSize();
+        double w = infoDim.width;
+
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new GridBagLayout());
+
+
+        JLabel info = new JLabel(infoText, JLabel.CENTER);
+        infoPanel.add(info);
+
+        Font TitleFont = info.getFont();
+        int infoSize = TitleFont.getSize();
+        int infoWidth = info.getFontMetrics(TitleFont).stringWidth(infoText);
+
+        while (infoWidth < w - 10) {
+            infoSize++;
+            info.setFont(new Font("Serif", Font.PLAIN, infoSize));
+            infoWidth= info.getFontMetrics(info.getFont()).stringWidth(infoText);
+        }
+
+        //set font back to smaller to not overflowing
+        info.setFont(new Font("Serif", Font.PLAIN, infoSize - 2));
+        infoWidth = info.getFontMetrics(info.getFont()).stringWidth(infoText);
+        System.out.println("Width :" + infoWidth);
+
+        frame1.add(infoPanel);
+
+        frame1.pack();
+        frame1.setSize(1000, 700);
+        frame1.setVisible(true);
+    }
+
+
+    public static void MessageAndInfo(String messageText, String infoText){
         JFrame frame = new JFrame("View Billboard");
         frame.setSize(1000, 700);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension messageDim = frame.getSize();
         double w = messageDim.width;
-
-        String messageText = "Message text and more text";
 
         JPanel messagePanel = new JPanel();
         messagePanel.setLayout(new GridBagLayout());
@@ -86,7 +164,7 @@ public class ViewBillboard {
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new GridBagLayout());
 
-        JLabel info = new JLabel("Info text info text info text info text");
+        JLabel info = new JLabel(infoText);
         infoPanel.add(info);
 
 
@@ -102,7 +180,7 @@ public class ViewBillboard {
 
     }
 
-    public static void MessageImageInfo(){
+    public static void MessageImageInfo(String messageText, String imageString, String infoText){
         JFrame frame = new JFrame("View Billboard");
         frame.setSize(1000, 700);
 
@@ -111,19 +189,19 @@ public class ViewBillboard {
         JPanel messagePanel = new JPanel();
         messagePanel.setLayout(new GridBagLayout());
 
-        JLabel message = new JLabel("Message", JLabel.CENTER);
+        JLabel message = new JLabel(messageText, JLabel.CENTER);
         messagePanel.add(message);
 
         JPanel imagePanel = new JPanel();
         imagePanel.setLayout(new GridBagLayout());
 
-        JLabel image = new JLabel("Insert image here", JLabel.CENTER);
+        JLabel image = new JLabel(imageString, JLabel.CENTER);
         imagePanel.add(image);
 
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new GridBagLayout());
 
-        JLabel info = new JLabel("Info text info text info text info text");
+        JLabel info = new JLabel(infoText);
         infoPanel.add(info);
 
 

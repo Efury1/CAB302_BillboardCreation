@@ -13,6 +13,10 @@ public class SelectBillboard {
         showSelectionScreen();
     }
 
+    /**
+     * Opens a new window showing a JList of billboards that can be viewed, edited, or deleted
+     * @throws IOException
+     */
     public static void showSelectionScreen() throws IOException {
         String token = "";
         JFrame frame = new JFrame("Control Panel");
@@ -31,6 +35,7 @@ public class SelectBillboard {
         billboards.add(b3);
         billboards.add(b4);
         String[] requestData = {};
+        //TODO Uncomment section when SendReceive is working
         /*Object[] billboardData = SendReceive.SendReceive(2,token, requestData);
 
         //unpack data, create billboard from data, and append billboard to array of billboards
@@ -55,6 +60,7 @@ public class SelectBillboard {
 
         JPanel labelPanel = new JPanel();
         labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
+        labelPanel.setPreferredSize(new Dimension(250, 700));
         JLabel LCreator = new JLabel("Billboard Creator:");
         labelPanel.add(LCreator);
 
@@ -86,12 +92,13 @@ public class SelectBillboard {
                 }
             }
         });
-        //frame.add(billboardList);
 
-        /*BView.addActionListener(new ActionListener() {
+        BView.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //View billboard
+                //TODO Get all data about billboard from database
+                Billboard selectedBillboard = billboards.get(billboardList.getSelectedIndex());
             }
         });
 
@@ -99,16 +106,18 @@ public class SelectBillboard {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //Edit billboard
+                //TODO Get all data about billboard from database
+                Billboard selectedBillboard = billboards.get(billboardList.getSelectedIndex());
             }
         });
 
         BDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //Delete billboard
-                
+                //TODO Delete billboard including from database
+                Billboard selectedBillboard = billboards.get(billboardList.getSelectedIndex());
             }
-        });*/
+        });
 
         frame.getContentPane().add(BorderLayout.SOUTH, buttonPanel);
         frame.getContentPane().add(BorderLayout.CENTER, billboardList);
