@@ -2,14 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ViewBillboard {
-    public static void main(String args[]) {
-        //TODO closes all frames on exit, need to fix this. Not main propriety though.
+    /*public static void main(String args[]) {
 
         Billboard TestBill = new Billboard("testBillboard", "testUser");
         TestBill.setBMessage("Test text");
         TestBill.setBDescription("Test description");
         showBillboard(TestBill);
-    }
+    }*/
 
     /**
      * Given a billboard, chooses which function should be called to display it and calls this function
@@ -66,7 +65,6 @@ public class ViewBillboard {
         JFrame frame1 = new JFrame("View Billboard");
         frame1.setSize(1000, 700);
 
-        frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension messageDim = frame1.getSize();
         double w = messageDim.width;
 
@@ -90,7 +88,6 @@ public class ViewBillboard {
         //set font back to smaller to not overflowing
         message.setFont(new Font("Serif", Font.PLAIN, messageSize - 2));
         messageWidth = message.getFontMetrics(message.getFont()).stringWidth(messageText);
-        System.out.println("Width :" + messageWidth);
 
         frame1.add(messagePanel);
 
@@ -110,7 +107,6 @@ public class ViewBillboard {
         //Wraps in HTML tags so can span multiple lines
         String infoText = "<html>"+ rawInfoText+"</html>";
 
-        frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension infoDim = frame1.getSize();
         double w = infoDim.width;
 
@@ -134,7 +130,6 @@ public class ViewBillboard {
         //set font back to smaller to not overflowing
         info.setFont(new Font("Serif", Font.PLAIN, infoSize - 2));
         infoWidth = info.getFontMetrics(info.getFont()).stringWidth(infoText);
-        System.out.println("Width :" + infoWidth);
 
         frame1.add(infoPanel);
 
@@ -152,7 +147,6 @@ public class ViewBillboard {
         JFrame frame = new JFrame("View Billboard");
         frame.setSize(1000, 700);
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension messageDim = frame.getSize();
         double w = messageDim.width;
 
@@ -176,7 +170,6 @@ public class ViewBillboard {
         //set font back to smaller to not overflowing
         message.setFont(new Font("Serif", Font.PLAIN, messageSize - 2));
         messageWidth = message.getFontMetrics(message.getFont()).stringWidth(messageText);
-        System.out.println("Width :" + messageWidth);
 
 
         JPanel infoPanel = new JPanel();
@@ -201,8 +194,6 @@ public class ViewBillboard {
     public static void MessageImageInfo(String messageText, String imageString, String infoText){
         JFrame frame = new JFrame("View Billboard");
         frame.setSize(1000, 700);
-
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel messagePanel = new JPanel();
         messagePanel.setLayout(new GridBagLayout());
@@ -242,7 +233,6 @@ public class ViewBillboard {
 
         String messageText = "Good morning";
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         Dimension messageDim = frame.getSize();
         double w = messageDim.width;
