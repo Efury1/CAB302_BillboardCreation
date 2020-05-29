@@ -36,7 +36,7 @@ public class SelectBillboard {
         billboards.add(b4);
         String[] requestData = {};
         //TODO Uncomment section when SendReceive is working
-        /*Object[] billboardData = SendReceive.SendReceive(2,token, requestData);
+        /*Object[] billboardData = ClientRequests.ListBillboards;
 
         //unpack data, create billboard from data, and append billboard to array of billboards
         for(int i = 0; i<billboardData.length; i++){
@@ -99,10 +99,15 @@ public class SelectBillboard {
                 //View billboard
                 Billboard selectedBillboard = billboards.get(billboardList.getSelectedIndex());
                 selectedBillboard.setBMessage("Testing...");
-                selectedBillboard.setBDescription("Test description");
-                System.out.println(selectedBillboard.getBOwner());
+                //selectedBillboard.setBDescription("Test description");
                 //TODO Get all data about billboard from database
-                ViewBillboard.showBillboard(selectedBillboard);
+                if(selectedBillboard.hasMessage()==false && selectedBillboard.hasDescription()==false && selectedBillboard.hasImage()==false){
+                    //Does not show billboard with nothing on it
+                    JOptionPane.showMessageDialog(frame,"There are no elements to display in this billboard");
+                }
+                else {
+                    ViewBillboard.showBillboard(selectedBillboard);
+                }
             }
         });
 
