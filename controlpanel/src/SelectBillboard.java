@@ -37,7 +37,7 @@ public class SelectBillboard {
         billboards.add(b4);
         String[] requestData = {};
         //TODO Uncomment section when SendReceive is working
-        /*Object[] billboardData = ClientRequests.ListBillboards;
+        /*Object[] billboardData = ClientRequests.ListBillboards();
 
         //unpack data, create billboard from data, and append billboard to array of billboards
         for(int i = 0; i<billboardData.length; i++){
@@ -110,7 +110,7 @@ public class SelectBillboard {
                     try {
                         ViewBillboard.showBillboard(selectedBillboard);
                     } catch (IOException ex) {
-                        ex.printStackTrace(); //TODO remove printStackTrace()
+                        ex.printStackTrace(); //TODO remove printStackTrace
                     }
                 }
             }
