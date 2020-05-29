@@ -1,20 +1,26 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class ViewBillboard {
-    /*public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
 
         Billboard TestBill = new Billboard("testBillboard", "testUser");
         TestBill.setBMessage("Test text");
         TestBill.setBDescription("Test description");
-        showBillboard(TestBill);
-    }*/
+        //showBillboard(TestBill);
+        MessageImageInfo("Hello", "https://vignette.wikia.nocookie.net/habitrpg/images/9/92/Summer-Splash-Starfish.png/revision/latest?cb=20150702105822", "Info");
+    }
 
     /**
      * Given a billboard, chooses which function should be called to display it and calls this function
      * @param b billboard to be displayed
      */
-    public static void showBillboard(Billboard b){
+    public static void showBillboard(Billboard b) throws IOException {
         if(b.hasMessage()&&b.hasDescription()&&b.hasImage()){
             //All three elements present
             MessageImageInfo(b.getBMessage(), b.getBImageLink(), b.getBDescription());
@@ -191,7 +197,14 @@ public class ViewBillboard {
 
     }
 
-    public static void MessageImageInfo(String messageText, String imageString, String infoText){
+    /**
+     * Displays billboard with Message, Image and Info
+     * @param messageText Message text to display
+     * @param imageString URL of image to display
+     * @param infoText Info text to display
+     * @throws IOException
+     */
+    public static void MessageImageInfo(String messageText, String imageString, String infoText) throws IOException {
         JFrame frame = new JFrame("View Billboard");
         frame.setSize(1000, 700);
 
@@ -204,7 +217,13 @@ public class ViewBillboard {
         JPanel imagePanel = new JPanel();
         imagePanel.setLayout(new GridBagLayout());
 
-        JLabel image = new JLabel(imageString, JLabel.CENTER);
+        URL imageURL = new URL(imageString);
+        //Turns URL to bufferedImage
+        BufferedImage decodedImage = ImageIO.read(imageURL);
+        //Turns bufferedImage to icon
+        ImageIcon iconImage = new ImageIcon(decodedImage);
+
+        JLabel image = new JLabel(iconImage, JLabel.CENTER);
         imagePanel.add(image);
 
         JPanel infoPanel = new JPanel();
@@ -225,13 +244,17 @@ public class ViewBillboard {
         frame.setVisible(true);
     }
 
-    public static void MessageAndImage(){
+    /**
+     * Displays billboard with message and image
+     * @param messageText Text of message to display
+     * @param imageString URL of image to display
+     * @throws IOException
+     */
+    public static void MessageAndImage(String messageText, String imageString) throws IOException {
         JFrame frame = new JFrame("View Billboard");
         frame.setLayout(new GridBagLayout());
         frame.setSize(1000, 700);
         GridBagConstraints gbc = new GridBagConstraints();
-
-        String messageText = "Good morning";
 
 
         Dimension messageDim = frame.getSize();
@@ -279,7 +302,13 @@ public class ViewBillboard {
         gbc.gridy = 1;
         imagePanel.setLayout(new GridBagLayout());
 
-        JLabel image = new JLabel("Insert image here", JLabel.CENTER);
+        URL imageURL = new URL(imageString);
+        //Turns URL to bufferedImage
+        BufferedImage decodedImage = ImageIO.read(imageURL);
+        //Turns bufferedImage to icon
+        ImageIcon iconImage = new ImageIcon(decodedImage);
+
+        JLabel image = new JLabel(iconImage, JLabel.CENTER);
         imagePanel.add(image);
 
 
