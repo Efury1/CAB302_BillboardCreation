@@ -1,4 +1,4 @@
-import org.junit.Test;
+/*import org.junit.Test;
 
 import java.io.IOException;
 
@@ -18,7 +18,7 @@ import static org.junit.Assert.assertNotNull;
 * ------------------Calculating Testing Effectiveness------------------------
 * */
 
-public class UnitTestingLogin extends Login {
+/*public class UnitTestingLogin extends Login {
     @Test
     public void testConnectInvalid() throws IOException {
         String[] processRequest = {};
@@ -62,4 +62,4 @@ public class UnitTestingLogin extends Login {
     }
 
 
-}
+}*/
