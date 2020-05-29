@@ -1,6 +1,4 @@
 
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -8,26 +6,24 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import java.awt.Image;
 import java.io.File;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Iterator;
+/* Main screen */
+/**
+ * @author Eliza Fury
+ * @version last edited 29.05.20
+ * Worked on designing GUI() screen.
+ * Implemented action listeners that allows screen to pick up text
+ * and change color of background.
+ * Linked functionality to billboard(@author Lauren).
+ */
 
 /*Note: we may need threading when it comes to refreshing the ratios.
 * So, it doesn't interfere with the programming logic. */
 
 public class GUI extends Component {
-    /*public static void main(String args[]) {
-        new GUI();
-    }*/
-
 
     public GUI () {
         JTextArea jt;
@@ -104,7 +100,13 @@ public class GUI extends Component {
         panel1.add(info);
 
 
-        //Action Listeners
+
+        /* actionPerformed */
+        /**
+         * The user can interact with GUI to create their billboard.
+         * There's also, the ability to go to other frames like View Billboards, schedule etc.
+         * @param aEvent from these buttons: 1.Upload Image 2.Edit Users 3.Schedule 4. Typing text etc
+         */
         menuImageLoad.addActionListener(e -> {
             //selectFile();
 
@@ -115,13 +117,16 @@ public class GUI extends Component {
                 int result = file.showSaveDialog(null);
                 if(result == JFileChooser.APPROVE_OPTION)
                 {
-                    File selectedFile = file.getSelectedFile();
-                    String path = selectedFile.getAbsolutePath();
-                    imagel.setIcon(new ImageIcon(path));
+                    try{
+                        File selectedFile = file.getSelectedFile();
+                        String path = selectedFile.getAbsolutePath();
+                        imagel.setIcon(new ImageIcon(path));
+
+                    } catch (Exception ex) { JOptionPane.showMessageDialog(this, ex); }
+
+
                 }
 
-
-            //
         });
 
 
@@ -212,24 +217,6 @@ public class GUI extends Component {
 
     }
 
-    //public class SaveSchedule extends JFrame
-
-    //{
-        //Schedule schedule = new Scheudle();
-        /*public SaveSchedule()
-        {
-            super("Save and schedule");
-            setSize(300, 200);
-            /*Handling use clicks */
-            //JTextField l;
-
-
-
-        //}
-
-
-    //}
-
 
     /*User needs to be able to close this class without exiting all windows, Eliza */
     public class Billboard extends JFrame
@@ -250,39 +237,6 @@ public class GUI extends Component {
 
 
     }
-
-    //Selecting File
-    /*public void selectFile() {
-        var chooser = new JFileChooser();
-        chooser.setCurrentDirectory(new File("."));
-        String[] extensions = ImageIO.getReaderFileSuffixes();
-        chooser.setFileFilter(new FileNameExtensionFilter("Image files", extensions));
-        Component frame;
-        int r = chooser.showOpenDialog(this);
-        try {
-            File file = null;
-            InputStream is = new BufferedInputStream(new FileInputStream(file));
-            Image image = ImageIO.read(is);
-            imagel.setIcon(ResizeImage(path));
-        }
-        catch(IOException e)
-        {
-            JOptionPane.showMessageDialog(this, e);
-        }
-
-
-    }*/
-        /*JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-        int result = fileChooser.showOpenDialog(this);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            //For testing
-            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
-        }}*/
-
-
-
 
     public void editUsers() {
 
@@ -374,7 +328,7 @@ public class GUI extends Component {
         });
 
 
-        //Layout with JLabel
+
 
         JScrollPane sp=new JScrollPane(userTable);
         JPanel panel2 = new JPanel();
@@ -396,23 +350,6 @@ public class GUI extends Component {
 
 
     }
-
-
-/*class ssWindow() {
-
-            final boolean RESIZABLE = true;
-            final boolean CLOSABLE = true;
-            final boolean ICONIFIABLE = true;
-            final boolean MAXIMIZABLE = true;
-
-            JInternalFrame firstWindow = new JInternalFrame("schedule and save", RESIZABLE,
-                    CLOSABLE, MAXIMIZABLE, ICONIFIABLE);
-            firstWindow.setSize(100, 100);
-            firstWindow.setLocation(10, 10);
-            firstWindow.setVisible(true);
-            frame.add(firstWindow);
-
-        }*/
 
 
 
