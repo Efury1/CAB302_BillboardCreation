@@ -22,7 +22,9 @@ import java.io.File;
 
 /*Note: we may need threading when it comes to refreshing the ratios.
 * So, it doesn't interfere with the programming logic. */
-
+    //TODO Need to scale image so it's not going over into other buttons
+    //TODO Schedule needs drop down menu
+    //TODO Add and Delete user screens
 public class GUI extends Component {
 
     public GUI () {
@@ -59,6 +61,7 @@ public class GUI extends Component {
         JMenuItem m11 = new JMenuItem("Import");
         JMenuItem m22 = new JMenuItem("Export");
         JMenuItem m44 = new JMenuItem("Schedule and Save");
+        JMenuItem m55 = new JMenuItem("Logout");
         JMenuItem colorYellow = new JMenuItem("Yellow");
         JMenuItem colorBlue = new JMenuItem("Blue");
         JMenuItem colorRed = new JMenuItem("Red");
@@ -67,6 +70,7 @@ public class GUI extends Component {
         m1.add(m11);
         m1.add(m22);
         m1.add(m44);
+        m1.add(m55);
         bkMenu.add(colorYellow);
         bkMenu.add(colorBlue);
         bkMenu.add(colorRed);
@@ -140,6 +144,12 @@ public class GUI extends Component {
             //SaveSchedule session2 = new SaveSchedule();
             session1.setVisible(true);
         });
+
+        m55.addActionListener(e -> {
+            //Need to not let you continue if you haven't login.
+            new Login();
+        });
+
 
 
         String testing = tf.getText();
@@ -217,26 +227,6 @@ public class GUI extends Component {
 
     }
 
-
-    /*User needs to be able to close this class without exiting all windows, Eliza */
-    public class Billboard extends JFrame
-
-    {
-        JScrollPane scrollpane;
-
-        public Billboard()
-        {
-            super("Billboard Viewer");
-            setSize(300, 200);
-            setDefaultCloseOperation(EXIT_ON_CLOSE);
-            String categories[] = {"Example 1", "Example 2", "Example 3","Example 4", "Example 5", "Example 6", "Example 7", "Example 8", "Example 9" };
-            JList billboardList = new JList(categories);
-            scrollpane = new JScrollPane(billboardList);
-            getContentPane().add(scrollpane, BorderLayout.CENTER);
-        }
-
-
-    }
 
     public void editUsers() {
 
