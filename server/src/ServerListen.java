@@ -10,6 +10,7 @@ public class ServerListen {
         Properties properties = new Properties();
         FileInputStream in = null;
         String port = null;
+        Integer testInt = 0;
         try{
             in = new FileInputStream("./network.props");
             properties.load(in);
@@ -17,49 +18,39 @@ public class ServerListen {
 
             //Extract the port
             port = properties.getProperty("network.port");
+            testInt = Integer.parseInt(port);
         } catch (FileNotFoundException fnfe) {
             System.err.println(fnfe);
-        } catch (IOException e) {
+        } catch (IOException | NumberFormatException e) {
             //TODO get ride of ex.printStackTrace, In lec3 he says it's not acceptable error handling.
-            e.printStackTrace();
+            //  e.printStackTrace();
+            System.err.println("Could not find port.");
             System.exit(1);
         }
 
         //Return the port (if all is well)
-        return Integer.parseInt(port);
+        return testInt;
     }
 
-    public static void main(String[] args) throws IOException, SQLException {
-
+    public static void main(String[] args) throws IOException, SQLException{
+        TokenHandling tokenCache = new TokenHandling();
         Integer port = RetrievePort();
 
         //Catch that the assigned port is not valid
         if(!(port == null)){
-            ServerSocket serverSocket = new ServerSocket(port);
+            ServerSocket serverSocket = null;
+            try {
+                serverSocket = new ServerSocket(port);
+            } catch (IOException | SecurityException | IllegalArgumentException e) {
+                System.err.println("Could not open socket.");
+                return;
+            }
 
             //loop indefinitely, listening for a connection to accept
             for(;;) {
                 Socket socket = serverSocket.accept();
 
-                //Get the connection info
-                InputStream input = socket.getInputStream();
-                ObjectInputStream objectInput = new ObjectInputStream(input);
-                int myInt = objectInput.readInt();
-                String token = objectInput.readUTF();
-
-                //System.out.println("Read byte " + myInt);
-                System.out.println("Request ID: " + myInt);
-                System.out.println("Token string: " + token);
-
-                ProcessRequest.ProcessRequest(myInt, token);
-
-                //Send a reply (based on info)
-                OutputStream output = socket.getOutputStream();
-                ObjectOutputStream objectOutput = new ObjectOutputStream(output);
-                objectOutput.writeInt(myInt*10);
-                objectOutput.writeUTF("Received request ID: " + myInt + " and token: " + token);
-                objectOutput.flush();
-
+                ReceiveSend.ReceiveSend(socket, tokenCache);
 
                 //close the connection
                 socket.close();

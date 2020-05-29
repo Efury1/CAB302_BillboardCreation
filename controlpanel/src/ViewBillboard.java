@@ -66,8 +66,7 @@ public class ViewBillboard {
         JFrame frame1 = new JFrame("View Billboard");
         frame1.setSize(1000, 700);
 
-        //frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame1.setDefaultCloseOperation(frame1.HIDE_ON_CLOSE);
+        frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension messageDim = frame1.getSize();
         double w = messageDim.width;
 
@@ -111,8 +110,7 @@ public class ViewBillboard {
         //Wraps in HTML tags so can span multiple lines
         String infoText = "<html>"+ rawInfoText+"</html>";
 
-        //frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame1.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension infoDim = frame1.getSize();
         double w = infoDim.width;
 
@@ -154,8 +152,7 @@ public class ViewBillboard {
         JFrame frame = new JFrame("View Billboard");
         frame.setSize(1000, 700);
 
-        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension messageDim = frame.getSize();
         double w = messageDim.width;
 
@@ -205,8 +202,7 @@ public class ViewBillboard {
         JFrame frame = new JFrame("View Billboard");
         frame.setSize(1000, 700);
 
-        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel messagePanel = new JPanel();
         messagePanel.setLayout(new GridBagLayout());
@@ -246,8 +242,7 @@ public class ViewBillboard {
 
         String messageText = "Good morning";
 
-        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         Dimension messageDim = frame.getSize();
         double w = messageDim.width;
@@ -304,7 +299,5 @@ public class ViewBillboard {
         frame.pack();
         frame.setSize(1000, 700);
         frame.setVisible(true);
-        frame.setDefaultCloseOperation(frame.HIDE_ON_CLOSE);
     }
-
 }

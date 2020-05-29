@@ -90,8 +90,10 @@ public class SendReceive {
                 objectOutputStream.writeUTF(HashPassword(dataToSend[1])); //  hashed password
                 break;
             case 2: //  List billboards
+            case 6: //  View schedule
+            case 9: //  List users
+            case 15:    //  Log out (aka delete session token)
                 //  nothing required
-                break;
             case 3: //  Get billboard information
             case 5: //  Delete billboard
                 objectOutputStream.writeUTF((String)dataToSend[0]);   //  billboard name
@@ -104,9 +106,6 @@ public class SendReceive {
                 objectOutputStream.writeUTF((String)dataToSend[4]);   //  background colour
                 objectOutputStream.writeUTF((String)dataToSend[5]);   //  title colour
                 objectOutputStream.writeUTF((String)dataToSend[6]);   //  description colour
-                break;
-            case 6: //  View schedule
-                //  nothing required
                 break;
             case 7: //  Schedule billboard
                 objectOutputStream.writeUTF((String)dataToSend[0]);   //  billboard name
@@ -121,9 +120,6 @@ public class SendReceive {
                 objectOutputStream.writeUTF((String)dataToSend[0]);   //  billboard name
                 objectOutputStream.writeUTF((String)dataToSend[1]);   //  start date
                 objectOutputStream.writeUTF((String)dataToSend[2]);   //  start time
-                break;
-            case 9: //  List users
-                //  nothing required
                 break;
             case 10:    //  Create User
                 objectOutputStream.writeUTF((String)dataToSend[0]);   //  username
@@ -143,9 +139,6 @@ public class SendReceive {
                 objectOutputStream.writeBoolean((Boolean)dataToSend[2]);   //  permission 2 (perm_edit_all_billboards billboards)
                 objectOutputStream.writeBoolean((Boolean)dataToSend[3]);   //  permission 3 (perm_edit_users)
                 objectOutputStream.writeBoolean((Boolean)dataToSend[4]);   //  permission 4 (perm_schedule)
-                break;
-            case 15:    //  Log out (aka delete session token)
-                //  nothing required
                 break;
             default:
                 break;
