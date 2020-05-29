@@ -25,6 +25,9 @@ import static org.junit.Assert.assertNotNull;
         String token = "";
         //LoginClient();
         Object[] loginData = SendReceive.SendReceive(1, token, processRequest);
+        //Create FileNoteFoundException: When system cannot
+        //IOException: When a valid host name can't be found
+
     }
 
     @Test

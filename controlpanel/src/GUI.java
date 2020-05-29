@@ -1,21 +1,31 @@
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
+/* Main screen */
+/**
+ * @author Eliza Fury
+ * @version last edited 29.05.20
+ * Worked on designing GUI() screen.
+ * Implemented action listeners that allows screen to pick up text
+ * and change color of background.
+ * Linked functionality to billboard(@author Lauren).
+ */
 
 /*Note: we may need threading when it comes to refreshing the ratios.
 * So, it doesn't interfere with the programming logic. */
-
+    //TODO Need to scale image so it's not going over into other buttons
+    //TODO Schedule needs drop down menu
+    //TODO Add and Delete user screens
 public class GUI extends Component {
-    /*public static void main(String args[]) {
-        new GUI();
-    }*/
-
 
     public GUI () {
         JTextArea jt;
@@ -28,6 +38,7 @@ public class GUI extends Component {
 
         JPanel infoPanel = new JPanel();
         JLabel info = new JLabel(" ");
+
 
 
         jt = new JTextArea(80, 20);
@@ -50,6 +61,7 @@ public class GUI extends Component {
         JMenuItem m11 = new JMenuItem("Import");
         JMenuItem m22 = new JMenuItem("Export");
         JMenuItem m44 = new JMenuItem("Schedule and Save");
+        JMenuItem m55 = new JMenuItem("Logout");
         JMenuItem colorYellow = new JMenuItem("Yellow");
         JMenuItem colorBlue = new JMenuItem("Blue");
         JMenuItem colorRed = new JMenuItem("Red");
@@ -58,6 +70,7 @@ public class GUI extends Component {
         m1.add(m11);
         m1.add(m22);
         m1.add(m44);
+        m1.add(m55);
         bkMenu.add(colorYellow);
         bkMenu.add(colorBlue);
         bkMenu.add(colorRed);
@@ -74,8 +87,10 @@ public class GUI extends Component {
         JLabel label1 = new JLabel("Type information");
         //To button b where I want it.
         JLabel spacer = new JLabel("                                                                                             ");
+        JLabel imagel = new JLabel(" ");
         panel.add(label); // Components Added using Flow Layout
         panel.add(tf);
+        panel.add(imagel);
         //panel.add(color);
         JRadioButton r1 = new JRadioButton("Yellow");
         JRadioButton r2 = new JRadioButton("Blue");
@@ -88,10 +103,37 @@ public class GUI extends Component {
         panel1.add(resultLabel);
         panel1.add(info);
 
-        //Action Listeners
+
+
+        /* actionPerformed */
+        /**
+         * The user can interact with GUI to create their billboard.
+         * There's also, the ability to go to other frames like View Billboards, schedule etc.
+         * @param aEvent from these buttons: 1.Upload Image 2.Edit Users 3.Schedule 4. Typing text etc
+         */
         menuImageLoad.addActionListener(e -> {
-            selectFile();
+            //selectFile();
+
+                JFileChooser file = new JFileChooser();
+                file.setCurrentDirectory(new File("."));
+                String[] extensions = ImageIO.getReaderFileSuffixes();
+                file.setFileFilter(new FileNameExtensionFilter("Image files", extensions));
+                int result = file.showSaveDialog(null);
+                if(result == JFileChooser.APPROVE_OPTION)
+                {
+                    try{
+                        File selectedFile = file.getSelectedFile();
+                        String path = selectedFile.getAbsolutePath();
+                        imagel.setIcon(new ImageIcon(path));
+
+                    } catch (Exception ex) { JOptionPane.showMessageDialog(this, ex); }
+
+
+                }
+
         });
+
+
 
         editUserPermission.addActionListener(e -> {
             editUsers();
@@ -102,6 +144,12 @@ public class GUI extends Component {
             //SaveSchedule session2 = new SaveSchedule();
             session1.setVisible(true);
         });
+
+        m55.addActionListener(e -> {
+            //Need to not let you continue if you haven't login.
+            new Login();
+        });
+
 
 
         String testing = tf.getText();
@@ -179,57 +227,6 @@ public class GUI extends Component {
 
     }
 
-    //public class SaveSchedule extends JFrame
-
-    //{
-        //Schedule schedule = new Scheudle();
-        /*public SaveSchedule()
-        {
-            super("Save and schedule");
-            setSize(300, 200);
-            /*Handling use clicks */
-            //JTextField l;
-
-
-
-        //}
-
-
-    //}
-
-
-    /*User needs to be able to close this class without exiting all windows, Eliza */
-    public class Billboard extends JFrame
-
-    {
-        JScrollPane scrollpane;
-
-        public Billboard()
-        {
-            super("Billboard Viewer");
-            setSize(300, 200);
-            setDefaultCloseOperation(EXIT_ON_CLOSE);
-            String categories[] = {"Example 1", "Example 2", "Example 3","Example 4", "Example 5", "Example 6", "Example 7", "Example 8", "Example 9" };
-            JList billboardList = new JList(categories);
-            scrollpane = new JScrollPane(billboardList);
-            getContentPane().add(scrollpane, BorderLayout.CENTER);
-        }
-
-
-    }
-
-    //Selecting File
-    public void selectFile() {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-        int result = fileChooser.showOpenDialog(this);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
-        }
-
-
-    }
 
     public void editUsers() {
 
@@ -270,6 +267,34 @@ public class GUI extends Component {
             }
         });
 
+        /*Add user */
+        addUser.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Create window
+
+                JFrame w1 = new JFrame();
+                // set panel
+                JPanel p = new JPanel();
+                // create a label
+                JLabel l = new JLabel("Testing");
+                // set border
+                p.setBorder(BorderFactory.createLineBorder(Color.darkGray));
+                p.add(l);
+                w1.add(p);
+                // set background
+                p.setBackground(Color.white);
+                //Set Location
+                w1.setLocation(300, 300);
+                // setsize of window
+                w1.setSize(200, 100);
+                // set visibility of window
+                w1.setVisible(true);
+                w1.setDefaultCloseOperation(frame.HIDE_ON_CLOSE);
+            }
+        });
+
         /*You're able to change table value */
         select.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         select.addListSelectionListener(new ListSelectionListener() {
@@ -293,7 +318,7 @@ public class GUI extends Component {
         });
 
 
-        //Layout with JLabel
+
 
         JScrollPane sp=new JScrollPane(userTable);
         JPanel panel2 = new JPanel();
@@ -307,7 +332,7 @@ public class GUI extends Component {
         frame.setSize(1000, 500);
         frame.setVisible(true);
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.setVisible(true);
 
     }
@@ -315,23 +340,6 @@ public class GUI extends Component {
 
 
     }
-
-
-/*class ssWindow() {
-
-            final boolean RESIZABLE = true;
-            final boolean CLOSABLE = true;
-            final boolean ICONIFIABLE = true;
-            final boolean MAXIMIZABLE = true;
-
-            JInternalFrame firstWindow = new JInternalFrame("schedule and save", RESIZABLE,
-                    CLOSABLE, MAXIMIZABLE, ICONIFIABLE);
-            firstWindow.setSize(100, 100);
-            firstWindow.setLocation(10, 10);
-            firstWindow.setVisible(true);
-            frame.add(firstWindow);
-
-        }*/
 
 
 
