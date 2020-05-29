@@ -1,12 +1,24 @@
+
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import java.awt.Image;
 import java.io.File;
-import java.io.IOException;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import java.net.URL;
 import java.util.HashMap;
+import java.util.Iterator;
 
 /*Note: we may need threading when it comes to refreshing the ratios.
 * So, it doesn't interfere with the programming logic. */
@@ -28,6 +40,7 @@ public class GUI extends Component {
 
         JPanel infoPanel = new JPanel();
         JLabel info = new JLabel(" ");
+
 
 
         jt = new JTextArea(80, 20);
@@ -74,8 +87,10 @@ public class GUI extends Component {
         JLabel label1 = new JLabel("Type information");
         //To button b where I want it.
         JLabel spacer = new JLabel("                                                                                             ");
+        JLabel imagel = new JLabel(" ");
         panel.add(label); // Components Added using Flow Layout
         panel.add(tf);
+        panel.add(imagel);
         //panel.add(color);
         JRadioButton r1 = new JRadioButton("Yellow");
         JRadioButton r2 = new JRadioButton("Blue");
@@ -88,10 +103,28 @@ public class GUI extends Component {
         panel1.add(resultLabel);
         panel1.add(info);
 
+
         //Action Listeners
         menuImageLoad.addActionListener(e -> {
-            selectFile();
+            //selectFile();
+
+                JFileChooser file = new JFileChooser();
+                file.setCurrentDirectory(new File("."));
+                String[] extensions = ImageIO.getReaderFileSuffixes();
+                file.setFileFilter(new FileNameExtensionFilter("Image files", extensions));
+                int result = file.showSaveDialog(null);
+                if(result == JFileChooser.APPROVE_OPTION)
+                {
+                    File selectedFile = file.getSelectedFile();
+                    String path = selectedFile.getAbsolutePath();
+                    imagel.setIcon(new ImageIcon(path));
+                }
+
+
+            //
         });
+
+
 
         editUserPermission.addActionListener(e -> {
             editUsers();
@@ -219,17 +252,37 @@ public class GUI extends Component {
     }
 
     //Selecting File
-    public void selectFile() {
-        JFileChooser fileChooser = new JFileChooser();
+    /*public void selectFile() {
+        var chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new File("."));
+        String[] extensions = ImageIO.getReaderFileSuffixes();
+        chooser.setFileFilter(new FileNameExtensionFilter("Image files", extensions));
+        Component frame;
+        int r = chooser.showOpenDialog(this);
+        try {
+            File file = null;
+            InputStream is = new BufferedInputStream(new FileInputStream(file));
+            Image image = ImageIO.read(is);
+            imagel.setIcon(ResizeImage(path));
+        }
+        catch(IOException e)
+        {
+            JOptionPane.showMessageDialog(this, e);
+        }
+
+
+    }*/
+        /*JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
+            //For testing
             System.out.println("Selected file: " + selectedFile.getAbsolutePath());
-        }
+        }}*/
 
 
-    }
+
 
     public void editUsers() {
 
