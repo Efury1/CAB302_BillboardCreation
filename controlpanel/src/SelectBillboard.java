@@ -107,11 +107,12 @@ public class SelectBillboard {
                     JOptionPane.showMessageDialog(frame,"There are no elements to display in this billboard");
                 }
                 else {
-                    try {
+                    ViewBillboard.showBillboard(selectedBillboard);
+                    /*try {
                         ViewBillboard.showBillboard(selectedBillboard);
                     } catch (IOException ex) {
                         ex.printStackTrace(); //TODO remove printStackTrace()
-                    }
+                    }*/
                 }
             }
         });

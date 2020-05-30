@@ -140,9 +140,13 @@ public class GUI extends Component {
         });
 
         m44.addActionListener(e -> {
-            Schedule session1 = new Schedule();
+            ScheduleModel cal = new ScheduleModel();
+            this.setSize(700, 400);
+            this.setVisible(true);
+
+            //Schedule session1 = new Schedule();
             //SaveSchedule session2 = new SaveSchedule();
-            session1.setVisible(true);
+            //session1.setVisible(true);
         });
 
         m55.addActionListener(e -> {
