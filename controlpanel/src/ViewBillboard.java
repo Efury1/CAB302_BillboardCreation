@@ -12,8 +12,10 @@ public class ViewBillboard {
         Billboard TestBill = new Billboard("testBillboard", "testUser");
         TestBill.setBMessage("Test text");
         TestBill.setBDescription("Test description");
+        String imageURL = "https://vignette.wikia.nocookie.net/habitrpg/images/9/92/Summer-Splash-Starfish.png/revision/latest?cb=20150702105822";
         //showBillboard(TestBill);
-        MessageImageInfo("Hello", "https://vignette.wikia.nocookie.net/habitrpg/images/9/92/Summer-Splash-Starfish.png/revision/latest?cb=20150702105822", "Info");
+        //MessageImageInfo("Hello", imageURL, "Info");
+        Image(imageURL);
     }
 
     /**
@@ -38,7 +40,7 @@ public class ViewBillboard {
                 else{
                     if(b.hasMessage()&&b.hasImage()){
                         //Message and image only
-                        //TODO
+                        MessageAndImage(b.getBMessage(), b.getBImageLink());
                     }
                     else{
                         if(b.hasMessage()){
@@ -48,7 +50,7 @@ public class ViewBillboard {
                         else{
                             if(b.hasImage()){
                                 //Image only
-                                //TODO
+                                Image(b.getBImageLink());
                             }
                             else{
                                 if(b.hasDescription()){
@@ -318,5 +320,39 @@ public class ViewBillboard {
         frame.pack();
         frame.setSize(1000, 700);
         frame.setVisible(true);
+    }
+
+    /**
+     * Shows billboard with image only
+     * @param imageLink URL of image to be displayed
+     * @throws IOException
+     */
+    public static void Image(String imageLink) throws IOException {
+        JFrame frame1 = new JFrame("View Billboard");
+        frame1.setSize(1000, 700);
+
+
+        Dimension imageDim = frame1.getSize();
+        double w = imageDim.width;
+
+        JPanel imagePanel = new JPanel();
+        imagePanel.setLayout(new GridBagLayout());
+
+
+        URL imageURL = new URL(imageLink);
+        //Turns URL to bufferedImage
+        BufferedImage decodedImage = ImageIO.read(imageURL);
+        //Turns bufferedImage to icon
+        ImageIcon iconImage = new ImageIcon(decodedImage);
+
+        JLabel image = new JLabel(iconImage, JLabel.CENTER);
+
+        imagePanel.add(image);
+
+        frame1.add(imagePanel);
+
+        frame1.pack();
+        frame1.setSize(1000, 700);
+        frame1.setVisible(true);
     }
 }
