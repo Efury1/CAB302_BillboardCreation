@@ -2,10 +2,10 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.*;
 
-public class TokenHandling {
+public class TokenHandler {
     private HashMap<String, Timestamp> sessionToken;
 
-    public TokenHandling()
+    public TokenHandler()
     {
         sessionToken = new HashMap<String, Timestamp>();
     }
