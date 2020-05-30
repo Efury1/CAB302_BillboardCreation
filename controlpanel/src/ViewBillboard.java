@@ -15,7 +15,7 @@ public class ViewBillboard {
         String imageURL = "https://vignette.wikia.nocookie.net/habitrpg/images/9/92/Summer-Splash-Starfish.png/revision/latest?cb=20150702105822";
         //showBillboard(TestBill);
         //MessageImageInfo("Hello", imageURL, "Info");
-        Image(imageURL);
+        ImageAndInfo(imageURL, "Here is a starfish");
     }
 
     /**
@@ -35,7 +35,7 @@ public class ViewBillboard {
             else {
                 if(b.hasDescription()&&b.hasImage()){
                     //Info and image only
-                    //TODO
+                    ImageAndInfo(b.getBImageLink(), b.getBDescription());
                 }
                 else{
                     if(b.hasMessage()&&b.hasImage()){
@@ -354,5 +354,44 @@ public class ViewBillboard {
         frame1.pack();
         frame1.setSize(1000, 700);
         frame1.setVisible(true);
+    }
+
+    /**
+     * Shows billboard with image and info only
+     * @param imageString URL of image to display
+     * @param infoText Text of information to display
+     * @throws IOException
+     */
+    public static void ImageAndInfo(String imageString, String infoText) throws IOException {
+        JFrame frame = new JFrame("View Billboard");
+        frame.setSize(1000, 700);
+
+        JPanel imagePanel = new JPanel();
+        imagePanel.setLayout(new GridBagLayout());
+
+        URL imageURL = new URL(imageString);
+        //Turns URL to bufferedImage
+        BufferedImage decodedImage = ImageIO.read(imageURL);
+        //Turns bufferedImage to icon
+        ImageIcon iconImage = new ImageIcon(decodedImage);
+
+        JLabel image = new JLabel(iconImage, JLabel.CENTER);
+        imagePanel.add(image);
+
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new GridBagLayout());
+
+        JLabel info = new JLabel(infoText);
+        infoPanel.add(info);
+
+
+        frame.add(imagePanel);
+        frame.add(infoPanel);
+
+        frame.setLayout(new GridLayout(2,1));
+
+        frame.pack();
+        frame.setSize(1000, 700);
+        frame.setVisible(true);
     }
 }
