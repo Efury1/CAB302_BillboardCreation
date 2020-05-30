@@ -1,21 +1,28 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class ViewBillboard {
-    public static void main(String args[]) {
-        //TODO closes all frames on exit, need to fix this. Not main propriety though.
+    public static void main(String args[]) throws IOException {
 
         Billboard TestBill = new Billboard("testBillboard", "testUser");
         TestBill.setBMessage("Test text");
         TestBill.setBDescription("Test description");
-        showBillboard(TestBill);
+        String imageURL = "https://vignette.wikia.nocookie.net/habitrpg/images/9/92/Summer-Splash-Starfish.png/revision/latest?cb=20150702105822";
+        //showBillboard(TestBill);
+        //MessageImageInfo("Hello", imageURL, "Info");
+        ImageAndInfo(imageURL, "Here is a starfish");
     }
 
     /**
      * Given a billboard, chooses which function should be called to display it and calls this function
      * @param b billboard to be displayed
      */
-    public static void showBillboard(Billboard b){
+    public static void showBillboard(Billboard b) throws IOException {
         if(b.hasMessage()&&b.hasDescription()&&b.hasImage()){
             //All three elements present
             MessageImageInfo(b.getBMessage(), b.getBImageLink(), b.getBDescription());
@@ -28,12 +35,12 @@ public class ViewBillboard {
             else {
                 if(b.hasDescription()&&b.hasImage()){
                     //Info and image only
-                    //TODO
+                    ImageAndInfo(b.getBImageLink(), b.getBDescription());
                 }
                 else{
                     if(b.hasMessage()&&b.hasImage()){
                         //Message and image only
-                        //TODO
+                        MessageAndImage(b.getBMessage(), b.getBImageLink());
                     }
                     else{
                         if(b.hasMessage()){
@@ -43,7 +50,7 @@ public class ViewBillboard {
                         else{
                             if(b.hasImage()){
                                 //Image only
-                                //TODO
+                                Image(b.getBImageLink());
                             }
                             else{
                                 if(b.hasDescription()){
@@ -66,7 +73,6 @@ public class ViewBillboard {
         JFrame frame1 = new JFrame("View Billboard");
         frame1.setSize(1000, 700);
 
-        frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension messageDim = frame1.getSize();
         double w = messageDim.width;
 
@@ -90,7 +96,6 @@ public class ViewBillboard {
         //set font back to smaller to not overflowing
         message.setFont(new Font("Serif", Font.PLAIN, messageSize - 2));
         messageWidth = message.getFontMetrics(message.getFont()).stringWidth(messageText);
-        System.out.println("Width :" + messageWidth);
 
         frame1.add(messagePanel);
 
@@ -110,7 +115,6 @@ public class ViewBillboard {
         //Wraps in HTML tags so can span multiple lines
         String infoText = "<html>"+ rawInfoText+"</html>";
 
-        frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension infoDim = frame1.getSize();
         double w = infoDim.width;
 
@@ -134,7 +138,6 @@ public class ViewBillboard {
         //set font back to smaller to not overflowing
         info.setFont(new Font("Serif", Font.PLAIN, infoSize - 2));
         infoWidth = info.getFontMetrics(info.getFont()).stringWidth(infoText);
-        System.out.println("Width :" + infoWidth);
 
         frame1.add(infoPanel);
 
@@ -152,7 +155,6 @@ public class ViewBillboard {
         JFrame frame = new JFrame("View Billboard");
         frame.setSize(1000, 700);
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension messageDim = frame.getSize();
         double w = messageDim.width;
 
@@ -176,7 +178,6 @@ public class ViewBillboard {
         //set font back to smaller to not overflowing
         message.setFont(new Font("Serif", Font.PLAIN, messageSize - 2));
         messageWidth = message.getFontMetrics(message.getFont()).stringWidth(messageText);
-        System.out.println("Width :" + messageWidth);
 
 
         JPanel infoPanel = new JPanel();
@@ -198,11 +199,16 @@ public class ViewBillboard {
 
     }
 
-    public static void MessageImageInfo(String messageText, String imageString, String infoText){
+    /**
+     * Displays billboard with Message, Image and Info
+     * @param messageText Message text to display
+     * @param imageString URL of image to display
+     * @param infoText Info text to display
+     * @throws IOException
+     */
+    public static void MessageImageInfo(String messageText, String imageString, String infoText) throws IOException {
         JFrame frame = new JFrame("View Billboard");
         frame.setSize(1000, 700);
-
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel messagePanel = new JPanel();
         messagePanel.setLayout(new GridBagLayout());
@@ -213,7 +219,13 @@ public class ViewBillboard {
         JPanel imagePanel = new JPanel();
         imagePanel.setLayout(new GridBagLayout());
 
-        JLabel image = new JLabel(imageString, JLabel.CENTER);
+        URL imageURL = new URL(imageString);
+        //Turns URL to bufferedImage
+        BufferedImage decodedImage = ImageIO.read(imageURL);
+        //Turns bufferedImage to icon
+        ImageIcon iconImage = new ImageIcon(decodedImage);
+
+        JLabel image = new JLabel(iconImage, JLabel.CENTER);
         imagePanel.add(image);
 
         JPanel infoPanel = new JPanel();
@@ -234,15 +246,18 @@ public class ViewBillboard {
         frame.setVisible(true);
     }
 
-    public static void MessageAndImage(){
+    /**
+     * Displays billboard with message and image
+     * @param messageText Text of message to display
+     * @param imageString URL of image to display
+     * @throws IOException
+     */
+    public static void MessageAndImage(String messageText, String imageString) throws IOException {
         JFrame frame = new JFrame("View Billboard");
         frame.setLayout(new GridBagLayout());
         frame.setSize(1000, 700);
         GridBagConstraints gbc = new GridBagConstraints();
 
-        String messageText = "Good morning";
-
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         Dimension messageDim = frame.getSize();
         double w = messageDim.width;
@@ -289,12 +304,91 @@ public class ViewBillboard {
         gbc.gridy = 1;
         imagePanel.setLayout(new GridBagLayout());
 
-        JLabel image = new JLabel("Insert image here", JLabel.CENTER);
+        URL imageURL = new URL(imageString);
+        //Turns URL to bufferedImage
+        BufferedImage decodedImage = ImageIO.read(imageURL);
+        //Turns bufferedImage to icon
+        ImageIcon iconImage = new ImageIcon(decodedImage);
+
+        JLabel image = new JLabel(iconImage, JLabel.CENTER);
         imagePanel.add(image);
 
 
         frame.add(imagePanel, gbc);
 
+
+        frame.pack();
+        frame.setSize(1000, 700);
+        frame.setVisible(true);
+    }
+
+    /**
+     * Shows billboard with image only
+     * @param imageLink URL of image to be displayed
+     * @throws IOException
+     */
+    public static void Image(String imageLink) throws IOException {
+        JFrame frame1 = new JFrame("View Billboard");
+        frame1.setSize(1000, 700);
+
+
+        Dimension imageDim = frame1.getSize();
+        double w = imageDim.width;
+
+        JPanel imagePanel = new JPanel();
+        imagePanel.setLayout(new GridBagLayout());
+
+
+        URL imageURL = new URL(imageLink);
+        //Turns URL to bufferedImage
+        BufferedImage decodedImage = ImageIO.read(imageURL);
+        //Turns bufferedImage to icon
+        ImageIcon iconImage = new ImageIcon(decodedImage);
+
+        JLabel image = new JLabel(iconImage, JLabel.CENTER);
+
+        imagePanel.add(image);
+
+        frame1.add(imagePanel);
+
+        frame1.pack();
+        frame1.setSize(1000, 700);
+        frame1.setVisible(true);
+    }
+
+    /**
+     * Shows billboard with image and info only
+     * @param imageString URL of image to display
+     * @param infoText Text of information to display
+     * @throws IOException
+     */
+    public static void ImageAndInfo(String imageString, String infoText) throws IOException {
+        JFrame frame = new JFrame("View Billboard");
+        frame.setSize(1000, 700);
+
+        JPanel imagePanel = new JPanel();
+        imagePanel.setLayout(new GridBagLayout());
+
+        URL imageURL = new URL(imageString);
+        //Turns URL to bufferedImage
+        BufferedImage decodedImage = ImageIO.read(imageURL);
+        //Turns bufferedImage to icon
+        ImageIcon iconImage = new ImageIcon(decodedImage);
+
+        JLabel image = new JLabel(iconImage, JLabel.CENTER);
+        imagePanel.add(image);
+
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new GridBagLayout());
+
+        JLabel info = new JLabel(infoText);
+        infoPanel.add(info);
+
+
+        frame.add(imagePanel);
+        frame.add(infoPanel);
+
+        frame.setLayout(new GridLayout(2,1));
 
         frame.pack();
         frame.setSize(1000, 700);

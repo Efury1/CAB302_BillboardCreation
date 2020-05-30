@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 public class Billboard {
     private String BName;
     private String BOwner;
@@ -221,5 +223,22 @@ public class Billboard {
      */
     public void setBBlobData(String BBlobData) {
         this.BBlobData = BBlobData;
+    }
+
+    /**
+     * Requests and processes billboard dat from server
+     * @throws IOException
+     */
+    public void importAllInfo() throws IOException {
+        Object[] billboardData = ClientRequests.GetBillboardInfo(getBName());
+
+        if(billboardData.length==6) {
+            setBMessage(billboardData[0].toString());
+            setBDescription(billboardData[1].toString());
+            setBBlobData(billboardData[2].toString());
+            setBBackgroundColour(billboardData[3].toString());
+            setBMessageColour(billboardData[4].toString());
+            setBDescriptionColour(billboardData[5].toString());
+        }
     }
 }
