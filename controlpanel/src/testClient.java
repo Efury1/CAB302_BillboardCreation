@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Blob;
 import java.util.Properties;
 
 public class testClient{
@@ -39,22 +40,124 @@ public class testClient{
 
         try {
             ClientRequests.Login("staff", "today123");
-            System.out.println(ClientRequests.GetSessionToken());
-        } catch (ClassNotFoundException e) {
-            System.err.println("Login failed.");
+            System.out.println("Token: " + ClientRequests.GetSessionToken());   //   TODO remove this
+        } catch (ClassNotFoundException | IOException e) {
+            System.err.println(e);
+            System.err.println("\nLogin failed.");
         }
+
 //        System.out.println("=========================================================");
 //        try {
 //            ClientRequests.ListBillboards();
 //        } catch (ClassNotFoundException | IOException e) {
-//            System.err.println("List billboards failed.");
+//            System.err.println(e);
+//            System.err.println("\nList billboards failed.");
 //        }
+
+//        System.out.println("=========================================================");
+//        try {
+//            ClientRequests.GetBillboardInfo("bill");
+//        } catch (ClassNotFoundException | IOException e) {
+//            System.err.println(e);
+//            System.err.println("\nGetBillboardInfo failed.");
+//        }
+
+//        System.out.println("=========================================================");
+//        try {
+//            ClientRequests.CreateEditBillboard("billboard1", "title","blah blah", adda, "", "", "", "");
+//        } catch (ClassNotFoundException | IOException e) {
+//            System.err.println(e);
+//            System.err.println("\nCreateEditBillboard failed.");
+//        }
+
+        //  Delete billboard - function 5
+//        System.out.println("=========================================================");
+//        try {
+//            ClientRequests.DeleteBillboard("howdy");
+//        } catch (ClassNotFoundException | IOException e) {
+//            System.err.println(e);
+//            System.err.println("\nDeleteBillboard failed.");
+//        }
+
+//        //  View Schedule - function 6
+//        System.out.println("=========================================================");
+//        try {
+//            ClientRequests.ViewSchedule();
+//        } catch (ClassNotFoundException | IOException e) {
+//            System.err.println(e);
+//        }
+
+//        //  Schedule Billboard - function 7
+//        System.out.println("=========================================================");
+//        try {
+//            ClientRequests.ScheduleBillboard("billboard3", "10:30:00", 60, true, 3600, "2020-05-31", "2020-06-01");
+//        } catch (ClassNotFoundException | IOException e) {
+//            System.err.println(e);
+//        }
+
+        //  Remove Schedule - function 8
         System.out.println("=========================================================");
         try {
-            ClientRequests.GetBillboardInfo("name");
+            ClientRequests.RemoveSchedule("billboard3","2020-05-31", "10:30:00");
         } catch (ClassNotFoundException | IOException e) {
-            System.err.println("List billboards failed.");
+            System.err.println(e);
         }
+
+//        //  View Schedule - function 9
+//        System.out.println("=========================================================");
+//        try {
+//            ClientRequests.ViewSchedule();
+//        } catch (ClassNotFoundException | IOException e) {
+//            System.err.println(e);
+//        }
+
+//        //  View Schedule - function 10
+//        System.out.println("=========================================================");
+//        try {
+//            ClientRequests.ViewSchedule();
+//        } catch (ClassNotFoundException | IOException e) {
+//            System.err.println(e);
+//        }
+
+//        //  View Schedule - function 11
+//        System.out.println("=========================================================");
+//        try {
+//            ClientRequests.ViewSchedule();
+//        } catch (ClassNotFoundException | IOException e) {
+//            System.err.println(e);
+//        }
+
+//        //  View Schedule - function 12
+//        System.out.println("=========================================================");
+//        try {
+//            ClientRequests.ViewSchedule();
+//        } catch (ClassNotFoundException | IOException e) {
+//            System.err.println(e);
+//        }
+
+//        //  View Schedule - function 13
+//        System.out.println("=========================================================");
+//        try {
+//            ClientRequests.ViewSchedule();
+//        } catch (ClassNotFoundException | IOException e) {
+//            System.err.println(e);
+//        }
+
+//        //  View Schedule - function 14
+//        System.out.println("=========================================================");
+//        try {
+//            ClientRequests.ViewSchedule();
+//        } catch (ClassNotFoundException | IOException e) {
+//            System.err.println(e);
+//        }
+
+//        //  View Schedule - function 15
+//        System.out.println("=========================================================");
+//        try {
+//            ClientRequests.ViewSchedule();
+//        } catch (ClassNotFoundException | IOException e) {
+//            System.err.println(e);
+//        }
 
         /*String host = null;
         Integer port = null;

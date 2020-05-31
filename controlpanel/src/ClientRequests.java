@@ -6,8 +6,6 @@ public class ClientRequests {
     private static String sessionToken;
 
     public static String GetSessionToken() { return sessionToken; };
-    public static void SetSessionToken(String seshToke) { sessionToken = seshToke; };
-    //  public static void SetSessionToken(String seshToke) { sessionToken = seshToke; };
 
     /**
      * Login request - functionID == 1

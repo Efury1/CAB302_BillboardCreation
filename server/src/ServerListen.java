@@ -56,7 +56,7 @@ public class ServerListen {
             //  Loop indefinitely, listening for a connection to accept
             for(;;) {
                 for(;;) {
-                    System.out.println("Server ready...");
+                    System.err.println("Server ready...");
                     Socket socket = null;
 
                     try {   //  Try to accept an incoming connection..

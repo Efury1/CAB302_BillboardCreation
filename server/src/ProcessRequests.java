@@ -298,11 +298,27 @@ public class ProcessRequests {
     private static Object[] DeleteBillboard(String billboardName, Connection myConnection) throws SQLException {
         Object[] serverReply;
 
-        //Make SQL statement to delete a billboard
-        PreparedStatement deleteBillboard = myConnection.prepareStatement("DELETE FROM billboards WHERE billboard_name = ?");
+        //Prepare the statement for the database
+        Statement commit = myConnection.createStatement();
+        commit.execute("BEGIN WORK");
 
-        if(deleteBillboard.executeUpdate() > 0){
-            serverReply = RelayValidResponse();
+        //Make SQL statement to delete a billboard
+        PreparedStatement deleteUserBillboard = myConnection.prepareStatement("DELETE FROM user_billboards WHERE billboard_name = ?");
+        deleteUserBillboard.setString(1, billboardName);
+        PreparedStatement deleteBillboard = myConnection.prepareStatement("DELETE FROM billboards WHERE billboard_name = ?");
+        deleteBillboard.setString(1, billboardName);
+
+        if(deleteUserBillboard.executeUpdate() > 0){
+            if (deleteBillboard.executeUpdate() > 0)
+            {
+                commit.execute("COMMIT");
+                serverReply = RelayValidResponse();
+            }
+            else
+            {
+                commit.execute("ROLLBACK");
+                serverReply = RelayError("Failed to delete billboard.");
+            }
         } else
         {
             serverReply = RelayError("Could not find the billboard to delete.");
@@ -325,7 +341,7 @@ public class ProcessRequests {
         int length = 0;
 
         //Query database for the schedule of all billboards
-        PreparedStatement billboardScheduleList = myConnection.prepareStatement("SELECT billboard_schedule.billboard_name, schedule_ts, start_date, end_date, start_time, duration, repeats, repeat_frequency FROM schedules INNER JOIN billboard_schedule ON schedules.scheduleID = billboard_schedule.scheduleID");
+        PreparedStatement billboardScheduleList = myConnection.prepareStatement("SELECT billboard_schedule.billboard_name, schedule_ts, start_date, end_date, start_time, duration, repeats, repeat_frequency FROM schedules INNER JOIN billboard_schedule ON schedules.schedule_ID = billboard_schedule.schedule_ID");
         ResultSet scheduledBillboards = billboardScheduleList.executeQuery();
         billboardScheduleList.close();
 
@@ -378,7 +394,7 @@ public class ProcessRequests {
         Statement commit = myConnection.createStatement();
         commit.execute("BEGIN WORK");
 
-        PreparedStatement scheduleCreate = myConnection.prepareStatement("INSERT INTO schedules (start_date, end_date, start_time, duration, repeats, repeat_frequency) VALUES (?, ?, ?, ?, ?, ?");
+        PreparedStatement scheduleCreate = myConnection.prepareStatement("INSERT INTO schedules (start_date, end_date, start_time, duration, repeats, repeat_frequency) VALUES (?, ?, ?, ?, ?, ?)");
         scheduleCreate.setString(1, startDate);
         scheduleCreate.setString(2, endDate);
         scheduleCreate.setString(3, startTime);
@@ -388,7 +404,6 @@ public class ProcessRequests {
 
         //Find the scheduleID for the latest entry
         PreparedStatement scheduleGet = myConnection.prepareStatement("SELECT schedule_ID FROM schedules WHERE schedule_ts = (SELECT MAX(schedule_ts) FROM schedules)");
-
         PreparedStatement scheduleAssignToBillboard = myConnection.prepareStatement("INSERT INTO billboard_schedule (schedule_ID, billboard_name) VALUES (?, ?)");
 
         if(scheduleCreate.executeUpdate() > 0) {
@@ -410,7 +425,6 @@ public class ProcessRequests {
         } else {
             serverReply = RelayError("Could not schedule billboard");
         }
-
 
         //close the statements
         commit.close();

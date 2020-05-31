@@ -122,6 +122,11 @@ public class InitDatabase {
 //                "('user1', 'billboard1'), " +
 //                "('user2', 'billboard2'), " +
 //                "('user3', 'billboard3')");
+//
+//        myStatement.executeUpdate("INSERT INTO schedules (start_date, end_date, start_time, duration, repeats, repeat_frequency) VALUES " +
+//                "('2020-04-06', '2020-04-07', '10:16:13', '30', true, '120'), " +
+//                "('2020-04-07', '2020-04-08', '10:16:13', '30', true, '120'), " +
+//                "('2020-04-07', '2020-04-07', '12:16:13', '30', false, '0')");
 
 
 

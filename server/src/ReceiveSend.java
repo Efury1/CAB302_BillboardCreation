@@ -46,7 +46,8 @@ public class ReceiveSend {
                 try {
                     replyData = ProcessRequests.ProcessRequest(functionID, tokenCache, clientData);
                 } catch (SQLException e) {
-                    replyData = ProcessRequests.RelayError("Invalid database action.");
+                    replyData = ProcessRequests.RelayError("Invalid database action: ");
+                    System.err.println(e);
                 }
             }
             else
