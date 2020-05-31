@@ -8,8 +8,8 @@ public class InitDatabase {
     public static String admin_username = "staff";
     public static String admin_password = "today123";
     //  Constructor of InitDatabase
-    public static void main(String[] args) throws SQLException {
-        Connection myConnection = DBConnection.getInstance();
+    public static void InitialiseDB() throws SQLException {
+        Connection myConnection = InitDBConnection.getInstance();
         Statement myStatement = myConnection.createStatement();
 
         //Admin details
@@ -95,13 +95,13 @@ public class InitDatabase {
             preparedStatement.executeUpdate();
         }
 
-        //TODO delet this
+        /*//TODO delet this
         TokenHandler testCache = new TokenHandler();
         Object[] billboard_info = ProcessRequests.ProcessRequest(4, testCache, new Object[]{"billboard100", "no", "nothing", new byte[1], "n", "n", "c", "user1"});
         for(int i = 0; i < billboard_info.length; i++) {
             System.out.println();
         }
-
+*/
 
 //        myStatement.executeUpdate("INSERT INTO billboards (billboard_name, title, description, picture, background_colour, title_colour, description_colour) VALUES " +
 //                "('billboard1', 'title1', 'blah blah', '', '', '', ''), " +
@@ -136,7 +136,10 @@ public class InitDatabase {
 //        System.out.println("personName: " + personName);
 //        System.out.println("someNumber: " + someNumber);
 
+        myStatement.execute("USE billboard_database");
+        myStatement.close();
+
         //Close the connection
-        myConnection.close();
+        //  myConnection.close();
     }
 }

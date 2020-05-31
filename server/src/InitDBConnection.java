@@ -6,7 +6,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class DBConnection {
+public class InitDBConnection {
+
     /**
      * The singleton instance of the database connection.
      */
@@ -15,7 +16,7 @@ public class DBConnection {
     /**
      * Constructor intializes the connection.
      */
-    private DBConnection() {
+    private InitDBConnection() {
         Properties props = new Properties();
         FileInputStream in = null;
         try {
@@ -31,8 +32,8 @@ public class DBConnection {
 
             System.out.println(url);
 
-            // get a connection to the server
-            instance = DriverManager.getConnection(url + "/" + schema, username, password);
+            // get a connection to the server (BUT NOT THE SCHEMA)
+            instance = DriverManager.getConnection(url, username, password);
 
         } catch (SQLException sqle) {
             System.err.println(sqle);
@@ -50,7 +51,7 @@ public class DBConnection {
      */
     public static Connection getInstance() {
         if (instance == null) {
-            new DBConnection();
+            new InitDBConnection();
         }
         return instance;
     }

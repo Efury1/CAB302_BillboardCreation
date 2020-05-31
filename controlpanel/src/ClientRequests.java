@@ -1,11 +1,13 @@
 import java.io.IOException;
 import java.io.ObjectInput;
+import java.sql.Blob;
 
 public class ClientRequests {
     private static String sessionToken;
 
-    public String GetSessionToken() { return sessionToken; };
-    public void SetSessionToken(String sessionToken) { this.sessionToken = sessionToken; };
+    public static String GetSessionToken() { return sessionToken; };
+    public static void SetSessionToken(String seshToke) { sessionToken = seshToke; };
+    //  public static void SetSessionToken(String seshToke) { sessionToken = seshToke; };
 
     /**
      * Login request - functionID == 1
@@ -20,7 +22,7 @@ public class ClientRequests {
      * @param password
      * @throws IOException
      */
-    public static void Login(String username, String password) throws IOException {
+    public static void Login(String username, String password) throws IOException, ClassNotFoundException {
         Object[] token = SendReceive.SendReceive(1, "", new Object[] {username, password});
         sessionToken = token[0].toString();
     }
@@ -31,7 +33,7 @@ public class ClientRequests {
      * @return
      * @throws IOException
      */
-    public static Object[] ListBillboards() throws IOException {
+    public static Object[] ListBillboards() throws IOException, ClassNotFoundException {
         Object[] listOfBillboards = SendReceive.SendReceive(2, sessionToken, new Object[] {});
         //  TODO for loop just for testing
         for(int i = 0; i < listOfBillboards.length; i+=2)
@@ -49,8 +51,8 @@ public class ClientRequests {
      * @return
      * @throws IOException
      */
-    public static Object[] GetBillboardInfo(String billboardName) throws IOException {
-        Object[] billboardInfo = SendReceive.SendReceive(3, sessionToken, new Object[] {billboardName});
+    public static Object[] GetBillboardInfo(String billboardName) throws IOException, ClassNotFoundException {
+        Object[] billboardInfo = SendReceive.SendReceive(3, GetSessionToken(), new Object[] {billboardName});
         return billboardInfo;
     }
 
@@ -67,7 +69,7 @@ public class ClientRequests {
      * @param creatorUsername
      * @throws IOException
      */
-    public static void CreateEditBillboard(String billboardName, String title, String description, byte[] pictureData, String bgColour, String titleColour, String descColour, String creatorUsername) throws IOException {
+    public static void CreateEditBillboard(String billboardName, String title, String description, Blob pictureData, String bgColour, String titleColour, String descColour, String creatorUsername) throws IOException, ClassNotFoundException {
         SendReceive.SendReceive(4, sessionToken, new Object[] {billboardName, title, description, pictureData, bgColour, titleColour, descColour, creatorUsername});
     }
 
@@ -77,7 +79,7 @@ public class ClientRequests {
      * @param billboardName
      * @throws IOException
      */
-    public static void DeleteBillboard(String billboardName) throws IOException {
+    public static void DeleteBillboard(String billboardName) throws IOException, ClassNotFoundException {
         SendReceive.SendReceive(5, sessionToken, new Object[] {billboardName});
     }
 
@@ -87,7 +89,7 @@ public class ClientRequests {
      * @return
      * @throws IOException
      */
-    public static Object[] ViewSchedule() throws IOException {
+    public static Object[] ViewSchedule() throws IOException, ClassNotFoundException {
         Object[] schedule = SendReceive.SendReceive(6, sessionToken, new Object[] {});
         return schedule;
     }
@@ -104,7 +106,7 @@ public class ClientRequests {
      * @param endDate
      * @throws IOException
      */
-    public static void ScheduleBillboard(String billboardName, String startTime, Integer duration, Boolean repeat, Integer repeatFreq, String startDate, String endDate) throws IOException {
+    public static void ScheduleBillboard(String billboardName, String startTime, Integer duration, Boolean repeat, Integer repeatFreq, String startDate, String endDate) throws IOException, ClassNotFoundException {
         SendReceive.SendReceive(7, sessionToken, new Object[] {billboardName, startTime, duration, repeat, repeatFreq, startDate, endDate});
     }
 
@@ -116,7 +118,7 @@ public class ClientRequests {
      * @param startTime
      * @throws IOException
      */
-    public static void RemoveSchedule(String billboardName, String startDate, String startTime) throws IOException {
+    public static void RemoveSchedule(String billboardName, String startDate, String startTime) throws IOException, ClassNotFoundException {
         SendReceive.SendReceive(8, sessionToken, new Object[] {billboardName, startDate, startTime});
     }
 
@@ -126,7 +128,7 @@ public class ClientRequests {
      * @return
      * @throws IOException
      */
-    public static Object[] ListUsers() throws IOException {
+    public static Object[] ListUsers() throws IOException, ClassNotFoundException {
         Object[] userList = SendReceive.SendReceive(9, sessionToken, new Object[] {});
         return userList;
     }
@@ -142,7 +144,7 @@ public class ClientRequests {
      * @param password
      * @throws IOException
      */
-    public static void CreateUser(String username, Boolean perm1, Boolean perm2, Boolean perm3, Boolean perm4, String password) throws IOException {
+    public static void CreateUser(String username, Boolean perm1, Boolean perm2, Boolean perm3, Boolean perm4, String password) throws IOException, ClassNotFoundException {
         SendReceive.SendReceive(10, sessionToken, new Object[] {username, perm1, perm2, perm3, perm4, password});
     }
 
@@ -153,7 +155,7 @@ public class ClientRequests {
      * @return
      * @throws IOException
      */
-    public static Object[] GetUserPermissions(String username) throws IOException {
+    public static Object[] GetUserPermissions(String username) throws IOException, ClassNotFoundException {
         Object[] userPerms = SendReceive.SendReceive(11, sessionToken, new Object[] {username});
         return userPerms;
     }
@@ -168,7 +170,7 @@ public class ClientRequests {
      * @param perm4
      * @throws IOException
      */
-    public static void SetUserPermissions(String username, Boolean perm1, Boolean perm2, Boolean perm3, Boolean perm4) throws IOException {
+    public static void SetUserPermissions(String username, Boolean perm1, Boolean perm2, Boolean perm3, Boolean perm4) throws IOException, ClassNotFoundException {
         SendReceive.SendReceive(12, sessionToken, new Object[] {username, perm1, perm2, perm3, perm4});
     }
 
@@ -179,7 +181,7 @@ public class ClientRequests {
      * @param password
      * @throws IOException
      */
-    public static void SetUserPassword(String username, String password) throws IOException {
+    public static void SetUserPassword(String username, String password) throws IOException, ClassNotFoundException {
         SendReceive.SendReceive(13, sessionToken, new Object[] {username, password});
     }
 
@@ -189,7 +191,7 @@ public class ClientRequests {
      * @param username
      * @throws IOException
      */
-    public static void DeleteUser(String username) throws IOException {
+    public static void DeleteUser(String username) throws IOException, ClassNotFoundException {
         SendReceive.SendReceive(14, sessionToken, new Object[] {username});
     }
 
@@ -198,7 +200,7 @@ public class ClientRequests {
      *
      * @throws IOException
      */
-    public static void LogOut() throws IOException {
+    public static void LogOut() throws IOException, ClassNotFoundException {
         SendReceive.SendReceive(15, sessionToken, new Object[] {});
     }
 }

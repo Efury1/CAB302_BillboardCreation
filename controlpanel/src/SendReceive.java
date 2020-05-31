@@ -18,8 +18,8 @@ public class SendReceive {
      * @return  The data that it gets from the server
      * @throws IOException
      */
-    public static Object[] SendReceive(Integer functionID, String token, Object[] dataToSend) throws IOException {
-        //  Prepare to connect
+    public static Object[] SendReceive(Integer functionID, String token, Object[] dataToSend) throws IOException, ClassNotFoundException {
+        //  Prepare to connect..
         Socket mySocket;
         try {
             mySocket = SocketConnect();
@@ -28,7 +28,7 @@ public class SendReceive {
             throw e;
         }
 
-        //  Prepare to send
+        //  Prepare to send..
         OutputStream outputStream = mySocket.getOutputStream();
         ObjectOutputStream objectOutput = new ObjectOutputStream(outputStream);
         objectOutput.writeInt(functionID);
@@ -36,9 +36,9 @@ public class SendReceive {
 
         SendData(objectOutput, functionID, dataToSend);
 
-        for (Object data:dataToSend) {
-            objectOutput.writeUTF((data.toString()));
-        }
+//        for (Object data:dataToSend) {
+//            objectOutput.writeUTF((data.toString()));
+//        }
         objectOutput.flush();
 
         //  prepare to receive..
@@ -81,9 +81,6 @@ public class SendReceive {
         switch (functionID)
         {
             case 1: //  Login request
-                //TODO and test in UnitTestingLogin
-                //Current Errors,
-
             case 13:    //  Set user password
                 objectOutputStream.writeUTF((String)dataToSend[0]);   //  username
                 objectOutputStream.writeUTF(HashPassword((String)dataToSend[1])); //  hashed password
@@ -102,7 +99,7 @@ public class SendReceive {
                 objectOutputStream.writeUTF((String)dataToSend[0]);   //  billboard name
                 objectOutputStream.writeUTF((String)dataToSend[1]);   //  title
                 objectOutputStream.writeUTF((String)dataToSend[2]);   //  description
-                objectOutputStream.write((byte[])dataToSend[3]);    //  picture data
+                objectOutputStream.writeObject((Blob)dataToSend[3]);  //  picture data
                 objectOutputStream.writeUTF((String)dataToSend[4]);   //  background colour
                 objectOutputStream.writeUTF((String)dataToSend[5]);   //  title colour
                 objectOutputStream.writeUTF((String)dataToSend[6]);   //  description colour
@@ -122,7 +119,7 @@ public class SendReceive {
                 objectOutputStream.writeUTF((String)dataToSend[1]);   //  start date
                 objectOutputStream.writeUTF((String)dataToSend[2]);   //  start time
                 break;
-            case 10:    //  Create User
+            case 10:    //  Create user
                 objectOutputStream.writeUTF((String)dataToSend[0]);   //  username
                 objectOutputStream.writeBoolean((Boolean)dataToSend[1]);  //  permission 1 (perm_create)
                 objectOutputStream.writeBoolean((Boolean)dataToSend[2]);  //  permission 2 (perm_edit_all_billboards billboards)
@@ -152,7 +149,15 @@ public class SendReceive {
      * @param functionID
      * @return
      */
-    public static Object[] ReceiveData(ObjectInputStream objectInputStream, Integer functionID) throws IOException {
+    public static Object[] ReceiveData(ObjectInputStream objectInputStream, Integer functionID) throws IOException, ClassNotFoundException {
+        while (objectInputStream.available() == 0)
+        {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         Boolean reply = objectInputStream.readBoolean();
         Integer length = objectInputStream.readInt();
         if (!reply)
@@ -170,13 +175,6 @@ public class SendReceive {
                 //  array[] = {reply(bool), length(int), errorMessage(String)}
             }
         }
-        //  TODO can be removed but kept for backup reasons..
-//        if (functionID == 11)
-//        {
-//            //  For case 11, the first item cannot be false
-//            //  Increase length to skip first element
-//            length++;
-//        }
         Object[] receivedData = new Object[length]; //  This must be run after the check (in case length == 0)
         switch (functionID)
         {
@@ -193,7 +191,7 @@ public class SendReceive {
             case 3: //  Get billboard information
                 receivedData[0] = objectInputStream.readUTF();  //  title
                 receivedData[1] = objectInputStream.readUTF();  //  description
-                receivedData[2] = objectInputStream.read(); //  picture
+                receivedData[2] = objectInputStream.readObject();  //  picture
                 receivedData[3] = objectInputStream.readUTF();  //  background colour
                 receivedData[4] = objectInputStream.readUTF();  //  title colour
                 receivedData[5] = objectInputStream.readUTF();  //  description colour
@@ -202,7 +200,7 @@ public class SendReceive {
             case 5: //  Delete billboard
             case 7: //  Schedule billboard
             case 8: //  Remove billboard from schedule
-            case 10:    //  Create User
+            case 10:    //  Create user
             case 12:    //  Set user permissions
             case 13:    //  Set user password
             case 14:    //  Delete user
@@ -229,20 +227,16 @@ public class SendReceive {
                 }
                 break;
             case 11:    //  Get user permissions
-                    //  TODO can remove but kept just in case
-                    // receivedData[0] = true; //
-                    receivedData[0] = objectInputStream.readBoolean();  //  permission 1 (perm_create)
-                    receivedData[1] = objectInputStream.readBoolean();  //  permission 2 (perm_edit_all_billboards billboards)
-                    receivedData[2] = objectInputStream.readBoolean();  //  permission 3 (perm_edit_users)
-                    receivedData[3] = objectInputStream.readBoolean();  //  permission 4 (perm_schedule)
+                receivedData[0] = objectInputStream.readBoolean();  //  permission 1 (perm_create)
+                receivedData[1] = objectInputStream.readBoolean();  //  permission 2 (perm_edit_all_billboards billboards)
+                receivedData[2] = objectInputStream.readBoolean();  //  permission 3 (perm_edit_users)
+                receivedData[3] = objectInputStream.readBoolean();  //  permission 4 (perm_schedule)
                 break;
             default:
                 break;
         }   //  end switch
 
-
-        //  TODO fix return
-        return new Object[]{};
+        return receivedData;
     }
 
     private static Socket SocketConnect() throws IOException {

@@ -37,7 +37,26 @@ public class testClient{
         //  This is to be used after server ReceiveSend(); is created
         //  SendReceive.SendReceive(1, "token", new Object[]{"testuser", "testpassword"});
 
-        String host = null;
+        try {
+            ClientRequests.Login("staff", "today123");
+            System.out.println(ClientRequests.GetSessionToken());
+        } catch (ClassNotFoundException e) {
+            System.err.println("Login failed.");
+        }
+//        System.out.println("=========================================================");
+//        try {
+//            ClientRequests.ListBillboards();
+//        } catch (ClassNotFoundException | IOException e) {
+//            System.err.println("List billboards failed.");
+//        }
+        System.out.println("=========================================================");
+        try {
+            ClientRequests.GetBillboardInfo("name");
+        } catch (ClassNotFoundException | IOException e) {
+            System.err.println("List billboards failed.");
+        }
+
+        /*String host = null;
         Integer port = null;
         Socket socket;
         String[] connectionProps = RetrieveConnectionProps();
@@ -67,7 +86,7 @@ public class testClient{
         GetServerReply(socket);
 
 
-        socket.close();
+        socket.close();*/
     }
 
     private static void GetServerReply(Socket socket) throws IOException, InterruptedException {

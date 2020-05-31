@@ -22,8 +22,6 @@ public class ServerListen {
         } catch (FileNotFoundException fnfe) {
             System.err.println(fnfe);
         } catch (IOException | NumberFormatException e) {
-            //TODO get ride of ex.printStackTrace, In lec3 he says it's not acceptable error handling.
-            //  e.printStackTrace();
             System.err.println("Could not find port.");
             System.exit(1);
         }
@@ -32,7 +30,16 @@ public class ServerListen {
         return testInt;
     }
 
-    public static void main(String[] args) throws IOException, SQLException{
+    public static void main(String[] args){
+
+        try {
+            InitDatabase.InitialiseDB();
+        } catch (SQLException throwables) {
+            System.err.println(throwables);
+            System.err.println("Could not initialise database.");
+            System.exit(1);
+        }
+
         TokenHandler tokenCache = new TokenHandler();
         Integer port = RetrievePort();
 
@@ -46,15 +53,30 @@ public class ServerListen {
                 return;
             }
 
-            //loop indefinitely, listening for a connection to accept
+            //  Loop indefinitely, listening for a connection to accept
             for(;;) {
-                System.out.println("Server ready...");
-                Socket socket = serverSocket.accept();
+                for(;;) {
+                    System.out.println("Server ready...");
+                    Socket socket = null;
 
-                ReceiveSend.ReceiveSend(socket, tokenCache);
+                    try {   //  Try to accept an incoming connection..
+                        socket = serverSocket.accept();
 
-                //close the connection
-                socket.close();
+                        try {
+                            ReceiveSend.ReceiveSend(socket, tokenCache);
+                        } catch (IOException e) {
+                            System.err.println("Data transmission failed.");
+                            break;
+                        }
+//                        catch (ClassNotFoundException e) {
+//                            e.printStackTrace();
+//                        }
+                        socket.close();
+                    } catch (IOException e) {
+                        System.err.println("Could not accept connection.");
+                        break;
+                    }
+                }
             }
         }
     }   //  end Main()

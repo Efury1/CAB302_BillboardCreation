@@ -5,31 +5,70 @@ import java.util.ArrayList;
 
 public class ProcessRequests {
     /**
-     * Creates and array object to handle a successful transaction.
-     * @return An array in the format: acknowledgement, length.
+     * Public function to help choose methods within this class. Options are specified with funcion_id.
+     * @param function_id ID of the function (from 1-15) which determines how the input data is processed.
+     * @param tokenCache Session tokens stored on the server.
+     * @param vars Data received from the client to be processed.
+     * @return An array of relevant data according to the function_id used.
+     * @throws SQLException
      */
-    public static Object[] RelayValidResponse()
-    {
-        Object[] validArray = new Object[2];
-        validArray[0] = true;               //  acknowledgement
-        validArray[1] = 0;                  //  length
-        return validArray;
-    }
+    public static Object[] ProcessRequest(Integer function_id, TokenHandler tokenCache, Object[] vars) throws SQLException {
+        Object[] dataToSendBack = new Object[]{};
+        Connection myConnection = DBConnection.getInstance();
 
+        switch (function_id){
+            case 1: //  Login request
+                dataToSendBack = Login(vars[0].toString(), vars[1].toString(), myConnection, tokenCache);
+                break;
+            case 2: //  List billboards
+                dataToSendBack = ListBillboards(myConnection);
+                break;
+            case 3: //  Get billboard information
+                dataToSendBack = GetBillboardInfo(vars[0].toString(), myConnection);
+                break;
+            case 4: //  Create/edit billboard
+                dataToSendBack = CreateEditBillboard(vars[0].toString(), vars[1].toString(), vars[2].toString(), (Blob)vars[3], vars[4].toString(), vars[5].toString(), vars[6].toString(), vars[7].toString(), myConnection);
+                break;
+            case 5: //  Delete billboard
+                dataToSendBack = DeleteBillboard(vars[0].toString(), myConnection);
+                break;
+            case 6: //  View schedule
+                dataToSendBack = ViewSchedule(myConnection);
+                break;
+            case 7: //  Schedule billboard
+                dataToSendBack = ScheduleBillboard(vars[0].toString(), vars[1].toString(), (Integer)vars[2], (Boolean)vars[3], (Integer)vars[4], vars[5].toString(), vars[6].toString(), myConnection);
+                break;
+            case 8: //  Remove billboard from schedule
+                dataToSendBack = RemoveSchedule(vars[0].toString(), vars[1].toString(), vars[2].toString(), myConnection);
+                break;
+            case 9: //  List users
+                dataToSendBack = ListUsers(myConnection);
+                break;
+            case 10: //  Create User
+                dataToSendBack = CreateUser(vars[0].toString(), (Boolean)vars[1], (Boolean)vars[2], (Boolean)vars[3], (Boolean)vars[4], vars[5].toString(), myConnection);
+                break;
+            case 11:    //  Get user permissions
+                dataToSendBack = GetUserPermissions(vars[0].toString(), myConnection);
+                break;
+            case 12:   //  Set user permissions
+                dataToSendBack = SetUserPermissions(vars[0].toString(), (Boolean)vars[1], (Boolean)vars[2], (Boolean)vars[3], (Boolean)vars[4], myConnection);
+                break;
+            case 13:    //  Set user password
+                dataToSendBack = SetUserPassword(vars[0].toString(), vars[1].toString(), myConnection);
+                break;
+            case 14:    //  Delete user
+                dataToSendBack = DeleteUser(vars[0].toString(), myConnection);
+                break;
+            /**
+             * @see ReceiveSend
+             */
+            case 15:    //Handled in ReceiveSend class
+                //do not need to do anything, it will never enter here
+                break;
+        }
 
-    /**
-     * Creates an array object to handle errors from the server easily.
-     * @param errorMessage Error message to store in the error array.
-     * @return An array in the format: acknowledgement, length, errorMessage.
-     */
-    public static Object[] RelayError(String errorMessage)
-    {
-        Object[] errorArray = new Object[3];
-        errorArray[0] = false;         //  False (acknowledgement of action failed)
-        errorArray[1] = 1;             //  length
-        errorArray[2] = errorMessage;  //  Error message
-        return errorArray;
-    }
+        return dataToSendBack;
+    }   //  end ProcessRequest
 
 
     /**
@@ -48,7 +87,7 @@ public class ProcessRequests {
         loginStatus[1] = 1; //length is always 1 (for consequent data)
         //process Username and password from database
 
-        PreparedStatement getUserQuery = myConnection.prepareStatement("SELECT password_hash, password_salt FROM users WHERE user = ?");
+        PreparedStatement getUserQuery = myConnection.prepareStatement("SELECT password_hash, password_salt FROM users WHERE username = ?");
         getUserQuery.setString(1, user);
         ResultSet result = getUserQuery.executeQuery();
         String serverPasswordHash;
@@ -69,7 +108,7 @@ public class ProcessRequests {
         String clientSaltedHash = saltHandler.HashString(serverPasswordSalt + pass); //Client's password
 
         //Check that the passwords match
-        if(clientSaltedHash == serverPasswordHash){
+        if(clientSaltedHash.compareTo(serverPasswordHash) == 0){
             loginStatus[0] = true;
             //Return a valid token
             SaltHandler tokenGen = new SaltHandler();
@@ -114,11 +153,12 @@ public class ProcessRequests {
             billboardData[1] = length;              //return the length of billboard data to read in
         } else {
             billboardData = RelayError("No billboards were found.");
+            return billboardData;
         }
 
 
         //Read in the data from the temp array to the main object array (to send the list of billboards back to the client)
-        for (int i = 2; i < billboardData.length+2; i += 2) {
+        for (int i = 2; i < billboardData.length; i += 2) {
             billboardData[i] = temp_array.get(i-2);
             billboardData[i+1] = temp_array.get(i-1);
         }
@@ -135,7 +175,7 @@ public class ProcessRequests {
      * OR an array object to handle errors from the server easily.
      * @throws SQLException
      */
-    private static Object[] GetBillboardInformation(String billboard_name, Connection myConnection) throws SQLException {
+    private static Object[] GetBillboardInfo(String billboard_name, Connection myConnection) throws SQLException {
         Object[] billboardData;
 
         //Query database for the billboard
@@ -149,7 +189,7 @@ public class ProcessRequests {
             billboardData[1] = 6;
             billboardData[2] = billboardInfo.getString(1);  //Title
             billboardData[3] = billboardInfo.getString(2);  //Description
-            billboardData[4] = billboardInfo.getBytes(3);   //Picture
+            billboardData[4] = billboardInfo.getBlob(3);   //Picture
             billboardData[5] = billboardInfo.getString(4);  //Background colour
             billboardData[6] = billboardInfo.getString(5);  //Title colour
             billboardData[7] = billboardInfo.getString(6);  //Description colour
@@ -177,7 +217,7 @@ public class ProcessRequests {
      * OR an array object to handle errors from the server easily.
      * @throws SQLException
      */
-    private static Object[] CreateEditBillboard(String billboardName, String title, String description, byte[] picture, String backgroundColour, String titleColour, String descriptionColour, String creatorUsername, Connection myConnection) throws SQLException {
+    private static Object[] CreateEditBillboard(String billboardName, String title, String description, Blob picture, String backgroundColour, String titleColour, String descriptionColour, String creatorUsername, Connection myConnection) throws SQLException {
         Object[] serverReply;
         //Query the database for the billboard
         PreparedStatement billboardQuery = myConnection.prepareStatement("SELECT COUNT(billboard_name) FROM billboards WHERE billboard_name = ?");
@@ -191,7 +231,7 @@ public class ProcessRequests {
                 PreparedStatement updateBillboard = myConnection.prepareStatement("UPDATE billboards SET title = ?, description = ?, picture = ?, background_colour = ?, title_colour = ?, description_colour = ? WHERE billboard_name = ?");
                 updateBillboard.setString(1, title);
                 updateBillboard.setString(2, description);
-                updateBillboard.setBytes(3, picture);
+                updateBillboard.setBlob(3, picture);
                 updateBillboard.setString(4, backgroundColour);
                 updateBillboard.setString(5, titleColour);
                 updateBillboard.setString(6, descriptionColour);
@@ -212,7 +252,7 @@ public class ProcessRequests {
                 createNewBillboard.setString(1, billboardName);
                 createNewBillboard.setString(2, title);
                 createNewBillboard.setString(3, description);
-                createNewBillboard.setBytes(4, picture);
+                createNewBillboard.setBlob(4, picture);
                 createNewBillboard.setString(5, backgroundColour);
                 createNewBillboard.setString(6, titleColour);
                 createNewBillboard.setString(7, descriptionColour);
@@ -309,7 +349,7 @@ public class ProcessRequests {
         scheduleData[0] = true;
         scheduleData[1] = length;
 
-        for(int i = 2; i < length+2; i++){
+        for(int i = 2; i < length; i++){
             scheduleData[i] = tempArray.get(i-2);
         }
 
@@ -437,7 +477,7 @@ public class ProcessRequests {
             userList = new Object[length+2];
             userList[0] = true;
             userList[1] = length;
-            for(int i = 2; i < length+2; i++){ //Copy across all the usernames to an object array to send to the client
+            for(int i = 2; i < length; i++){ //Copy across all the usernames to an object array to send to the client
                 userList[i] = tempArray.get(i-2);
             }
         } else {
@@ -633,73 +673,47 @@ public class ProcessRequests {
     }
 
 
-    //  TODO A function to handle the transfer of ownership of a billboard.
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //  Helper functions:   ///////////////////////
+
 
     /**
-     * Public function to help choose methods within this class. Options are specified with funcion_id.
-     * @param function_id ID of the function (from 1-15) which determines how the input data is processed.
-     * @param tokenCache Session tokens stored on the server.
-     * @param vars Data received from the client to be processed.
-     * @return An array of relevant data according to the function_id used.
-     * @throws SQLException
+     * Creates and array object to handle a successful transaction.
+     * @return An array in the format: acknowledgement, length.
      */
-    public static Object[] ProcessRequest(Integer function_id, TokenHandler tokenCache, Object[] vars) throws SQLException {
-        Object[] dataToSendBack = new Object[]{};
-        Connection myConnection = DBConnection.getInstance();
+    public static Object[] RelayValidResponse()
+    {
+        Object[] validArray = new Object[2];
+        validArray[0] = true;               //  acknowledgement
+        validArray[1] = 0;                  //  length
+        return validArray;
+    }
 
-        switch (function_id){
-            case 1: //  Login request
-                dataToSendBack = Login(vars[0].toString(), vars[1].toString(), myConnection, tokenCache);
-                break;
-            case 2: //  List billboards
-                dataToSendBack = ListBillboards(myConnection);
-                break;
-            case 3: //  Get billboard information
-                dataToSendBack = GetBillboardInformation(vars[0].toString(), myConnection);
-                break;
-            case 4: //  Create/edit billboard
-                dataToSendBack = CreateEditBillboard(vars[0].toString(), vars[1].toString(), vars[2].toString(), (byte[])vars[3], vars[4].toString(), vars[5].toString(), vars[6].toString(), vars[7].toString(), myConnection);
-                break;
-            case 5: //  Delete billboard
-                dataToSendBack = DeleteBillboard(vars[0].toString(), myConnection);
-                break;
-            case 6: //  View schedule
-                dataToSendBack = ViewSchedule(myConnection);
-                break;
-            case 7: //  Schedule billboard
-                dataToSendBack = ScheduleBillboard(vars[0].toString(), vars[1].toString(), (Integer)vars[2], (Boolean)vars[3], (Integer)vars[4], vars[5].toString(), vars[6].toString(), myConnection);
-                break;
-            case 8: //  Remove billboard from schedule
-                dataToSendBack = RemoveSchedule(vars[0].toString(), vars[1].toString(), vars[2].toString(), myConnection);
-                break;
-            case 9: //  List users
-                dataToSendBack = ListUsers(myConnection);
-                break;
-            case 10: //  Create User
-                dataToSendBack = CreateUser(vars[0].toString(), (Boolean)vars[1], (Boolean)vars[2], (Boolean)vars[3], (Boolean)vars[4], vars[5].toString(), myConnection);
-                break;
-            case 11:    //  Get user permissions
-                dataToSendBack = GetUserPermissions(vars[0].toString(), myConnection);
-                break;
-            case 12:   //  Set user permissions
-                dataToSendBack = SetUserPermissions(vars[0].toString(), (Boolean)vars[1], (Boolean)vars[2], (Boolean)vars[3], (Boolean)vars[4], myConnection);
-                break;
-            case 13:    //  Set user password
-                dataToSendBack = SetUserPassword(vars[0].toString(), vars[1].toString(), myConnection);
-                break;
-            case 14:    //  Delete user
-                dataToSendBack = DeleteUser(vars[0].toString(), myConnection);
-                break;
-            /**
-             * @see ReceiveSend
-             */
-            case 15:    //Handled in ReceiveSend class
-                //do not need to do anything, it will never enter here
-                break;
-        }
 
-        //TODO Remove this
-        return dataToSendBack;
+    /**
+     * Creates an array object to handle errors from the server easily.
+     * @param errorMessage Error message to store in the error array.
+     * @return An array in the format: acknowledgement, length, errorMessage.
+     */
+    public static Object[] RelayError(String errorMessage)
+    {
+        Object[] errorArray = new Object[3];
+        errorArray[0] = false;         //  False (acknowledgement of action failed)
+        errorArray[1] = 1;             //  length
+        errorArray[2] = errorMessage;  //  Error message
+        return errorArray;
     }
 }

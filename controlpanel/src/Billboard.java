@@ -229,7 +229,7 @@ public class Billboard {
      * Requests and processes billboard dat from server
      * @throws IOException
      */
-    public void importAllInfo() throws IOException {
+    public void importAllInfo() throws IOException, ClassNotFoundException {
         Object[] billboardData = ClientRequests.GetBillboardInfo(getBName());
 
         if(billboardData.length==6) {
