@@ -1,4 +1,5 @@
 
+import javax.sql.rowset.serial.SerialBlob;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -6,18 +7,23 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import java.io.File;
+import java.sql.Blob;
+import java.sql.SQLException;
 /* Main screen */
 /**
- * @author Eliza Fury
- * @version last edited 29.05.20
+ * @author Eliza & Lauren & Lachie
+ * @version last edited 31.05.20
  * Worked on designing GUI() screen.
  * Implemented action listeners that allows screen to pick up text
  * and change color of background.
- * Linked functionality to billboard(@author Lauren).
+ * Linked functionality to billboard (@author Lauren).
+ * Renamed functions to understandable names (@author Lachie).
+ * Implemented Logout function and revised login function (@author Lachie).
  */
 
 /*Note: we may need threading when it comes to refreshing the ratios.
@@ -44,42 +50,42 @@ public class GUI extends Component {
         jt = new JTextArea(80, 20);
         infoPanel.add(jt);
 
-        JButton b = new JButton("Submit");
+        JButton submitButton = new JButton("Submit");
 
 
         JMenu bkMenu = new JMenu("Background");
-        JMenuBar mb = new JMenuBar();
-        JMenu m1 = new JMenu("File");
-        JMenu m2 = new JMenu("Edit");
-        JButton m3 = new JButton("View Billboards");
+        JMenuBar menuBar = new JMenuBar();
+        JMenu fileMenu = new JMenu("File");
+        JMenu editMenu = new JMenu("Edit");
+        JButton viewBillboards = new JButton("View Billboards");
 
         /*Adding menu */
-        mb.add(m1);
-        mb.add(m2);
-        mb.add(m3);
+        menuBar.add(fileMenu);
+        menuBar.add(editMenu);
+        menuBar.add(viewBillboards);
         /*Under file */
-        JMenuItem m11 = new JMenuItem("Import");
-        JMenuItem m22 = new JMenuItem("Export");
-        JMenuItem m44 = new JMenuItem("Schedule and Save");
-        JMenuItem m55 = new JMenuItem("Logout");
+        JMenuItem importMenu = new JMenuItem("Import");
+        JMenuItem exportMenu = new JMenuItem("Export");
+        JMenuItem saveAndSchedule = new JMenuItem("Schedule and Save");
+        JMenuItem menuLogout = new JMenuItem("Logout");
         JMenuItem colorYellow = new JMenuItem("Yellow");
         JMenuItem colorBlue = new JMenuItem("Blue");
         JMenuItem colorRed = new JMenuItem("Red");
 
 
-        m1.add(m11);
-        m1.add(m22);
-        m1.add(m44);
-        m1.add(m55);
+        fileMenu.add(importMenu);
+        fileMenu.add(exportMenu);
+        fileMenu.add(saveAndSchedule);
+        fileMenu.add(menuLogout);
         bkMenu.add(colorYellow);
         bkMenu.add(colorBlue);
         bkMenu.add(colorRed);
         /*Under edit */
         JMenuItem menuImageLoad = new JMenuItem("Upload Image");
         JMenuItem editUserPermission = new JMenuItem("Edit Users");
-        m2.add(editUserPermission);
-        m2.add(menuImageLoad);
-        m2.add(bkMenu);
+        editMenu.add(editUserPermission);
+        editMenu.add(menuImageLoad);
+        editMenu.add(bkMenu);
 
         JLabel resultLabel = new JLabel(" ");
         JLabel label = new JLabel("Type message and press enter");
@@ -99,7 +105,7 @@ public class GUI extends Component {
         panel.add(r2);
         panel.add(r3);
         panel.add(spacer);
-        panel.add(b);
+        panel.add(submitButton);
         panel1.add(resultLabel);
         panel1.add(info);
 
@@ -124,7 +130,10 @@ public class GUI extends Component {
                     try{
                         File selectedFile = file.getSelectedFile();
                         String path = selectedFile.getAbsolutePath();
-                        imagel.setIcon(new ImageIcon(path));
+                        Blob imageBlob = ReadImage(selectedFile);
+
+                        ImageIcon icon = ConvertToImageIcon(imageBlob);
+                        imagel.setIcon(icon);
 
                     } catch (Exception ex) { JOptionPane.showMessageDialog(this, ex); }
 
@@ -139,7 +148,7 @@ public class GUI extends Component {
             editUsers();
         });
 
-        m44.addActionListener(e -> {
+        saveAndSchedule.addActionListener(e -> {
             ScheduleModel cal = new ScheduleModel();
             this.setSize(700, 400);
             this.setVisible(true);
@@ -149,9 +158,9 @@ public class GUI extends Component {
             //session1.setVisible(true);
         });
 
-        m55.addActionListener(e -> {
-            //Need to not let you continue if you haven't login.
-            new Login();
+        menuLogout.addActionListener(e -> {
+            JOptionPane.showMessageDialog(frame, "You have successfully logged out.");
+            System.exit(0);
         });
 
 
@@ -189,7 +198,7 @@ public class GUI extends Component {
             }
         }
 
-        b.addActionListener(new ActionListener()
+        submitButton.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
@@ -203,7 +212,7 @@ public class GUI extends Component {
         });
 
 
-        m3.addActionListener(new ActionListener()
+        viewBillboards.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
@@ -224,11 +233,26 @@ public class GUI extends Component {
 
         //Adding Components to the frame.
         frame.getContentPane().add(BorderLayout.SOUTH, panel);
-        frame.getContentPane().add(BorderLayout.NORTH, mb);
+        frame.getContentPane().add(BorderLayout.NORTH, menuBar);
         frame.getContentPane().add(BorderLayout.CENTER, panel1);
         frame.getContentPane().add(BorderLayout.EAST, infoPanel);
         frame.setVisible(true);
 
+    }
+
+    private ImageIcon ConvertToImageIcon(Blob imageBlob) throws SQLException, IOException {
+        InputStream inputStream = imageBlob.getBinaryStream();
+        BufferedImage bufferedImage = ImageIO.read(inputStream);
+        Image image = bufferedImage;
+        return new ImageIcon(image);
+    }
+
+    private Blob ReadImage(File selectedFile) throws IOException, SQLException {
+        BufferedImage image = ImageIO.read(selectedFile);
+        ByteArrayOutputStream Output = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", Output);
+        Blob myBlob = new SerialBlob(Output.toByteArray());
+        return myBlob;
     }
 
 
@@ -255,7 +279,7 @@ public class GUI extends Component {
         ListSelectionModel select = userTable.getSelectionModel();
 
 
-        //TODO ready for sever functionality, needs to get connection
+        //TODO ready for server functionality, needs to get connection
         deleteBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
