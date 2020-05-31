@@ -1,7 +1,15 @@
+import com.sun.jdi.event.MethodExitEvent;
+
 import javax.swing.*;
+import javax.xml.stream.events.EndDocument;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.font.TextAttribute;
+import java.io.IOException;
+import java.net.ConnectException;
 import java.sql.*;
+import java.util.Map;
 
 public class Login {
 
@@ -21,38 +29,43 @@ public class Login {
         frame.setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        JLabel lblNewLabel = new JLabel("Login to continue");
-        lblNewLabel.setBounds(195, 110, 120, 40);
+        JLabel lblNewLabel = new JLabel("Login to continue...");
+        Font font = lblNewLabel.getFont();
+        Map attributes = font.getAttributes();
+        attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        lblNewLabel.setFont(font.deriveFont(attributes));
+        lblNewLabel.setBounds(50, 40, 120, 40);
         contentPane.add(lblNewLabel);
         textField = new JTextField();
         //Username text field
-        textField.setBounds(200, 170, 200, 35);
+        textField.setBounds(50, 100, 200, 20);
         contentPane.add(textField);
         textField.setColumns(10);
 
         passwordField = new JPasswordField();
-        passwordField.setBounds(200, 230, 200, 35);
+        passwordField.setBounds(50, 140, 200, 20);
         contentPane.add(passwordField);
 
-        JLabel userLabel = new JLabel("Username");
-        userLabel.setBounds(50, 166, 193, 52);
+        JLabel userLabel = new JLabel("Username:");
+        userLabel.setBounds(50, 65, 193, 52);
         contentPane.add(userLabel);
 
-        JLabel passLabel = new JLabel("Password");
+        JLabel passLabel = new JLabel("Password:");
 
-        passLabel.setBounds(50, 230, 193, 52);
+        passLabel.setBounds(50, 105, 193, 52);
         contentPane.add(passLabel);
 
         JButton loginButton = new JButton("Login");
-        loginButton.setBounds(200, 300, 90, 20);
+        loginButton.setBounds(50, 170, 100, 30);
         contentPane.add(loginButton);
+        loginButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         //loginButton.addActionListener((ActionListener) this);
 
         //  Screen set up
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         frame.setTitle("User Login");
         frame.setVisible(true);
-        frame.setSize(500, 400);
+        frame.setSize(300, 300);
         frame.setResizable(false);
 
         loginButton.addActionListener(new ActionListener() {
@@ -61,17 +74,15 @@ public class Login {
                 String uName = textField.getText();
                 String pass = passwordField.getText();  //  getText() is deprecated for JPasswordField (find other method)
                 /*Tutor will now be able to login in with name and password */
-                if(uName.equals("name") && pass.equals("password"))
-                {
-                    JOptionPane.showMessageDialog(frame, "You have successfully login!");
+                try {
+                    ClientRequests.Login(uName, pass);
+                    //System.out.println(ClientRequests.GetSessionToken());
+                    JOptionPane.showMessageDialog(frame, "You have successfully logged in!");
                     //Create object
                     GUI gui = new GUI();
-
-                }
-                else
-                {
-                    //This currently works
-                    JOptionPane.showMessageDialog(frame,"Invalid username and/or password!");
+                    frame.setVisible(false);
+                } catch (ClassNotFoundException | IOException error1) {
+                    JOptionPane.showMessageDialog(frame, error1.getMessage());
                 }
             }
         });
