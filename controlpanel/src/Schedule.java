@@ -70,21 +70,34 @@ class Schedule {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFrame CBillboard = new JFrame();
-                JTextField endDate = new JTextField();
-                JTextField startDate = new JTextField();
-                JPanel northPanel = new JPanel();
-                northPanel.setLayout(new GridLayout(2,2));
+                JTextField endDate = new JTextField("00:00am");
+                JTextField startDate = new JTextField("00:00am");
+
+                JPanel datePanel = new JPanel();
+                datePanel.setLayout(new GridLayout(2,2));
+
                 JLabel frameTitle = new JLabel("Schedule Billboard");
-                JPanel eastPanel = new JPanel();
-                eastPanel.add(frameTitle);
-                northPanel.add(new JLabel("Start Date: ", SwingConstants.RIGHT));
-                northPanel.add(endDate);
-                northPanel.add(new JLabel("End Date: ", SwingConstants.RIGHT));
-                northPanel.add(startDate);
-                CBillboard.add(northPanel, BorderLayout.CENTER);
-                CBillboard.add(eastPanel, BorderLayout.NORTH);
-                CBillboard.setSize(300, 100);
-                CBillboard.setResizable(false);
+
+                JPanel titlePanel = new JPanel();
+                titlePanel.add(frameTitle);
+
+                datePanel.add(new JLabel("Start Date: ", SwingConstants.RIGHT));
+
+                JButton save = new JButton("Save");
+                JPanel savePanel = new JPanel();
+                savePanel.add(save);
+
+
+                datePanel.add(endDate);
+                datePanel.add(new JLabel("End Date: ", SwingConstants.RIGHT));
+                datePanel.add(startDate);
+
+
+                CBillboard.add(titlePanel, BorderLayout.NORTH);
+                CBillboard.add(datePanel, BorderLayout.CENTER);
+                CBillboard.add(savePanel, BorderLayout.SOUTH);
+                CBillboard.setSize(300, 150);
+                CBillboard.setResizable(true);
                 CBillboard.setVisible(true);
                 CBillboard.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 
@@ -96,8 +109,8 @@ class Schedule {
     }
 
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         Schedule jc = new Schedule();
 
-    }*/
+    }
 }
