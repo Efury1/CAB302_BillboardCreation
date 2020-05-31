@@ -279,7 +279,7 @@ public class GUI extends Component {
         ListSelectionModel select = userTable.getSelectionModel();
 
 
-        //TODO ready for sever functionality, needs to get connection
+        //TODO ready for server functionality, needs to get connection
         deleteBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
