@@ -33,7 +33,7 @@ public class ServerListen {
     }
 
     public static void main(String[] args) throws IOException, SQLException{
-        TokenHandling tokenCache = new TokenHandling();
+        TokenHandler tokenCache = new TokenHandler();
         Integer port = RetrievePort();
 
         //Catch that the assigned port is not valid
@@ -48,6 +48,7 @@ public class ServerListen {
 
             //loop indefinitely, listening for a connection to accept
             for(;;) {
+                System.out.println("Server ready...");
                 Socket socket = serverSocket.accept();
 
                 ReceiveSend.ReceiveSend(socket, tokenCache);

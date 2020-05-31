@@ -4,6 +4,9 @@ import java.io.ObjectInput;
 public class ClientRequests {
     private static String sessionToken;
 
+    public String GetSessionToken() { return sessionToken; };
+    public void SetSessionToken(String sessionToken) { this.sessionToken = sessionToken; };
+
     /**
      * Login request - functionID == 1
      * @param username
@@ -25,8 +28,8 @@ public class ClientRequests {
         //  TODO for loop just for testing
         for(int i = 0; i < listOfBillboards.length; i+=2)
         {
-            System.out.println(listOfBillboards[i]);
-            System.out.println(listOfBillboards[i+1]);
+            System.out.println(listOfBillboards[i]);    //Billboard name
+            System.out.println(listOfBillboards[i+1]);  //Billboard creator
         }
         return listOfBillboards;
     }
@@ -36,8 +39,8 @@ public class ClientRequests {
         return billboardInfo;
     }
 
-    public static void CreateEditBillboard(String billboardName, String title, String description, byte[] pictureData, String bgColour, String titleColour, String descColour) throws IOException {
-        SendReceive.SendReceive(4, sessionToken, new Object[] {billboardName, title, description, pictureData, bgColour, titleColour, descColour});
+    public static void CreateEditBillboard(String billboardName, String title, String description, byte[] pictureData, String bgColour, String titleColour, String descColour, String creatorUsername) throws IOException {
+        SendReceive.SendReceive(4, sessionToken, new Object[] {billboardName, title, description, pictureData, bgColour, titleColour, descColour, creatorUsername});
     }
 
     public static void DeleteBillboard(String billboardName) throws IOException {

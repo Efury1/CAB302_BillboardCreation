@@ -52,15 +52,14 @@ public class SendReceive {
      * @param password
      * @return
      */
-    private static String HashPassword(Object password) {
-        String inputPassword = password.toString();
+    private static String HashPassword(String password) {
         MessageDigest messageDigest = null;
         try {
             messageDigest = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException e) {
             //  do nothing (this will never be caught)
         }
-        byte[] hashedPassword = messageDigest.digest(inputPassword.getBytes());
+        byte[] hashedPassword = messageDigest.digest(password.getBytes());
         StringBuffer stringBuffer = new StringBuffer();
         for (byte b: hashedPassword)
         {
@@ -87,13 +86,14 @@ public class SendReceive {
 
             case 13:    //  Set user password
                 objectOutputStream.writeUTF((String)dataToSend[0]);   //  username
-                objectOutputStream.writeUTF(HashPassword(dataToSend[1])); //  hashed password
+                objectOutputStream.writeUTF(HashPassword((String)dataToSend[1])); //  hashed password
                 break;
             case 2: //  List billboards
             case 6: //  View schedule
             case 9: //  List users
             case 15:    //  Log out (aka delete session token)
                 //  nothing required
+                break;
             case 3: //  Get billboard information
             case 5: //  Delete billboard
                 objectOutputStream.writeUTF((String)dataToSend[0]);   //  billboard name
@@ -102,10 +102,11 @@ public class SendReceive {
                 objectOutputStream.writeUTF((String)dataToSend[0]);   //  billboard name
                 objectOutputStream.writeUTF((String)dataToSend[1]);   //  title
                 objectOutputStream.writeUTF((String)dataToSend[2]);   //  description
-                objectOutputStream.write((byte[])dataToSend[3]);  //  picture data
+                objectOutputStream.write((byte[])dataToSend[3]);    //  picture data
                 objectOutputStream.writeUTF((String)dataToSend[4]);   //  background colour
                 objectOutputStream.writeUTF((String)dataToSend[5]);   //  title colour
                 objectOutputStream.writeUTF((String)dataToSend[6]);   //  description colour
+                objectOutputStream.writeUTF((String)dataToSend[7]);   //  creator username
                 break;
             case 7: //  Schedule billboard
                 objectOutputStream.writeUTF((String)dataToSend[0]);   //  billboard name
@@ -127,7 +128,7 @@ public class SendReceive {
                 objectOutputStream.writeBoolean((Boolean)dataToSend[2]);  //  permission 2 (perm_edit_all_billboards billboards)
                 objectOutputStream.writeBoolean((Boolean)dataToSend[3]);  //  permission 3 (perm_edit_users)
                 objectOutputStream.writeBoolean((Boolean)dataToSend[4]);  //  permission 4 (perm_schedule)
-                objectOutputStream.writeUTF(HashPassword(dataToSend[5])); //  hashed password
+                objectOutputStream.writeUTF(HashPassword((String)dataToSend[5])); //  hashed password
                 break;
             case 11:    //  Get user permissions
             case 14:    //  Delete user
@@ -224,7 +225,7 @@ public class SendReceive {
             case 9: //  List users
                 for (int i = 0; i < length; i++)
                 {
-                    receivedData[i] = objectInputStream.readUTF();  //  username (eg. "user1", "user2", "user3"
+                    receivedData[i] = objectInputStream.readUTF();  //  username (eg. "user1", "user2", "user3")
                 }
                 break;
             case 11:    //  Get user permissions

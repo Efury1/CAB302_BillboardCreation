@@ -3,7 +3,7 @@ import java.net.Socket;
 import java.sql.SQLException;
 
 public class ReceiveSend {
-    public static void ReceiveSend(Socket socket, TokenHandling tokenCache) throws IOException, SQLException {
+    public static void ReceiveSend(Socket socket, TokenHandler tokenCache) throws IOException, SQLException {
         //  Get the connection info
         InputStream input = socket.getInputStream();
         ObjectInputStream objectInputStream = new ObjectInputStream(input);
@@ -11,25 +11,32 @@ public class ReceiveSend {
         String token = objectInputStream.readUTF();
         Object[] clientData;
 
-        if (functionID != 1)
+        if(functionID == 15){                   // Log Out (only have to remove the session token)
+            tokenCache.RemoveToken(token);
+            clientData = new Object[2];
+            clientData[0] = true;
+            clientData[1] = 0;
+        }
+        else if (functionID == 1)               //The login request (bypass token validation)
         {
-            if (tokenCache.ValidateToken(token))
+            clientData = ReceiveData(objectInputStream, functionID);
+//            for (Object yeeyha:clientData) {
+//                System.out.println("Incoming Client Data: " + yeeyha);
+//            }
+        }
+        else                                    //Every other request
+        {
+            if (tokenCache.ValidateToken(token)) //Validate their token
             {
                 clientData = ReceiveData(objectInputStream, functionID);
-                for (Object yeeyha:clientData) {
-                    System.out.println("Incoming Client Data: " + yeeyha);
-                }
+                ProcessRequest.ProcessRequest(functionID, tokenCache, clientData);
             }
             else
             {
-                //  TODO send back an error message "uhh, token cayan't be found, sire" (token invalid)
-            }
-        }
-        else
-        {
-            clientData = ReceiveData(objectInputStream, functionID);
-            for (Object yeeyha:clientData) {
-                System.out.println("Incoming Client Data: " + yeeyha);
+                clientData = new Object[3];
+                clientData[0] = false;
+                clientData[1] = 1;
+                clientData[2] = "Invalid session token.";
             }
         }
 
@@ -59,7 +66,7 @@ public class ReceiveSend {
             case 2: //  List billboards
             case 6: //  View schedule
             case 9: //  List users
-            case 15:    //  Log out (aka delete session token)
+            case 15:    //  Log out (aka delete session token) (handled earlier)
                 //  nothing required
                 break;
             case 3: //  Get billboard information
@@ -74,6 +81,7 @@ public class ReceiveSend {
                 incomingData[4] = objectInputStream.readUTF();    //  background colour
                 incomingData[5] = objectInputStream.readUTF();    //  title colour
                 incomingData[6] = objectInputStream.readUTF();    //  description colour
+                incomingData[7] = objectInputStream.readUTF();     // creator username
                 break;
             case 7: //  Schedule billboard
                 incomingData[0] = objectInputStream.readUTF();    //  billboard name
@@ -113,6 +121,12 @@ public class ReceiveSend {
         }
         return incomingData;
     }
+
+    /**
+     * Get the length of the data to be sent to the server. Based on function ID standards.
+     * @param functionID
+     * @return
+     */
     private static Integer GetDataLength(Integer functionID)
     {
         Integer length = 0;
@@ -125,16 +139,18 @@ public class ReceiveSend {
             case 2:
             case 6:
             case 9:
-            case 15:
                 length = 0;
                 break;
             case 3:
             case 5:
+            case 15:
             case 11:
             case 14:
                 length = 1;
                 break;
             case 4:
+                length = 8;
+                break;
             case 7:
                 length = 7;
                 break;
