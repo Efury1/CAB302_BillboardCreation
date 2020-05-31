@@ -1,14 +1,16 @@
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
 
-class Schedule
-{
+class Schedule {
 
-    public Schedule()
-    {
+    public Schedule() {
 
         JFrame scheduleFrame;
         JPanel daysPanel, buttonsPanel, eventsPanel;
@@ -23,7 +25,7 @@ class Schedule
 
         //JPanels
         daysPanel = new JPanel();
-        daysPanel.setLayout(new GridLayout(1,2));
+        daysPanel.setLayout(new GridLayout(1, 2));
         daysPanel.setBorder(BorderFactory.createTitledBorder("Schedule Billboard"));
         buttonsPanel = new JPanel();
 
@@ -49,22 +51,66 @@ class Schedule
         btnPanel.add(new JButton("   "));
         buttonsPanel.add(btnPanel);
 
-        events = new JTextArea(10,10);
+        JButton create = new JButton("Create Billboard");
+        events = new JTextArea(10, 10);
         events.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(events);
-         eventsPanel = new JPanel(new GridLayout(2, 5, 0, 0));
-         eventsPanel.add(events);
+        eventsPanel = new JPanel(new GridLayout(2, 5, 0, 0));
+        eventsPanel.add(events);
+        eventsPanel.add(create);
 
 
         scheduleFrame.add(daysPanel, BorderLayout.NORTH);
         scheduleFrame.add(buttonsPanel, BorderLayout.CENTER);
         scheduleFrame.add(eventsPanel, BorderLayout.SOUTH);
         scheduleFrame.setVisible(true);
+
+        create.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame CBillboard = new JFrame();
+                JTextField endDate = new JTextField("00:00am");
+                JTextField startDate = new JTextField("00:00am");
+
+                JPanel datePanel = new JPanel();
+                datePanel.setLayout(new GridLayout(2,2));
+
+                JLabel frameTitle = new JLabel("Schedule Billboard");
+
+                JPanel titlePanel = new JPanel();
+                titlePanel.add(frameTitle);
+
+                datePanel.add(new JLabel("Start Date: ", SwingConstants.RIGHT));
+
+                JButton save = new JButton("Save");
+                JPanel savePanel = new JPanel();
+                savePanel.add(save);
+
+
+                datePanel.add(endDate);
+                datePanel.add(new JLabel("End Date: ", SwingConstants.RIGHT));
+                datePanel.add(startDate);
+
+
+                CBillboard.add(titlePanel, BorderLayout.NORTH);
+                CBillboard.add(datePanel, BorderLayout.CENTER);
+                CBillboard.add(savePanel, BorderLayout.SOUTH);
+                CBillboard.setSize(300, 150);
+                CBillboard.setResizable(true);
+                CBillboard.setVisible(true);
+                CBillboard.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+
+            }
+
+        });
+
+
     }
-    /*public static void main (String[] args)
-    {
+
+
+    public static void main(String[] args) {
         Schedule jc = new Schedule();
 
-    }*/
-
+    }
 }
