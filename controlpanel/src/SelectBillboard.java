@@ -37,7 +37,7 @@ public class SelectBillboard {
         billboards.add(b4);
         String[] requestData = {};
         //TODO Uncomment section when SendReceive is working
-        Object[] billboardData = ClientRequests.ListBillboards();
+        /*Object[] billboardData = ClientRequests.ListBillboards();
 
         //unpack data, create billboard from data, and append billboard to array of billboards
         for(int i = 0; i<billboardData.length; i++){
@@ -46,7 +46,7 @@ public class SelectBillboard {
             String billboardCreator = billboardData[i].toString();
             billboards.add(new Billboard(billboardName, billboardCreator));
             totalBoards++;
-        }
+        }*/
 
         JPanel buttonPanel = new JPanel();
         JButton BView = new JButton("View");
@@ -99,9 +99,13 @@ public class SelectBillboard {
             public void actionPerformed(ActionEvent e) {
                 //View billboard
                 Billboard selectedBillboard = billboards.get(billboardList.getSelectedIndex());
-                selectedBillboard.setBMessage("Testing...");
+                //selectedBillboard.setBMessage("Testing...");
                 //selectedBillboard.setBDescription("Test description");
-                //TODO Get all data about billboard from database
+                /*try {
+                    selectedBillboard.importAllInfo();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }*/
                 if(selectedBillboard.hasMessage()==false && selectedBillboard.hasDescription()==false && selectedBillboard.hasImage()==false){
                     //Does not show billboard with nothing on it
                     JOptionPane.showMessageDialog(frame,"There are no elements to display in this billboard");
@@ -122,11 +126,11 @@ public class SelectBillboard {
                 //Edit billboard
                 //TODO Get all data about billboard from database
                 Billboard selectedBillboard = billboards.get(billboardList.getSelectedIndex());
-                try {
+                /*try {
                     selectedBillboard.importAllInfo();
                 } catch (IOException ex) {
                     ex.printStackTrace();
-                }
+                }*/
             }
         });
 
@@ -135,11 +139,11 @@ public class SelectBillboard {
             public void actionPerformed(ActionEvent e) {
                 //TODO Delete billboard including from database
                 Billboard selectedBillboard = billboards.get(billboardList.getSelectedIndex());
-                try {
+               /* try {
                     ClientRequests.DeleteBillboard(selectedBillboard.getBName());
                 } catch (IOException ex) {
                     ex.printStackTrace();
-                }
+                }*/
             }
         });
 
