@@ -3,7 +3,7 @@ import java.net.Socket;
 import java.sql.SQLException;
 
 public class ReceiveSend {
-    public static void ReceiveSend(Socket socket, TokenHandler tokenCache) throws IOException, SQLException {
+    public static void ReceiveSend(Socket socket, TokenHandler tokenCache) throws IOException {
         //  Get the connection info
         InputStream input = socket.getInputStream();
         ObjectInputStream objectInputStream = new ObjectInputStream(input);
@@ -13,30 +13,30 @@ public class ReceiveSend {
 
         if(functionID == 15){                   // Log Out (only have to remove the session token)
             tokenCache.RemoveToken(token);
-            clientData = new Object[2];
-            clientData[0] = true;
-            clientData[1] = 0;
+            clientData = ProcessRequests.RelayValidResponse();
         }
         else if (functionID == 1)               //The login request (bypass token validation)
         {
             clientData = ReceiveData(objectInputStream, functionID);
-//            for (Object yeeyha:clientData) {
-//                System.out.println("Incoming Client Data: " + yeeyha);
-//            }
+            clientData = ReceiveData(objectInputStream, functionID);
+            //    for (Object yeeyha:clientData) {
+        //        System.out.println("Incoming Client Data: " + yeeyha);
+        //    }
         }
         else                                    //Every other request
         {
             if (tokenCache.ValidateToken(token)) //Validate their token
             {
                 clientData = ReceiveData(objectInputStream, functionID);
-                ProcessRequest.ProcessRequest(functionID, tokenCache, clientData);
+                try {
+                    ProcessRequests.ProcessRequest(functionID, tokenCache, clientData);
+                } catch (SQLException e) {
+                    clientData = ProcessRequests.RelayError("Invalid database action.");
+                }
             }
             else
             {
-                clientData = new Object[3];
-                clientData[0] = false;
-                clientData[1] = 1;
-                clientData[2] = "Invalid session token.";
+                clientData = ProcessRequests.RelayError("Invalid session token.");
             }
         }
 

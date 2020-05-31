@@ -1,16 +1,26 @@
-import javax.swing.plaf.nimbus.State;
-import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class ProcessRequest {
+public class ProcessRequests {
+    /**
+     * Creates and array object to handle a successful transaction.
+     * @return An array in the format: acknowledgement, length.
+     */
+    public static Object[] RelayValidResponse()
+    {
+        Object[] validArray = new Object[2];
+        validArray[0] = true;               //  acknowledgement
+        validArray[1] = 0;                  //  length
+        return validArray;
+    }
+
 
     /**
      * Creates an array object to handle errors from the server easily.
-     * @param errorMessage Error message to store in the error array
-     * @return An array in the format: acknowledgement, length, errorMessage
+     * @param errorMessage Error message to store in the error array.
+     * @return An array in the format: acknowledgement, length, errorMessage.
      */
     public static Object[] RelayError(String errorMessage)
     {
@@ -22,6 +32,17 @@ public class ProcessRequest {
     }
 
 
+    /**
+     * Checks if the username+password match a record on the database. Returns a token and creates a
+     * session stored on the server.
+     * @param user Input username
+     * @param pass Input password
+     * @param myConnection A connection/session with a specific database.
+     * @param tokenCache Array of tokens
+     * @return A token if the login is valid
+     * OR an array object to handle errors from the server easily.
+     * @throws SQLException
+     */
     private static Object[] Login(String user, String pass, Connection myConnection, TokenHandler tokenCache) throws SQLException {
         Object[] loginStatus = new Object[3];
         loginStatus[1] = 1; //length is always 1 (for consequent data)
@@ -56,12 +77,20 @@ public class ProcessRequest {
             tokenCache.AddToken(token);
             loginStatus[2] = token;             //To send back to client
         } else {
-            loginStatus = RelayError("The username or password is invalid");
+            loginStatus = RelayError("The username or password is invalid.");
         }
         getUserQuery.close();
         return loginStatus;
     }
+    
 
+    /**
+     * Queries a database and gets the names of all billboards and their creators.
+     * @param myConnection A connection/session with a specific database.
+     * @return An object array of billboard names and their creators
+     * OR an array object to handle errors from the server easily.
+     * @throws SQLException
+     */
     private static Object[] ListBillboards(Connection myConnection) throws SQLException {
         Object[] billboardData;
         ArrayList<String> temp_array = new ArrayList<String>();
@@ -97,6 +126,15 @@ public class ProcessRequest {
         return billboardData;
     }
 
+
+    /**
+     * Searches over a database for a billboard and gives back its details.
+     * @param billboard_name Name of the queried billboard.
+     * @param myConnection A connection/session with a specific database.
+     * @return A billboard's components in an object array
+     * OR an array object to handle errors from the server easily.
+     * @throws SQLException
+     */
     private static Object[] GetBillboardInformation(String billboard_name, Connection myConnection) throws SQLException {
         Object[] billboardData;
 
@@ -123,6 +161,22 @@ public class ProcessRequest {
         return billboardData;
     }
 
+
+    /**
+     * Creates a new billboard in the database OR updates the details of an existing billboard.
+     * @param billboardName Name of the queried/new billboard.
+     * @param title Title of the queried/new billboard.
+     * @param description Description of the queried/new billboard.
+     * @param picture Picture of the queried/new billboard.
+     * @param backgroundColour Background colour of the queried/new billboard.
+     * @param titleColour Title color of the queried/new billboard.
+     * @param descriptionColour Description colour of the queried/new billboard.
+     * @param creatorUsername Creator username of the queried/new billboard.
+     * @param myConnection A connection/session with a specific database.
+     * @return An object array of the successful transaction of creating/editing a billboard
+     * OR an array object to handle errors from the server easily.
+     * @throws SQLException
+     */
     private static Object[] CreateEditBillboard(String billboardName, String title, String description, byte[] picture, String backgroundColour, String titleColour, String descriptionColour, String creatorUsername, Connection myConnection) throws SQLException {
         Object[] serverReply;
         //Query the database for the billboard
@@ -144,9 +198,7 @@ public class ProcessRequest {
                 updateBillboard.setString(7, billboardName);
 
                 if(updateBillboard.executeUpdate() > 0){
-                    serverReply = new Object[2];
-                    serverReply[0] = true;
-                    serverReply[1] = 0;
+                    serverReply = RelayValidResponse();
                 } else {
                     serverReply = RelayError("Could not update the billboard information");
                 }
@@ -172,9 +224,7 @@ public class ProcessRequest {
                 //Only commit to database if both queries work
                 if(createNewBillboard.executeUpdate() > 0){
                     if(createUserBillboardEntry.executeUpdate() > 0){
-                        serverReply = new Object[2];
-                        serverReply[0] = true;
-                        serverReply[1] = 0;
+                        serverReply = RelayValidResponse();
                         commit.execute("COMMIT");
                     } else {
                         serverReply = RelayError("The billboard could not be created.");
@@ -196,6 +246,15 @@ public class ProcessRequest {
         return serverReply;
     }
 
+
+    /**
+     * Removes the billboard from a database with the given billboardName.
+     * @param billboardName Name of the billboard to be removed.
+     * @param myConnection A connection/session with a specific database.
+     * @return A confirmation of deletion in an object array
+     * OR an array object to handle errors from the server easily.
+     * @throws SQLException
+     */
     private static Object[] DeleteBillboard(String billboardName, Connection myConnection) throws SQLException {
         Object[] serverReply;
 
@@ -203,19 +262,23 @@ public class ProcessRequest {
         PreparedStatement deleteBillboard = myConnection.prepareStatement("DELETE FROM billboards WHERE billboard_name = ?");
 
         if(deleteBillboard.executeUpdate() > 0){
-            serverReply = new Object[2];
-            serverReply[0] = true;
-            serverReply[1] = 0;
-        } else {
-            serverReply = new Object[3];
-            serverReply[0] = false;
-            serverReply[1] = 1;
-            serverReply[2] = "Could not find the billboard to delete";
+            serverReply = RelayValidResponse();
+        } else
+        {
+            serverReply = RelayError("Could not find the billboard to delete.");
         }
         deleteBillboard.close();
         return serverReply;
     }
 
+
+    /**
+     * Sends a request to a database and gets back all schedule data for all scheduled billboards.
+     * @param myConnection A connection/session with a specific database.
+     * @return Every scheduled billboard's details
+     * OR an array object to handle errors from the server easily.
+     * @throws SQLException
+     */
     private static Object[] ViewSchedule(Connection myConnection) throws SQLException {
         Object[] scheduleData;
         ArrayList<Object> tempArray = new ArrayList<Object>();
@@ -228,10 +291,10 @@ public class ProcessRequest {
 
         if(scheduledBillboards.next()){
             do {
-                tempArray.add(scheduledBillboards.getString(1)); //Billboard name
-                tempArray.add(scheduledBillboards.getString(2)); //Last updated timestamp
-                tempArray.add(scheduledBillboards.getString(3)); //Start date
-                tempArray.add(scheduledBillboards.getString(4)); //End date
+                tempArray.add(scheduledBillboards.getString(1));  //Billboard name
+                tempArray.add(scheduledBillboards.getString(2));  //Last updated timestamp
+                tempArray.add(scheduledBillboards.getString(3));  //Start date
+                tempArray.add(scheduledBillboards.getString(4));  //End date
                 tempArray.add(scheduledBillboards.getInt(5));     //Duration
                 tempArray.add(scheduledBillboards.getBoolean(6)); //Repeats
                 tempArray.add(scheduledBillboards.getInt(7));     //Repeat frequency
@@ -253,6 +316,21 @@ public class ProcessRequest {
         return scheduleData;
     }
 
+
+    /**
+     * Schedules the billboard to display at that time and returns an acknowledgement.
+     * @param billboardName Name of the billboard to be scheduled.
+     * @param startTime Start time of the schedule. (eg. HH:MM:SS)
+     * @param duration Duration (in minutes) the billboard is to be scheduled for.
+     * @param repeats Boolean: Whether the schedule repeats or not
+     * @param repeatFrequency The frequency (in minutes) that the schedule repeats.
+     * @param startDate Start date of the schedule (eg. YYYY-MM-DD)
+     * @param endDate End date of the schedule (eg. YYYY-MM-DD)
+     * @param myConnection A connection/session with a specific database.
+     * @return An object array of the successful transaction of scheduling a billboard
+     * OR an array object to handle errors from the server easily.
+     * @throws SQLException
+     */
     private static Object[] ScheduleBillboard(String billboardName, String startTime, Integer duration, Boolean repeats, Integer repeatFrequency, String startDate, String endDate, Connection myConnection) throws SQLException {
         Object[] serverReply;
 
@@ -273,7 +351,7 @@ public class ProcessRequest {
 
         PreparedStatement scheduleAssignToBillboard = myConnection.prepareStatement("INSERT INTO billboard_schedule (schedule_ID, billboard_name) VALUES (?, ?)");
 
-        if(scheduleCreate.executeUpdate() > 0){
+        if(scheduleCreate.executeUpdate() > 0) {
             //Get the scheduleID of the new Schedule
             ResultSet recentSchedule = scheduleGet.executeQuery();
             recentSchedule.next();
@@ -284,10 +362,8 @@ public class ProcessRequest {
 
             if(scheduleAssignToBillboard.executeUpdate() > 0){
                 commit.execute("COMMIT");
-                serverReply = new Object[2];
-                serverReply[0] = true;
-                serverReply[1] = 0;
-            } else{
+                serverReply = RelayValidResponse();
+            } else {
                 commit.execute("ROLLBACK");
                 serverReply = RelayError("Could not schedule billboard");
             }
@@ -304,6 +380,17 @@ public class ProcessRequest {
         return serverReply;
     }
 
+
+    /**
+     * Removes the billboard from a given schedule.
+     * @param billboardName Name of the billboard that's scheduled.
+     * @param startDate Start date of the billboard to be removed. (eg. YYYY-MM-DD)
+     * @param startTime Start time of the billboard to be removed. (eg. HH:MM:SS)
+     * @param myConnection A connection/session with a specific database.
+     * @return An object array of the successful transaction of removing the schedule of a billboard.
+     * OR an array object to handle errors from the server easily.
+     * @throws SQLException
+     */
     private static Object[] RemoveSchedule(String billboardName, String startDate, String startTime, Connection myConnection) throws SQLException {
         Object[] serverReply;
 
@@ -314,9 +401,7 @@ public class ProcessRequest {
         removeSchedule.setString(3, startTime);
 
         if(removeSchedule.executeUpdate() > 0){
-            serverReply = new Object[2];
-            serverReply[0] = true;
-            serverReply[1] = 0;
+            serverReply = RelayValidResponse();
         } else {
             serverReply = RelayError("Could not remove schedule (not found)");
         }
@@ -324,6 +409,14 @@ public class ProcessRequest {
         return serverReply;
     }
 
+
+    /**
+     * Returns all the usernames from a database.
+     * @param myConnection A connection/session with a specific database.
+     * @return Object array of all usernames
+     * OR an array object to handle errors from the server easily.
+     * @throws SQLException
+     */
     private static Object[] ListUsers(Connection myConnection) throws SQLException {
         Object[] userList;
         ArrayList<String> tempArray = new ArrayList<String>();
@@ -354,6 +447,20 @@ public class ProcessRequest {
         return userList;
     }
 
+
+    /**
+     * Creates a user with the input parameters in the database.
+     * @param username The username of the created user.
+     * @param permCreate Boolean: Permission to create billboards.
+     * @param permEditAllBillboards Boolean: Permission to edit all billboards.
+     * @param permEditUsers Boolean: Permission to edit all users.
+     * @param permSchedule Boolean: Permission to schedule billboards
+     * @param password_hash Prehashed password of the user.
+     * @param myConnection A connection/session with a specific database.
+     * @return Returns an acknowledgement of the successful transaction
+     * OR an array object to handle errors from the server easily.
+     * @throws SQLException
+     */
     private static Object[] CreateUser(String username, Boolean permCreate, Boolean permEditAllBillboards, Boolean permEditUsers, Boolean permSchedule, String password_hash, Connection myConnection) throws SQLException {
         Object[] serverReply;
 
@@ -374,16 +481,23 @@ public class ProcessRequest {
         createNewUser.setBoolean(7, permSchedule);
 
         if(createNewUser.executeUpdate() > 0){
-            serverReply = new Object[2];
-            serverReply[0] = true;
-            serverReply[1] = 0;
+            serverReply = RelayValidResponse();
         } else {
             serverReply = RelayError("Could not create user" + username);
         }
         createNewUser.close();
         return serverReply;
     }
+    
 
+    /**
+     * Retrieves the permissions of the specified user from a database.
+     * @param username The user query.
+     * @param myConnection A connection/session with a specific database.
+     * @return An array of the queried user's permissions
+     * OR an array object to handle errors from the server easily.
+     * @throws SQLException
+     */
     private static Object[] GetUserPermissions(String username, Connection myConnection) throws SQLException {
         Object[] userPermissions;
 
@@ -408,6 +522,19 @@ public class ProcessRequest {
         return userPermissions;
     }
 
+
+    /**
+     * Sets the queried user's permissions to the input parameters.
+     * @param username The username of th queried user to set permissions.
+     * @param permCreate Boolean: Permission to create billboards.
+     * @param permEditAllBillboards Boolean: Permission to edit all billboards.
+     * @param permEditUsers Boolean: Permission to edit all users.
+     * @param permSchedule Boolean: Permission to schedule billboards
+     * @param myConnection A connection/session with a specific database.
+     * @return An acknowledgement of the successful transaction in the database
+     * OR an array object to handle errors from the server easily.
+     * @throws SQLException
+     */
     private static Object[] SetUserPermissions(String username, Boolean permCreate, Boolean permEditAllBillboards, Boolean permEditUsers, Boolean permSchedule, Connection myConnection) throws SQLException {
         Object[] serverReply;
 
@@ -420,9 +547,7 @@ public class ProcessRequest {
         setUserPerms.setString(5, username);
 
         if(setUserPerms.executeUpdate() > 0){
-            serverReply = new Object[2];
-            serverReply[0] = true;
-            serverReply[1] = 0;
+            serverReply = RelayValidResponse();
         } else {
             serverReply = RelayError("Could not find or update user permissions.");
         }
@@ -431,6 +556,16 @@ public class ProcessRequest {
         return serverReply;
     }
 
+
+    /**
+     * Stores the user's password in a database securely.
+     * @param username Username of the user to set the password.
+     * @param password Specified password from the user.
+     * @param myConnection A connection/session with a specific database.
+     * @return 
+     * OR an array object to handle errors from the server easily.
+     * @throws SQLException
+     */
     private static Object[] SetUserPassword(String username, String password, Connection myConnection) throws SQLException {
         Object[] serverReply;
 
@@ -466,6 +601,15 @@ public class ProcessRequest {
 
     }
 
+
+    /**
+     * Deletes the specified user from the database and transfers any owned billboards to the admin
+     * @param username Username of the user to be deleted from a database.
+     * @param myConnection A connection/session with a specific database.
+     * @return An acknowledgement of the successful transaction on the database.
+     * OR an array object to handle errors from the server easily.
+     * @throws SQLException
+     */
     private static Object[] DeleteUser(String username, Connection myConnection) throws SQLException {
         Object[] serverReply;
 
@@ -479,9 +623,7 @@ public class ProcessRequest {
 
         deleteUserLinkingTable.executeUpdate(); //Does not need to be rolled back (non-harmful command)
         if(deleteUserRequest.executeUpdate() > 0){
-            serverReply = new Object[2];
-            serverReply[0] = true;
-            serverReply[1] = 0;
+            serverReply = RelayValidResponse();
         } else {
             serverReply = RelayError("Could not find user.");
         }
@@ -490,12 +632,24 @@ public class ProcessRequest {
         return serverReply;
     }
 
+
+    //  TODO A function to handle the transfer of ownership of a billboard.
+    
+
+    /**
+     * Public function to help choose methods within this class. Options are specified with funcion_id.
+     * @param function_id ID of the function (from 1-15) which determines how the input data is processed.
+     * @param tokenCache Session tokens stored on the server.
+     * @param vars Data received from the client to be processed.
+     * @return An array of relevant data according to the function_id used.
+     * @throws SQLException
+     */
     public static Object[] ProcessRequest(Integer function_id, TokenHandler tokenCache, Object[] vars) throws SQLException {
         Object[] dataToSendBack = new Object[]{};
         Connection myConnection = DBConnection.getInstance();
 
         switch (function_id){
-            case 1: //Login request
+            case 1: //  Login request
                 dataToSendBack = Login(vars[0].toString(), vars[1].toString(), myConnection, tokenCache);
                 break;
             case 2: //  List billboards
@@ -546,6 +700,6 @@ public class ProcessRequest {
         }
 
         //TODO Remove this
-        return  dataToSendBack;
+        return dataToSendBack;
     }
 }

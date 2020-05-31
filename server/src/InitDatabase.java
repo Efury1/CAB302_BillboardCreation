@@ -97,7 +97,7 @@ public class InitDatabase {
 
         //TODO delet this
         TokenHandler testCache = new TokenHandler();
-        Object[] billboard_info = ProcessRequest.ProcessRequest(4, testCache, new Object[]{"billboard100", "no", "nothing", new byte[1], "n", "n", "c", "user1"});
+        Object[] billboard_info = ProcessRequests.ProcessRequest(4, testCache, new Object[]{"billboard100", "no", "nothing", new byte[1], "n", "n", "c", "user1"});
         for(int i = 0; i < billboard_info.length; i++) {
             System.out.println();
         }
