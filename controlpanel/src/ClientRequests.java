@@ -15,9 +15,9 @@ public class ClientRequests {
      */
 
     /**
-     *
-     * @param username
-     * @param password
+     *Sends login request to server and retrieves token
+     * @param username username used to login to the application
+     * @param password password used to login to the application
      * @throws IOException
      */
     public static void Login(String username, String password) throws IOException {
@@ -27,8 +27,8 @@ public class ClientRequests {
 
 
     /**
-     *
-     * @return
+     *Requests and returns the current list of billboards in the database
+     * @return An object array of the name and creator of each billboard
      * @throws IOException
      */
     public static Object[] ListBillboards() throws IOException {
@@ -44,9 +44,9 @@ public class ClientRequests {
 
 
     /**
-     *
-     * @param billboardName
-     * @return
+     *Requests and returns the data of a particular billboard
+     * @param billboardName the name of the billboard to return data of
+     * @return An object array of billboard data
      * @throws IOException
      */
     public static Object[] GetBillboardInfo(String billboardName) throws IOException {
@@ -56,15 +56,15 @@ public class ClientRequests {
 
 
     /**
-     *
-     * @param billboardName
-     * @param title
-     * @param description
-     * @param pictureData
-     * @param bgColour
-     * @param titleColour
-     * @param descColour
-     * @param creatorUsername
+     *Sends data to create or update a billboard
+     * @param billboardName name of billboard to update or create
+     * @param title new/updated title
+     * @param description new/updated description
+     * @param pictureData new/updated image
+     * @param bgColour new/updated background color
+     * @param titleColour new/updated title colour
+     * @param descColour new/updated description colour
+     * @param creatorUsername the user name of the creator
      * @throws IOException
      */
     public static void CreateEditBillboard(String billboardName, String title, String description, byte[] pictureData, String bgColour, String titleColour, String descColour, String creatorUsername) throws IOException {
@@ -73,8 +73,8 @@ public class ClientRequests {
 
 
     /**
-     *
-     * @param billboardName
+     *Deletes the specified billboard
+     * @param billboardName name of billboard to delete
      * @throws IOException
      */
     public static void DeleteBillboard(String billboardName) throws IOException {
@@ -83,8 +83,8 @@ public class ClientRequests {
 
 
     /**
-     *
-     * @return
+     *Returns schedule of billboard showings
+     * @return object array of schedule data
      * @throws IOException
      */
     public static Object[] ViewSchedule() throws IOException {
@@ -94,14 +94,14 @@ public class ClientRequests {
 
 
     /**
-     *
-     * @param billboardName
-     * @param startTime
-     * @param duration
-     * @param repeat
-     * @param repeatFreq
-     * @param startDate
-     * @param endDate
+     *Schedules the selected billboard
+     * @param billboardName name of billboard to schedule
+     * @param startTime start of the scheduled session
+     * @param duration duration in minutes of the showing of the billboard
+     * @param repeat whether the showing is repeated
+     * @param repeatFreq the frequency of repeats
+     * @param startDate the start date of the scheduling
+     * @param endDate the end date of the scheduling
      * @throws IOException
      */
     public static void ScheduleBillboard(String billboardName, String startTime, Integer duration, Boolean repeat, Integer repeatFreq, String startDate, String endDate) throws IOException {
@@ -110,10 +110,10 @@ public class ClientRequests {
 
 
     /**
-     *
-     * @param billboardName
-     * @param startDate
-     * @param startTime
+     *Removes a specific scheduling of a billboard
+     * @param billboardName the name of the billboard to remove scheduling of
+     * @param startDate the start date of the scheduling to be removed
+     * @param startTime the start time of the scheduling to be removed
      * @throws IOException
      */
     public static void RemoveSchedule(String billboardName, String startDate, String startTime) throws IOException {
@@ -122,8 +122,8 @@ public class ClientRequests {
 
 
     /**
-     *
-     * @return
+     *Returns a list of registered users
+     * @return object array of usernames
      * @throws IOException
      */
     public static Object[] ListUsers() throws IOException {
@@ -133,13 +133,13 @@ public class ClientRequests {
 
 
     /**
-     *
-     * @param username
-     * @param perm1
-     * @param perm2
-     * @param perm3
-     * @param perm4
-     * @param password
+     *Creates a new user
+     * @param username username of new user
+     * @param perm1 whether has permission to create billboards
+     * @param perm2 whether has permission to edit all billboards
+     * @param perm3 whether has permission to edit other users
+     * @param perm4 whether has permission to schedule billboards
+     * @param password password of new user
      * @throws IOException
      */
     public static void CreateUser(String username, Boolean perm1, Boolean perm2, Boolean perm3, Boolean perm4, String password) throws IOException {
@@ -148,9 +148,9 @@ public class ClientRequests {
 
 
     /**
-     *
-     * @param username
-     * @return
+     *Returns list of user permissions
+     * @param username username of user to get permissions of
+     * @return object array of permissions
      * @throws IOException
      */
     public static Object[] GetUserPermissions(String username) throws IOException {
@@ -160,12 +160,12 @@ public class ClientRequests {
 
 
     /**
-     *
-     * @param username
-     * @param perm1
-     * @param perm2
-     * @param perm3
-     * @param perm4
+     *Sets the permissions of a specific user
+     * @param username username of user to set permissions of
+     * @param perm1 whether has permission to create billboards
+     * @param perm2 whether has permission to edit all billboards
+     * @param perm3 whether has permission to edit other users
+     * @param perm4 whether has permission to schedule billboards
      * @throws IOException
      */
     public static void SetUserPermissions(String username, Boolean perm1, Boolean perm2, Boolean perm3, Boolean perm4) throws IOException {
@@ -174,9 +174,9 @@ public class ClientRequests {
 
 
     /**
-     *
-     * @param username
-     * @param password
+     *Sets the password of a user
+     * @param username username of user to set password of
+     * @param password new password of user
      * @throws IOException
      */
     public static void SetUserPassword(String username, String password) throws IOException {
@@ -185,8 +185,8 @@ public class ClientRequests {
 
 
     /**
-     *
-     * @param username
+     *Deletes specified user
+     * @param username username of user to delete
      * @throws IOException
      */
     public static void DeleteUser(String username) throws IOException {
@@ -195,7 +195,7 @@ public class ClientRequests {
 
 
     /**
-     *
+     *Logs user out of the application
      * @throws IOException
      */
     public static void LogOut() throws IOException {
