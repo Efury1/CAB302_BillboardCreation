@@ -49,11 +49,13 @@ class Schedule
         btnPanel.add(new JButton("   "));
         buttonsPanel.add(btnPanel);
 
+        JButton create = new JButton("Create Billboard");
         events = new JTextArea(10,10);
         events.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(events);
-         eventsPanel = new JPanel(new GridLayout(2, 5, 0, 0));
-         eventsPanel.add(events);
+        eventsPanel = new JPanel(new GridLayout(2, 5, 0, 0));
+        eventsPanel.add(events);
+        eventsPanel.add(create);
 
 
         scheduleFrame.add(daysPanel, BorderLayout.NORTH);
@@ -61,10 +63,10 @@ class Schedule
         scheduleFrame.add(eventsPanel, BorderLayout.SOUTH);
         scheduleFrame.setVisible(true);
     }
-    /*public static void main (String[] args)
+    public static void main (String[] args)
     {
         Schedule jc = new Schedule();
 
-    }*/
+    }
 
 }
