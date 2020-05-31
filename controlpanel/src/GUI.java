@@ -1,4 +1,5 @@
 
+import javax.sql.rowset.serial.SerialBlob;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -6,10 +7,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import java.io.File;
+import java.sql.Blob;
+import java.sql.SQLException;
 /* Main screen */
 /**
  * @author Eliza & Lauren & Lachie
@@ -126,7 +130,10 @@ public class GUI extends Component {
                     try{
                         File selectedFile = file.getSelectedFile();
                         String path = selectedFile.getAbsolutePath();
-                        imagel.setIcon(new ImageIcon(path));
+                        Blob imageBlob = ReadImage(selectedFile);
+
+                        ImageIcon icon = ConvertToImageIcon(imageBlob);
+                        imagel.setIcon(icon);
 
                     } catch (Exception ex) { JOptionPane.showMessageDialog(this, ex); }
 
@@ -231,6 +238,21 @@ public class GUI extends Component {
         frame.getContentPane().add(BorderLayout.EAST, infoPanel);
         frame.setVisible(true);
 
+    }
+
+    private ImageIcon ConvertToImageIcon(Blob imageBlob) throws SQLException, IOException {
+        InputStream inputStream = imageBlob.getBinaryStream();
+        BufferedImage bufferedImage = ImageIO.read(inputStream);
+        Image image = bufferedImage;
+        return new ImageIcon(image);
+    }
+
+    private Blob ReadImage(File selectedFile) throws IOException, SQLException {
+        BufferedImage image = ImageIO.read(selectedFile);
+        ByteArrayOutputStream Output = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", Output);
+        Blob myBlob = new SerialBlob(Output.toByteArray());
+        return myBlob;
     }
 
 
