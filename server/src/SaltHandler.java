@@ -2,6 +2,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
+/**
+ * Class used to handle generating a random salt and other hashing helper functions.
+ */
 public class SaltHandler {
     private String salt;
 
@@ -40,12 +43,17 @@ public class SaltHandler {
      * Constructor for a new Salt
      */
     public SaltHandler(){
+        //Create a random set of bytes and then convert into a string
         Random random = new Random();
         byte[] saltBytes = new byte[32];
         random.nextBytes(saltBytes);
         salt = BytesToString(saltBytes);
     }
 
+    /**
+     * Gives a random salt string.
+     * @return A random salt string.
+     */
     public String GetSalt(){
         return salt;
     }
