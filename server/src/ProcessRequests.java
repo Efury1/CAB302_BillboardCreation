@@ -341,20 +341,22 @@ public class ProcessRequests {
         int length = 0;
 
         //Query database for the schedule of all billboards
-        PreparedStatement billboardScheduleList = myConnection.prepareStatement("SELECT billboard_schedule.billboard_name, schedule_ts, start_date, end_date, start_time, duration, repeats, repeat_frequency FROM schedules INNER JOIN billboard_schedule ON schedules.schedule_ID = billboard_schedule.schedule_ID");
+        PreparedStatement billboardScheduleList = myConnection.prepareStatement("SELECT billboard_schedule.billboard_name, user_billboards.username, schedule_ts, start_date, end_date, start_time, duration, repeats, repeat_frequency FROM schedules INNER JOIN billboard_schedule ON schedules.schedule_ID = billboard_schedule.schedule_ID INNER JOIN user_billboards ON billboard_schedule.billboard_name = user_billboards.billboard_name");
         ResultSet scheduledBillboards = billboardScheduleList.executeQuery();
         billboardScheduleList.close();
 
         if(scheduledBillboards.next()){
             do {
                 tempArray.add(scheduledBillboards.getString(1));  //Billboard name
-                tempArray.add(scheduledBillboards.getString(2));  //Last updated timestamp
-                tempArray.add(scheduledBillboards.getString(3));  //Start date
-                tempArray.add(scheduledBillboards.getString(4));  //End date
-                tempArray.add(scheduledBillboards.getInt(5));     //Duration
-                tempArray.add(scheduledBillboards.getBoolean(6)); //Repeats
-                tempArray.add(scheduledBillboards.getInt(7));     //Repeat frequency
-                length += 7;
+                tempArray.add(scheduledBillboards.getString(2));  //Creator name
+                tempArray.add(scheduledBillboards.getString(3));  //Last updated timestamp
+                tempArray.add(scheduledBillboards.getString(4));  //Start date
+                tempArray.add(scheduledBillboards.getString(5));  //End date
+                tempArray.add(scheduledBillboards.getString(6));  //Start time
+                tempArray.add(scheduledBillboards.getInt(7));     //Duration
+                tempArray.add(scheduledBillboards.getBoolean(8)); //Repeats
+                tempArray.add(scheduledBillboards.getInt(9));     //Repeat frequency
+                length += 9;
             } while(scheduledBillboards.next());
         } else {
             scheduleData = RelayError("No scheduled billboards found.");
@@ -365,7 +367,7 @@ public class ProcessRequests {
         scheduleData[0] = true;
         scheduleData[1] = length;
 
-        for(int i = 2; i < length; i++){
+        for(int i = 2; i < length+2; i++){
             scheduleData[i] = tempArray.get(i-2);
         }
 
@@ -449,7 +451,7 @@ public class ProcessRequests {
         Object[] serverReply;
 
         //Prepare the query to find the schedule and delete it
-        PreparedStatement removeSchedule = myConnection.prepareStatement("DELETE FROM schedule_billboard WHERE schedule_billboard.billboard_name = ? AND schedules.start_date = ? AND schedules.start_time = ? INNER JOIN schedules ON schedule_billboard.schedule_ID = schedules.schedule_ID");
+        PreparedStatement removeSchedule = myConnection.prepareStatement("DELETE sched FROM billboard_schedule sched INNER JOIN schedules all_sched ON sched.schedule_ID = all_sched.schedule_ID WHERE sched.billboard_name = ? AND all_sched.start_date = ? AND all_sched.start_time = ?");
         removeSchedule.setString(1, billboardName);
         removeSchedule.setString(2, startDate);
         removeSchedule.setString(3, startTime);
@@ -483,7 +485,7 @@ public class ProcessRequests {
         boolean hasUsers = false;
         while(userListSet.next()){
             hasUsers = true;
-            tempArray.add(userListSet.getString(1));
+            tempArray.add(userListSet.getString("username"));
             length++;
         }
 
@@ -491,7 +493,7 @@ public class ProcessRequests {
             userList = new Object[length+2];
             userList[0] = true;
             userList[1] = length;
-            for(int i = 2; i < length; i++){ //Copy across all the usernames to an object array to send to the client
+            for(int i = 2; i < length+2; i++){ //Copy across all the usernames to an object array to send to the client
                 userList[i] = tempArray.get(i-2);
             }
         } else {

@@ -96,21 +96,21 @@ public class testClient{
 //        }
 
         //  Remove Schedule - function 8
-        System.out.println("=========================================================");
-        try {
-            ClientRequests.RemoveSchedule("billboard3","2020-05-31", "10:30:00");
-        } catch (ClassNotFoundException | IOException e) {
-            System.err.println(e);
-        }
-
-//        //  View Schedule - function 9
 //        System.out.println("=========================================================");
 //        try {
-//            ClientRequests.ViewSchedule();
+//            ClientRequests.RemoveSchedule("b1","1999-01-01", "06:40:00");
 //        } catch (ClassNotFoundException | IOException e) {
 //            System.err.println(e);
 //        }
 
+        //  View Schedule - function 9
+//        System.out.println("=========================================================");
+//        try {
+//            ClientRequests.ListUsers();
+//        } catch (ClassNotFoundException | IOException e) {
+//            System.err.println(e);
+//        }
+     //TODO
 //        //  View Schedule - function 10
 //        System.out.println("=========================================================");
 //        try {
@@ -118,14 +118,18 @@ public class testClient{
 //        } catch (ClassNotFoundException | IOException e) {
 //            System.err.println(e);
 //        }
-
-//        //  View Schedule - function 11
-//        System.out.println("=========================================================");
-//        try {
-//            ClientRequests.ViewSchedule();
-//        } catch (ClassNotFoundException | IOException e) {
-//            System.err.println(e);
-//        }
+        //  Get user permission - function 11
+        System.out.println("=========================================================");
+        try {
+            Object[] perms = ClientRequests.GetUserPermissions("staff");
+            String[] permNo = {"1 (Create)", "2 (Edit All Billboards)", "3 (Edit Users)", "3 (Schedule Billboards [that are not yours])"};
+            int index = 0;
+            for (Object perm: perms) {
+                System.out.println("Staff permission" + permNo[index] + " " + perms[index++]);
+            }
+        } catch (ClassNotFoundException | IOException e) {
+            System.err.println(e);
+        }
 
 //        //  View Schedule - function 12
 //        System.out.println("=========================================================");
