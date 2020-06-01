@@ -3,8 +3,7 @@ import com.sun.jdi.event.MethodExitEvent;
 import javax.swing.*;
 import javax.xml.stream.events.EndDocument;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.awt.font.TextAttribute;
 import java.io.IOException;
 import java.net.ConnectException;
@@ -59,6 +58,7 @@ public class Login {
         loginButton.setBounds(50, 170, 100, 30);
         contentPane.add(loginButton);
         loginButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
         //loginButton.addActionListener((ActionListener) this);
 
         //  Screen set up
@@ -78,8 +78,10 @@ public class Login {
                     ClientRequests.Login(uName, pass);
                     //System.out.println(ClientRequests.GetSessionToken());
                     JOptionPane.showMessageDialog(frame, "You have successfully logged in!");
+
                     //Create object
-                    GUI gui = new GUI();
+                    GUI gui = new GUI(uName);
+
                     frame.setVisible(false);
                 } catch (ClassNotFoundException | IOException error1) {
                     JOptionPane.showMessageDialog(frame, error1.getMessage());
@@ -91,7 +93,9 @@ public class Login {
     public static void main(String[] args) throws SQLException {
         Login testing = new Login();
     }
+
 }
+
 
     /*
      * !! For testing

@@ -3,17 +3,25 @@ import javax.sql.rowset.serial.SerialBlob;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import java.io.File;
+import java.sql.Array;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.BooleanSupplier;
 /* Main screen */
 /**
  * @author Eliza & Lauren & Lachie
@@ -33,7 +41,11 @@ import java.sql.SQLException;
     //TODO Add and Delete user screens
 public class GUI extends Component {
 
-    public GUI () {
+    private String username;
+
+    public GUI (String username) {
+        this.username = username;
+
         JTextArea jt;
 
         JFrame frame = new JFrame("Control Panel Review");
@@ -52,6 +64,10 @@ public class GUI extends Component {
 
         JButton submitButton = new JButton("Submit");
 
+        if (!GetUserPerms()) {
+            JOptionPane.showMessageDialog(frame, "Could not retrieve your user permissions, please log-out and try again.");
+            System.exit(0);
+        }
 
         JMenu bkMenu = new JMenu("Background");
         JMenuBar menuBar = new JMenuBar();
@@ -83,6 +99,7 @@ public class GUI extends Component {
         /*Under edit */
         JMenuItem menuImageLoad = new JMenuItem("Upload Image");
         JMenuItem editUserPermission = new JMenuItem("Edit Users");
+        editUserPermission.setEnabled(permUsers);
         editMenu.add(editUserPermission);
         editMenu.add(menuImageLoad);
         editMenu.add(bkMenu);
@@ -259,23 +276,48 @@ public class GUI extends Component {
     public void editUsers() {
 
         /* Create and set up a frame window */
-        JFrame frame = new JFrame("Edit Users");
+        JFrame editFrame = new JFrame("Edit Users");
 
         //Delete Button
         JButton deleteBtn = new JButton("Delete User");
         JButton changePass = new JButton("Change Password");
         JButton addUser = new JButton("Add User");
+        JButton refresh = new JButton("Refresh");
         JPanel panel = new JPanel();
         panel.add(addUser);
         panel.add(changePass);
         panel.add(deleteBtn);
-        String data[][]={ {"User1","Permission"},
-                {"User2","Permission"},
-                {"User3","Permission"}};
-        String column[]={"User","PermissionType"};
-        //JTable table = new JTable(data, column);
-        DefaultTableModel model = new DefaultTableModel(data, column);
-        JTable userTable=new JTable(model);
+        panel.add(refresh);
+
+        //GetUserPerms(frame)
+
+        //String data1[][];
+
+        final Object[][][] allUsersArray = {new Object[][]{}};
+
+        try {
+            Object[] allUsers = ClientRequests.ListUsers();
+            allUsersArray[0] = new Object[allUsers.length][5];
+
+            for (int i = 0; i < allUsers.length; i++) {
+                Object[] userPerms = ClientRequests.GetUserPermissions(allUsers[i].toString());
+                allUsersArray[0][i][0] = (String)allUsers[i].toString();
+                allUsersArray[0][i][1] = (Boolean)userPerms[0];
+                allUsersArray[0][i][2] = (Boolean)userPerms[1];
+                allUsersArray[0][i][3] = (Boolean)userPerms[2];
+                allUsersArray[0][i][4] = (Boolean)userPerms[3];
+
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(editFrame, e.getMessage());
+            return;
+        }
+
+        String column[]={"User", "Create", "Edit All Billboards", "Edit Users", "Schedule Billboards"};
+
+        DefaultTableModel model = new DefaultTableModel(allUsersArray[0], column);
+        JTable userTable = new JTable(model);
+
         ListSelectionModel select = userTable.getSelectionModel();
 
 
@@ -298,30 +340,111 @@ public class GUI extends Component {
         /*Add user */
         addUser.addActionListener(new ActionListener() {
 
+            private JTextField textField = new JTextField();
+            private JPasswordField passwordField = new JPasswordField();
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 //Create window
 
-                JFrame w1 = new JFrame();
-                // set panel
-                JPanel p = new JPanel();
-                // create a label
-                JLabel l = new JLabel("Testing");
-                // set border
-                p.setBorder(BorderFactory.createLineBorder(Color.darkGray));
-                p.add(l);
-                w1.add(p);
-                // set background
-                p.setBackground(Color.white);
-                //Set Location
-                w1.setLocation(300, 300);
-                // setsize of window
-                w1.setSize(200, 100);
-                // set visibility of window
-                w1.setVisible(true);
-                w1.setDefaultCloseOperation(frame.HIDE_ON_CLOSE);
+                JFrame confirmFrame = new JFrame("Control Panel Review");
+                confirmFrame.setDefaultCloseOperation(confirmFrame.EXIT_ON_CLOSE);
+                confirmFrame.setBounds(100, 100, 500, 400);
+                confirmFrame.setResizable(false);
+                JPanel contentPane = new JPanel();
+                confirmFrame.setContentPane(contentPane);
+                contentPane.setLayout(null);
+
+                JLabel createUserLabel = new JLabel("Create User...");
+                Font font = createUserLabel.getFont();
+                Map attributes = font.getAttributes();
+                attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+                createUserLabel.setFont(font.deriveFont(attributes));
+                createUserLabel.setBounds(50, 40, 120, 40);
+                contentPane.add(createUserLabel);
+                textField = new JTextField();
+                //Username text field
+                textField.setBounds(50, 100, 200, 20);
+                contentPane.add(textField);
+                textField.setColumns(10);
+
+                passwordField = new JPasswordField();
+                passwordField.setBounds(50, 140, 200, 20);
+                contentPane.add(passwordField);
+
+                JLabel userLabel = new JLabel("Username:");
+                userLabel.setBounds(50, 65, 193, 52);
+                contentPane.add(userLabel);
+
+                JLabel passLabel = new JLabel("Password:");
+
+                passLabel.setBounds(50, 105, 193, 52);
+                contentPane.add(passLabel);
+
+                //RADIO LABELS
+                JRadioButton permCreate = new JRadioButton("Create Billboards");
+                JRadioButton permEditBB = new JRadioButton("Edit Billboards");
+                JRadioButton permUsers = new JRadioButton("Edit Users");
+                JRadioButton permSchedule = new JRadioButton("Schedule Billboards");
+
+                //RADIO PANEL
+                JPanel radioPanel = new JPanel();
+                radioPanel.setLayout(new GridLayout(4, 1));
+                radioPanel.add(permCreate);
+                radioPanel.add(permEditBB);
+                radioPanel.add(permUsers);
+                radioPanel.add(permSchedule);
+
+                radioPanel.setBorder(BorderFactory.createTitledBorder(
+                        BorderFactory.createEtchedBorder(), "Permissions:"));
+
+                radioPanel.setBounds(300, 50, 150, 150);
+                contentPane.add(radioPanel);
+
+
+                JButton confirmButton = new JButton("Confirm");
+                confirmButton.setBounds(50, 170, 100, 30);
+                contentPane.add(confirmButton);
+                confirmButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+                confirmButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String uName = textField.getText();
+                        String pass = passwordField.getText();  //  getText() is deprecated for JPasswordField (find other method)
+                        /*Tutor will now be able to login in with name and password */
+                        try {
+                            ClientRequests.CreateUser(uName, permCreate.isSelected(), permEditBB.isSelected(), permUsers.isSelected(), permSchedule.isSelected(), pass);
+                            JOptionPane.showMessageDialog(confirmFrame, "You have successfully created user: " + uName + ".");
+                            model.fireTableDataChanged();
+                            editFrame.setVisible(false);
+                            editUsers();
+                            confirmFrame.setVisible(false);
+                        } catch (ClassNotFoundException | IOException error1) {
+                            JOptionPane.showMessageDialog(confirmFrame, error1.getMessage());
+                        }
+                    }
+                });
+                //  Screen set up
+                confirmFrame.setDefaultCloseOperation(confirmFrame.HIDE_ON_CLOSE);
+                confirmFrame.setTitle("User Create");
+                confirmFrame.setVisible(true);
+                confirmFrame.setSize(600, 300);
+                confirmFrame.setResizable(false);
             }
         });
+
+        refresh.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.fireTableDataChanged();
+                editFrame.setVisible(false);
+                editUsers();
+
+            }
+        });
+
+
 
         /*You're able to change table value */
         select.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -351,23 +474,43 @@ public class GUI extends Component {
         JScrollPane sp=new JScrollPane(userTable);
         JPanel panel2 = new JPanel();
         panel2.add(sp);
-        frame.setLayout(new BorderLayout());
+        editFrame.setLayout(new BorderLayout());
         //frame.add(new JLabel("Edit Users"), BorderLayout.NORTH);
         //frame.add(userTable, BorderLayout.CENTER);
-        frame.getContentPane().add(BorderLayout.CENTER, panel2);
-        frame.getContentPane().add(BorderLayout.SOUTH, panel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 500);
-        frame.setVisible(true);
+        editFrame.getContentPane().add(BorderLayout.CENTER, panel2);
+        editFrame.getContentPane().add(BorderLayout.SOUTH, panel);
+        editFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        editFrame.setSize(1000, 500);
+        editFrame.setVisible(true);
 
-        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        frame.setVisible(true);
+        editFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        editFrame.setVisible(true);
+
+    }
+
+    private Boolean permCreate;
+    private Boolean permEditBB;
+    private Boolean permUsers;
+    private Boolean permSchedule;
+
+    public Boolean GetUserPerms() {
+        try {
+            Object[] loggedInUserPerms = ClientRequests.GetUserPermissions(username);
+
+            permCreate = (Boolean) loggedInUserPerms[0];
+            permEditBB = (Boolean) loggedInUserPerms[1];
+            permUsers = (Boolean) loggedInUserPerms[2];
+            permSchedule = (Boolean) loggedInUserPerms[3];
+            return true;
+
+        } catch (IOException | ClassNotFoundException e) {
+            return false;
+        }
 
     }
 
 
-
-    }
+}
 
 
 
