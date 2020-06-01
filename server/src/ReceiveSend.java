@@ -9,14 +9,25 @@ public class ReceiveSend {
         InputStream input = socket.getInputStream();
         ObjectInputStream objectInputStream = new ObjectInputStream(input);
 
-        // TODO
-        while (objectInputStream.available() == 0)
+        //Check that the client has sent some data
+        Long system_time = System.currentTimeMillis();
+        Boolean timeOut = false;
+        while (objectInputStream.available() == 0) // i.e. Zero Objects available to read
         {
             try {
-                Thread.sleep(10);
+                if(system_time + 5000 < System.currentTimeMillis()){
+                    timeOut = true;
+                    break;
+                }
+                Thread.sleep(10); //wait a bit and try again
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+
+        //Do not run the rest of the code to send or receive if the client's connection has been interrupted
+        if (timeOut){
+            return;
         }
 
         Integer functionID = objectInputStream.readInt();
