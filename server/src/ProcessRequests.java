@@ -632,13 +632,15 @@ public class ProcessRequests {
         PreparedStatement getServerSalt = myConnection.prepareStatement("SELECT password_salt FROM users WHERE username = ?");
         getServerSalt.setString(1, username);
 
-        PreparedStatement setPassword = myConnection.prepareStatement("UPDATE users SET password_hash WHERE username = ?");
+        PreparedStatement setPassword = myConnection.prepareStatement("UPDATE users SET password_hash = ? WHERE username = ?");
+        setPassword.setString(2, username);
 
         ResultSet serverSalt = getServerSalt.executeQuery();
         if(serverSalt.next()){
             String serverPasswordSalt = serverSalt.getString(1);
             String saltedPassword = serverPasswordSalt + password;
             String saltedHashedPassword = saltHandler.HashString(saltedPassword);
+            setPassword.setString(1, saltedHashedPassword);
             if(setPassword.executeUpdate() > 0){
                 serverReply = new Object[2];
                 serverReply[0] = true;
@@ -676,6 +678,7 @@ public class ProcessRequests {
         deleteUserLinkingTable.setString(2, username);
 
         PreparedStatement deleteUserRequest = myConnection.prepareStatement("DELETE FROM users WHERE username = ?");
+        deleteUserRequest.setString(1, username);
 
         deleteUserLinkingTable.executeUpdate(); //Does not need to be rolled back (non-harmful command)
         if(deleteUserRequest.executeUpdate() > 0){

@@ -5,8 +5,11 @@ import java.sql.*;
  * Initialises the database and contained tables.
  */
 public class InitDatabase {
+
+    //For testing, the admin user with all permissions
     public static String admin_username = "staff";
     public static String admin_password = "today123";
+
     //  Constructor of InitDatabase
     public static void InitialiseDB() throws SQLException {
         Connection myConnection = InitDBConnection.getInstance();
