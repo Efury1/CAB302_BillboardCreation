@@ -103,50 +103,60 @@ public class testClient{
 //            System.err.println(e);
 //        }
 
-        //  View Schedule - function 9
+        //  List Users - function 9
 //        System.out.println("=========================================================");
 //        try {
 //            ClientRequests.ListUsers();
 //        } catch (ClassNotFoundException | IOException e) {
 //            System.err.println(e);
 //        }
-     //TODO
-//        //  View Schedule - function 10
+
+//        //  Create user - function 10
 //        System.out.println("=========================================================");
 //        try {
-//            ClientRequests.ViewSchedule();
+//            ClientRequests.CreateUser("bob", true, false, true, false, "jimmy");
 //        } catch (ClassNotFoundException | IOException e) {
 //            System.err.println(e);
 //        }
+
         //  Get user permission - function 11
-        System.out.println("=========================================================");
-        try {
-            Object[] perms = ClientRequests.GetUserPermissions("staff");
-            String[] permNo = {"1 (Create)", "2 (Edit All Billboards)", "3 (Edit Users)", "3 (Schedule Billboards [that are not yours])"};
-            int index = 0;
-            for (Object perm: perms) {
-                System.out.println("Staff permission" + permNo[index] + " " + perms[index++]);
-            }
-        } catch (ClassNotFoundException | IOException e) {
-            System.err.println(e);
-        }
-
-//        //  View Schedule - function 12
 //        System.out.println("=========================================================");
 //        try {
-//            ClientRequests.ViewSchedule();
+//            Object[] perms = ClientRequests.GetUserPermissions("staff");
+//            String[] permNo = {"1 (Create)", "2 (Edit All Billboards)", "3 (Edit Users)", "3 (Schedule Billboards [that are not yours])"};
+//            int index = 0;
+//            for (Object perm: perms) {
+//                System.out.println("Staff permission" + permNo[index] + " " + perms[index++]);
+//            }
 //        } catch (ClassNotFoundException | IOException e) {
 //            System.err.println(e);
 //        }
 
-//        //  View Schedule - function 13
+////        //  Set User Perms - function 12
 //        System.out.println("=========================================================");
 //        try {
-//            ClientRequests.ViewSchedule();
+//            ClientRequests.SetUserPermissions("bob", false, true, false, true);
+//        } catch (ClassNotFoundException | IOException e) {
+//            System.err.println(e);
+//
+
+//        //  Set User Password - function 13
+//        System.out.println("=========================================================");
+//
+//        try {
+//            ClientRequests.SetUserPassword("bob", "bobb");
+//        } catch (ClassNotFoundException | IOException e) {
+//            System.err.println(e);
+//        }
+//
+//        try {
+//            ClientRequests.Login("bob", "bobb");
 //        } catch (ClassNotFoundException | IOException e) {
 //            System.err.println(e);
 //        }
 
+
+        //TODO
 //        //  View Schedule - function 14
 //        System.out.println("=========================================================");
 //        try {
