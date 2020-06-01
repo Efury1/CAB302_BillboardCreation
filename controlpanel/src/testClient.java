@@ -155,23 +155,42 @@ public class testClient{
 //            System.err.println(e);
 //        }
 
+//        //  Delete User - function 14
+//        System.out.println("=========================================================");
+//        try {
+//            ClientRequests.DeleteUser("bob");
+//        } catch (ClassNotFoundException | IOException e) {
+//            System.err.println(e);
+//        }
 
         //TODO
-//        //  View Schedule - function 14
-//        System.out.println("=========================================================");
-//        try {
-//            ClientRequests.ViewSchedule();
-//        } catch (ClassNotFoundException | IOException e) {
-//            System.err.println(e);
-//        }
+//        //  Log Out - function 15
+        System.out.println("=========================================================");
+        try {
+            Object[] userList = ClientRequests.ListUsers();
+            for (Object user: userList) {
+                System.out.println(user.toString());
+            }
+        } catch (ClassNotFoundException | IOException e) {
+            System.err.println(e);
+        }
 
-//        //  View Schedule - function 15
-//        System.out.println("=========================================================");
-//        try {
-//            ClientRequests.ViewSchedule();
-//        } catch (ClassNotFoundException | IOException e) {
-//            System.err.println(e);
-//        }
+        try {
+            ClientRequests.LogOut();
+        } catch (ClassNotFoundException | IOException e) {
+            System.err.println(e);
+        }
+
+        try {
+            Object[] userList = ClientRequests.ListUsers();
+            for (Object user: userList) {
+                System.out.println(user.toString());
+            }
+        } catch (ClassNotFoundException | IOException e) {
+            System.err.println(e);
+        }
+
+
 
         /*String host = null;
         Integer port = null;

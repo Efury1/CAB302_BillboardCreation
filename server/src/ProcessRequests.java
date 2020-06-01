@@ -678,6 +678,7 @@ public class ProcessRequests {
         deleteUserLinkingTable.setString(2, username);
 
         PreparedStatement deleteUserRequest = myConnection.prepareStatement("DELETE FROM users WHERE username = ?");
+        deleteUserRequest.setString(1, username);
 
         deleteUserLinkingTable.executeUpdate(); //Does not need to be rolled back (non-harmful command)
         if(deleteUserRequest.executeUpdate() > 0){
