@@ -68,26 +68,53 @@ public class Login {
         frame.setSize(300, 300);
         frame.setResizable(false);
 
+
+        //Make login submit on Press Enter
+        KeyListener enterKeyListener = new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if(e.getKeyChar() == '\n') {
+                    LogInUser(frame);
+                }
+            }
+        };
+        passwordField.addKeyListener(enterKeyListener);
+        textField.addKeyListener(enterKeyListener);
+
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String uName = textField.getText();
-                String pass = passwordField.getText();  //  getText() is deprecated for JPasswordField (find other method)
-                /*Tutor will now be able to login in with name and password */
-                try {
-                    ClientRequests.Login(uName, pass);
-                    //System.out.println(ClientRequests.GetSessionToken());
-                    JOptionPane.showMessageDialog(frame, "You have successfully logged in!");
-
-                    //Create object
-                    GUI gui = new GUI(uName);
-
-                    frame.setVisible(false);
-                } catch (ClassNotFoundException | IOException error1) {
-                    JOptionPane.showMessageDialog(frame, error1.getMessage());
-                }
+                LogInUser(frame);
             }
         });
+    }
+
+    private void LogInUser(JFrame frame) {
+        String uName = textField.getText();
+        String pass = passwordField.getText();  //  getText() is deprecated for JPasswordField (find other method)
+        /*Tutor will now be able to login in with name and password */
+        try {
+            ClientRequests.Login(uName, pass);
+            //System.out.println(ClientRequests.GetSessionToken());
+            JOptionPane.showMessageDialog(frame, "You have successfully logged in!");
+
+            //Create object
+            GUI gui = new GUI(uName);
+
+            frame.setVisible(false);
+        } catch (ClassNotFoundException | IOException error1) {
+            JOptionPane.showMessageDialog(frame, error1.getMessage());
+        }
     }
 
     public static void main(String[] args) throws SQLException {

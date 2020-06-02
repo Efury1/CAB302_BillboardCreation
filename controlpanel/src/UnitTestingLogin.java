@@ -1,9 +1,9 @@
-/*import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 /*All possible scenarios
 * 1. Client tries to connect to database. Success is printed
@@ -18,51 +18,46 @@ import static org.junit.Assert.assertNotNull;
 * ------------------Calculating Testing Effectiveness------------------------
 * */
 
-/*public class UnitTestingLogin extends Login {
+public class UnitTestingLogin{
     @Test
-    public void testConnectInvalid() throws IOException {
+    public void testConnectInvalid() throws IOException, ClassNotFoundException {
         String[] processRequest = {};
         String token = "";
-        //LoginClient();
-        Object[] loginData = SendReceive.SendReceive(1, token, processRequest);
+        ;
         //Create FileNoteFoundException: When system cannot
         //IOException: When a valid host name can't be found
-
+        Assertions.assertThrows(IOException.class, ()->{
+            ClientRequests.Login("","");
+        });
     }
 
     @Test
-    public void testConnectValid()
-    {
+    public void testUserPasswordValid() throws IOException, ClassNotFoundException {
         //Login using default user
-        //should return correct vlue
+        //should return correct value
         //assertNotNull();
+        ClientRequests.Login("staff", "today123"); //Login with the correct admin user details
+        Assertions.assertNotNull(ClientRequests.GetSessionToken()); //Check that a valid session token is set
 
     }
 
     @Test
     public void testUserPasswordEmpty()
     {
-
-
+        Assertions.assertThrows(IOException.class, () -> {
+            ClientRequests.Login("staff", "");
+        });
     }
 
     @Test
     public void testUserPasswordInvalid()
     {
         //Login using default user
-        //should return correct vlue
+        //should return correct value
         //assertNotNull();
+        Assertions.assertThrows(IOException.class, () -> {
+            ClientRequests.Login("staff", "theWrongPassword");
+        });
 
     }
-
-    @Test
-    public void testUserPasswordValid()
-    {
-        //Login using default user
-        //should return correct vlue
-        //assertNotNull();
-
-    }
-
-
-}*/
+}
