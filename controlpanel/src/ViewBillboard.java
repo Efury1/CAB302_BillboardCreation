@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/**
+ * Handles displaying the billboards.
+ */
 public class ViewBillboard {
     public static void main(String args[]) throws IOException {
 

@@ -1,5 +1,8 @@
 import java.io.IOException;
 
+/**
+ * Used to create an instance of a billboard, and allows access to each element of it.
+ */
 public class Billboard {
     private String BName;
     private String BOwner;

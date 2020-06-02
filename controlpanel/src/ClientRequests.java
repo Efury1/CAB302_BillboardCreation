@@ -2,6 +2,14 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.sql.Blob;
 
+/**
+ * <p>Class to handle all outgoing client requests. Formats the data in readiness to send to the server.
+ * Static functions can be called for every request type listed in the assignment specification.
+ * </p>
+ * <p>(e.g. ListBillboards(); will initiate a call to create a connection and send a request to the server for the billboard list.)
+ * <p>May return an Object Array containing the data requested, or an error message sent back from the server</p>
+ *
+ */
 public class ClientRequests {
     private static String sessionToken;
 

@@ -6,6 +6,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+/**
+ * Use to create a connection to the specific schema in the database used for the billboard.
+ */
 public class DBConnection {
     /**
      * The singleton instance of the database connection.
