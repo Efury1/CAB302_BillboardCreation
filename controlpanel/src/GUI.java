@@ -66,7 +66,8 @@ public class GUI extends Component {
 
         if (!GetUserPerms()) {
             JOptionPane.showMessageDialog(frame, "Could not retrieve your user permissions, please log-out and try again.");
-            System.exit(0);
+            frame.dispose();
+            Login returnToLogin = new Login();
         }
 
         JMenu bkMenu = new JMenu("Background");
@@ -96,11 +97,15 @@ public class GUI extends Component {
         bkMenu.add(colorYellow);
         bkMenu.add(colorBlue);
         bkMenu.add(colorRed);
+
         /*Under edit */
+
         JMenuItem menuImageLoad = new JMenuItem("Upload Image");
         JMenuItem editUserPermission = new JMenuItem("Edit Users");
+        JMenuItem changePassMenu = new JMenuItem("Change Password");
         editUserPermission.setEnabled(permUsers);
         editMenu.add(editUserPermission);
+        editMenu.add(changePassMenu);
         editMenu.add(menuImageLoad);
         editMenu.add(bkMenu);
 
@@ -153,16 +158,17 @@ public class GUI extends Component {
                         imagel.setIcon(icon);
 
                     } catch (Exception ex) { JOptionPane.showMessageDialog(this, ex); }
-
-
                 }
-
         });
 
 
 
         editUserPermission.addActionListener(e -> {
             editUsers();
+        });
+
+        changePassMenu.addActionListener(e -> {
+            ChangePassword(username);
         });
 
         saveAndSchedule.addActionListener(e -> {
@@ -176,8 +182,16 @@ public class GUI extends Component {
         });
 
         menuLogout.addActionListener(e -> {
-            JOptionPane.showMessageDialog(frame, "You have successfully logged out.");
-            System.exit(0);
+
+            try {
+                ClientRequests.LogOut();
+            } catch (IOException | ClassNotFoundException e1){
+                JOptionPane.showMessageDialog(frame, e1.getMessage());
+            } finally {
+                JOptionPane.showMessageDialog(frame, "You have successfully logged out.");
+                frame.dispose();
+                Login returnToLogin = new Login();
+            }
         });
 
 
@@ -283,11 +297,13 @@ public class GUI extends Component {
         JButton changePass = new JButton("Change Password");
         JButton addUser = new JButton("Add User");
         JButton refresh = new JButton("Refresh");
+        JButton changePerms = new JButton("Change Permissions");
         JPanel panel = new JPanel();
         panel.add(addUser);
         panel.add(changePass);
         panel.add(deleteBtn);
         panel.add(refresh);
+        panel.add(changePerms);
 
         //GetUserPerms(frame)
 
@@ -321,12 +337,6 @@ public class GUI extends Component {
         ListSelectionModel select = userTable.getSelectionModel();
 
         changePass.addActionListener(new ActionListener() {
-
-
-            private JTextField textField = new JTextField();
-            private JPasswordField passwordField = new JPasswordField();
-            private JPasswordField confpasswordField = new JPasswordField();
-
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -343,87 +353,7 @@ public class GUI extends Component {
                     JOptionPane.showMessageDialog(editFrame, "Unable to change password: No user selected.");
                     return;
                 }
-
-                JFrame changePassFrame = new JFrame("Control Panel Review");
-                changePassFrame.setDefaultCloseOperation(changePassFrame.EXIT_ON_CLOSE);
-                changePassFrame.setBounds(100, 100, 500, 400);
-                changePassFrame.setResizable(false);
-                JPanel contentPane = new JPanel();
-                changePassFrame.setContentPane(contentPane);
-                contentPane.setLayout(null);
-
-                JLabel createUserLabel = new JLabel("Change Pass...");
-                Font font = createUserLabel.getFont();
-                Map attributes = font.getAttributes();
-                attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-                createUserLabel.setFont(font.deriveFont(attributes));
-                createUserLabel.setBounds(50, 20, 120, 40);
-                contentPane.add(createUserLabel);
-
-                JLabel userLabel = new JLabel("Username:");
-                userLabel.setBounds(50, 45, 193, 52);
-                contentPane.add(userLabel);
-
-                textField = new JTextField(userToChange);
-                //Username text field
-                textField.setBounds(50, 80, 200, 20);
-                contentPane.add(textField);
-                textField.setColumns(10);
-                textField.setEditable(false);
-
-                JLabel PassLabel = new JLabel("New Password:");
-                PassLabel.setBounds(50, 90, 193, 52);
-                contentPane.add(PassLabel);
-
-                JLabel confirmPassLabel = new JLabel("Confirm Password:");
-                confirmPassLabel.setBounds(50, 130, 193, 52);
-                contentPane.add(confirmPassLabel);
-
-                passwordField = new JPasswordField();
-                passwordField.setBounds(50, 125, 200, 20);
-                contentPane.add(passwordField);
-
-                confpasswordField = new JPasswordField();
-                confpasswordField.setBounds(50, 165, 200, 20);
-                contentPane.add(confpasswordField);
-
-                JButton confirmButton = new JButton("Change");
-                confirmButton.setBounds(50, 210, 100, 30);
-                contentPane.add(confirmButton);
-                confirmButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
-                String finalUserToChange = userToChange;
-                confirmButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        String uName = textField.getText();
-                        String pass = passwordField.getText();  //  getText() is deprecated for JPasswordField (find other method)
-                        String confpass = confpasswordField.getText();
-                        try {
-                            if (!pass.equals("")) {
-                                if (confpass.equals(pass)) {
-                                    ClientRequests.SetUserPassword(finalUserToChange, pass);
-                                    JOptionPane.showMessageDialog(editFrame, "Password change successful.");
-                                }
-                                else {
-                                    JOptionPane.showMessageDialog(editFrame, "Unable to change password: Passwords do not match.");
-                                }
-                            }
-                            else {
-                                JOptionPane.showMessageDialog(editFrame, "Unable to change password: Password cannot be blank.");
-                            }
-                        } catch (IOException | ClassNotFoundException changePassError){
-                            JOptionPane.showMessageDialog(editFrame, changePassError);
-                        }
-
-                    }
-                });
-                //  Screen set up
-                changePassFrame.setDefaultCloseOperation(changePassFrame.HIDE_ON_CLOSE);
-                changePassFrame.setTitle("Change Pass");
-                changePassFrame.setVisible(true);
-                changePassFrame.setSize(600, 300);
-                changePassFrame.setResizable(false);
+                ChangePassword(userToChange);
             }
         });
 
@@ -560,14 +490,115 @@ public class GUI extends Component {
             }
         });
 
+        //TODO YOU'Re MUM //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        changePerms.addActionListener(new ActionListener() {
 
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                String userToChange = "";
+                for( int i = 0; i < userTable.getRowCount(); i++)
+                {
+                    if (userTable.isRowSelected(i)){
+                        userToChange = (String)userTable.getValueAt(i, 0);
+                    }
+                }
+
+
+
+                if (userToChange == "") {
+                    JOptionPane.showMessageDialog(editFrame, "Cannot change permissions: No user selected.");
+                    return;
+                }
+                else if (userToChange.equals(username)){
+                    JOptionPane.showMessageDialog(editFrame, "Cannot change permissions: Cannot change permissions of self.");
+                    return;
+                }
+
+                JFrame confirmFrame = new JFrame("Control Panel Review");
+                confirmFrame.setDefaultCloseOperation(confirmFrame.EXIT_ON_CLOSE);
+                confirmFrame.setBounds(100, 100, 500, 400);
+                confirmFrame.setResizable(false);
+                JPanel contentPane = new JPanel();
+                confirmFrame.setContentPane(contentPane);
+                contentPane.setLayout(null);
+
+                JLabel createUserLabel = new JLabel("Change Permissions... " + userToChange);
+                Font font = createUserLabel.getFont();
+                Map attributes = font.getAttributes();
+                attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+                createUserLabel.setFont(font.deriveFont(attributes));
+                createUserLabel.setBounds(50, 30, 500, 40);
+                contentPane.add(createUserLabel);
+
+                Object[] perms = new Object[4];
+
+                try {
+                    perms = ClientRequests.GetUserPermissions(userToChange);
+                } catch (IOException | ClassNotFoundException error) {
+                    JOptionPane.showMessageDialog(confirmFrame, error.getMessage());
+                    confirmFrame.setVisible(false);
+                    confirmFrame.dispose();
+                    return;
+                }
+
+                //RADIO LABELS
+                JRadioButton permCreate = new JRadioButton("Create Billboards", (Boolean)perms[0]);
+                JRadioButton permEditBB = new JRadioButton("Edit Billboards", (Boolean)perms[1]);
+                JRadioButton permUsers = new JRadioButton("Edit Users", (Boolean)perms[2]);
+                JRadioButton permSchedule = new JRadioButton("Schedule Billboards", (Boolean)perms[3]);
+
+                //RADIO PANEL
+                JPanel radioPanel = new JPanel();
+                radioPanel.setLayout(new GridLayout(4, 1));
+                radioPanel.add(permCreate);
+                radioPanel.add(permEditBB);
+                radioPanel.add(permUsers);
+                radioPanel.add(permSchedule);
+
+                radioPanel.setBorder(BorderFactory.createTitledBorder(
+                        BorderFactory.createEtchedBorder(), "Permissions:"));
+
+                radioPanel.setBounds(50, 70, 150, 150);
+                contentPane.add(radioPanel);
+
+
+                JButton confirmButton = new JButton("Confirm");
+                confirmButton.setBounds(50, 230, 100, 30);
+                contentPane.add(confirmButton);
+                confirmButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+                String finalUserToChange = userToChange;
+                confirmButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            ClientRequests.SetUserPermissions(finalUserToChange, permCreate.isSelected(), permEditBB.isSelected(), permUsers.isSelected(), permSchedule.isSelected());
+                            JOptionPane.showMessageDialog(confirmFrame, "You have successfully changed the permissions of: " + finalUserToChange + ".");
+                            model.fireTableDataChanged();
+                            editFrame.setVisible(false);
+                            editUsers();
+                            confirmFrame.setVisible(false);
+                        } catch (ClassNotFoundException | IOException error1) {
+                            JOptionPane.showMessageDialog(confirmFrame, error1.getMessage());
+                        }
+                    }
+                });
+                //  Screen set up
+                confirmFrame.setDefaultCloseOperation(confirmFrame.HIDE_ON_CLOSE);
+                confirmFrame.setTitle("Change User Permissions");
+                confirmFrame.setVisible(true);
+                confirmFrame.setSize(300, 320);
+                confirmFrame.setResizable(false);
+            }
+        });
 
         /*You're able to change table value */
         select.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         select.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                String Data = null;
+                Object Data = null;
                 int[] row = userTable.getSelectedRows();
                 int[] columns = userTable.getSelectedColumns();
                 JButton deleteBtn = new JButton("Delete User");
@@ -575,10 +606,10 @@ public class GUI extends Component {
                 {
                     for (int j = 0; j < columns.length; j++)
                     {
-                        Data = (String) userTable.getValueAt(row[i], columns[j]);
+                        Data = userTable.getValueAt(row[i], columns[j]);
                     }
                     //Tells you want has been selected, this is more for testing
-                    System.out.println("The selected table element is: " + Data);
+                    System.out.println("The selected table element is: " + Data.toString());
                 }
 
             }
@@ -625,9 +656,91 @@ public class GUI extends Component {
 
     }
 
+    public void ChangePassword(String userToChange) {
 
+        JFrame changePassFrame = new JFrame("Change Password");
+        changePassFrame.setDefaultCloseOperation(changePassFrame.EXIT_ON_CLOSE);
+        changePassFrame.setBounds(100, 100, 500, 400);
+        changePassFrame.setResizable(false);
+        JPanel contentPane = new JPanel();
+        changePassFrame.setContentPane(contentPane);
+        contentPane.setLayout(null);
 
-}
+        JLabel createUserLabel = new JLabel("Change Pass...");
+        Font font = createUserLabel.getFont();
+        Map attributes = font.getAttributes();
+        attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        createUserLabel.setFont(font.deriveFont(attributes));
+        createUserLabel.setBounds(50, 20, 120, 40);
+        contentPane.add(createUserLabel);
+
+        JLabel userLabel = new JLabel("Username:");
+        userLabel.setBounds(50, 45, 193, 52);
+        contentPane.add(userLabel);
+
+        JTextField textField = new JTextField(userToChange);
+        //Username text field
+        textField.setBounds(50, 80, 200, 20);
+        contentPane.add(textField);
+        textField.setColumns(10);
+        textField.setEditable(false);
+
+        JLabel PassLabel = new JLabel("New Password:");
+        PassLabel.setBounds(50, 90, 193, 52);
+        contentPane.add(PassLabel);
+
+        JLabel confirmPassLabel = new JLabel("Confirm Password:");
+        confirmPassLabel.setBounds(50, 130, 193, 52);
+        contentPane.add(confirmPassLabel);
+
+        JPasswordField passwordField = new JPasswordField();
+        passwordField.setBounds(50, 125, 200, 20);
+        contentPane.add(passwordField);
+
+        JPasswordField confpasswordField = new JPasswordField();
+        confpasswordField.setBounds(50, 165, 200, 20);
+        contentPane.add(confpasswordField);
+
+        JButton confirmButton = new JButton("Change");
+        confirmButton.setBounds(50, 210, 100, 30);
+        contentPane.add(confirmButton);
+        confirmButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        String finalUserToChange = userToChange;
+        confirmButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String uName = textField.getText();
+                String pass = passwordField.getText();  //  getText() is deprecated for JPasswordField (find other method)
+                String confpass = confpasswordField.getText();
+                try {
+                    if (!pass.equals("")) {
+                        if (confpass.equals(pass)) {
+                            ClientRequests.SetUserPassword(finalUserToChange, pass);
+                            JOptionPane.showMessageDialog(changePassFrame, "Password change successful.");
+                        }
+                        else {
+                            JOptionPane.showMessageDialog(changePassFrame, "Unable to change password: Passwords do not match.");
+                        }
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(changePassFrame, "Unable to change password: Password cannot be blank.");
+                    }
+                } catch (IOException | ClassNotFoundException changePassError){
+                    JOptionPane.showMessageDialog(changePassFrame, changePassError);
+                }
+
+            }
+        });
+        //  Screen set up
+        changePassFrame.setDefaultCloseOperation(changePassFrame.HIDE_ON_CLOSE);
+        changePassFrame.setTitle("Change Pass");
+        changePassFrame.setVisible(true);
+        changePassFrame.setSize(600, 300);
+        changePassFrame.setResizable(false);
+        }
+    }
+
 
 
 
