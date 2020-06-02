@@ -633,7 +633,7 @@ public class ProcessRequests {
         getServerSalt.setString(1, username);
 
         PreparedStatement setPassword = myConnection.prepareStatement("UPDATE users SET password_hash = ?, password_salt = ? WHERE username = ?");
-        setPassword.setString(2, username);
+        setPassword.setString(3, username);
 
         ResultSet serverSalt = getServerSalt.executeQuery();
         if(serverSalt.next()){
