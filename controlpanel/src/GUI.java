@@ -325,14 +325,24 @@ public class GUI extends Component {
         deleteBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String Data = null;
-                int[] row = userTable.getSelectedRows();
-                int[] columns = userTable.getSelectedColumns();
-                for( int i = userTable.getRowCount() - 1; i >= 0; )
+                for( int i = 0; i < userTable.getRowCount(); i++)
                 {
-                    DefaultTableModel model =
-                            (DefaultTableModel)userTable.getModel();
-                    model.removeRow(i);
+                    if (userTable.isRowSelected(i)){
+                        String userToDelete = (String)userTable.getValueAt(i, 0);
+                        if(userToDelete.equals(username)){
+                            JOptionPane.showMessageDialog(editFrame, "You cannot delete yourself");
+                        } else {
+                            try {
+                                ClientRequests.DeleteUser(userToDelete);
+                                model.removeRow(i);
+                            } catch (IOException | ClassNotFoundException deleteUserError) {
+                                JOptionPane.showMessageDialog(editFrame, deleteUserError);
+                            } finally {
+                                break;
+                            }
+                        }
+
+                    }
                 }
             }
         });
