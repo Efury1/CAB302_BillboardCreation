@@ -301,11 +301,11 @@ public class GUI extends Component {
 
             for (int i = 0; i < allUsers.length; i++) {
                 Object[] userPerms = ClientRequests.GetUserPermissions(allUsers[i].toString());
-                allUsersArray[0][i][0] = (String)allUsers[i].toString();
-                allUsersArray[0][i][1] = (Boolean)userPerms[0];
-                allUsersArray[0][i][2] = (Boolean)userPerms[1];
-                allUsersArray[0][i][3] = (Boolean)userPerms[2];
-                allUsersArray[0][i][4] = (Boolean)userPerms[3];
+                allUsersArray[0][i][0] = (String) allUsers[i].toString();
+                allUsersArray[0][i][1] = (Boolean) userPerms[0];
+                allUsersArray[0][i][2] = (Boolean) userPerms[1];
+                allUsersArray[0][i][3] = (Boolean) userPerms[2];
+                allUsersArray[0][i][4] = (Boolean) userPerms[3];
 
             }
         } catch (IOException | ClassNotFoundException e) {
@@ -320,8 +320,114 @@ public class GUI extends Component {
 
         ListSelectionModel select = userTable.getSelectionModel();
 
+        changePass.addActionListener(new ActionListener() {
 
-        //TODO ready for server functionality, needs to get connection
+
+            private JTextField textField = new JTextField();
+            private JPasswordField passwordField = new JPasswordField();
+            private JPasswordField confpasswordField = new JPasswordField();
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                String userToChange = "";
+
+                for( int i = 0; i < userTable.getRowCount(); i++)
+                {
+                    if (userTable.isRowSelected(i)){
+                        userToChange = (String)userTable.getValueAt(i, 0);
+                    }
+                }
+
+                if (userToChange == "") {
+                    JOptionPane.showMessageDialog(editFrame, "Unable to change password: No user selected.");
+                    return;
+                }
+
+                JFrame changePassFrame = new JFrame("Control Panel Review");
+                changePassFrame.setDefaultCloseOperation(changePassFrame.EXIT_ON_CLOSE);
+                changePassFrame.setBounds(100, 100, 500, 400);
+                changePassFrame.setResizable(false);
+                JPanel contentPane = new JPanel();
+                changePassFrame.setContentPane(contentPane);
+                contentPane.setLayout(null);
+
+                JLabel createUserLabel = new JLabel("Change Pass...");
+                Font font = createUserLabel.getFont();
+                Map attributes = font.getAttributes();
+                attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+                createUserLabel.setFont(font.deriveFont(attributes));
+                createUserLabel.setBounds(50, 20, 120, 40);
+                contentPane.add(createUserLabel);
+
+                JLabel userLabel = new JLabel("Username:");
+                userLabel.setBounds(50, 45, 193, 52);
+                contentPane.add(userLabel);
+
+                textField = new JTextField(userToChange);
+                //Username text field
+                textField.setBounds(50, 80, 200, 20);
+                contentPane.add(textField);
+                textField.setColumns(10);
+                textField.setEditable(false);
+
+                JLabel PassLabel = new JLabel("New Password:");
+                PassLabel.setBounds(50, 90, 193, 52);
+                contentPane.add(PassLabel);
+
+                JLabel confirmPassLabel = new JLabel("Confirm Password:");
+                confirmPassLabel.setBounds(50, 130, 193, 52);
+                contentPane.add(confirmPassLabel);
+
+                passwordField = new JPasswordField();
+                passwordField.setBounds(50, 125, 200, 20);
+                contentPane.add(passwordField);
+
+                confpasswordField = new JPasswordField();
+                confpasswordField.setBounds(50, 165, 200, 20);
+                contentPane.add(confpasswordField);
+
+                JButton confirmButton = new JButton("Change");
+                confirmButton.setBounds(50, 210, 100, 30);
+                contentPane.add(confirmButton);
+                confirmButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+                String finalUserToChange = userToChange;
+                confirmButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String uName = textField.getText();
+                        String pass = passwordField.getText();  //  getText() is deprecated for JPasswordField (find other method)
+                        String confpass = confpasswordField.getText();
+                        try {
+                            if (!pass.equals("")) {
+                                if (confpass.equals(pass)) {
+                                    ClientRequests.SetUserPassword(finalUserToChange, pass);
+                                    JOptionPane.showMessageDialog(editFrame, "Password change successful.");
+                                }
+                                else {
+                                    JOptionPane.showMessageDialog(editFrame, "Unable to change password: Passwords do not match.");
+                                }
+                            }
+                            else {
+                                JOptionPane.showMessageDialog(editFrame, "Unable to change password: Password cannot be blank.");
+                            }
+                        } catch (IOException | ClassNotFoundException changePassError){
+                            JOptionPane.showMessageDialog(editFrame, changePassError);
+                        }
+
+                    }
+                });
+                //  Screen set up
+                changePassFrame.setDefaultCloseOperation(changePassFrame.HIDE_ON_CLOSE);
+                changePassFrame.setTitle("Change Pass");
+                changePassFrame.setVisible(true);
+                changePassFrame.setSize(600, 300);
+                changePassFrame.setResizable(false);
+            }
+        });
+
+
         deleteBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -518,6 +624,7 @@ public class GUI extends Component {
         }
 
     }
+
 
 
 }
