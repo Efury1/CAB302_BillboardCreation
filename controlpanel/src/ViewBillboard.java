@@ -29,6 +29,7 @@ public class ViewBillboard {
      * @param b billboard to be displayed
      */
     public static void showBillboard(Billboard b) throws IOException, SQLException {
+        //TODO Add colour support
         if(b.hasMessage()&&b.hasDescription()&&b.hasImage()){
             //All three elements present
             MessageImageInfo(b.getBMessage(), b.getBBlobData(), b.getBDescription());
