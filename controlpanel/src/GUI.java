@@ -1,9 +1,7 @@
 
 import javax.sql.rowset.serial.SerialBlob;
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
+import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
@@ -43,11 +41,17 @@ public class GUI extends Component {
 
     private String username;
 
+    /**
+     * <p>Constructor for the GUI. Initialises based on the supplied username, changing the access permissions on Init.</p>
+     * <p>The GUI functionality is dependent on the database stored permissions of the user.</p>
+     * @param username The username of the logged in user.
+     */
     public GUI (String username) {
         this.username = username;
 
         JTextArea jt;
 
+        //Create the frame elements
         JFrame frame = new JFrame("Control Panel Review");
         frame.setBounds(30, 30, 1000, 800);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,50 +60,50 @@ public class GUI extends Component {
 
         JPanel infoPanel = new JPanel();
         JLabel info = new JLabel(" ");
-
-
-
         jt = new JTextArea(80, 20);
         infoPanel.add(jt);
 
         JButton submitButton = new JButton("Submit");
 
+        //Try to get the user's permissions, if they couldn't be retrieved, exit the GUI and prompt for login
         if (!GetUserPerms()) {
             JOptionPane.showMessageDialog(frame, "Could not retrieve your user permissions, please log-out and try again.");
             frame.dispose();
             Login returnToLogin = new Login();
         }
 
+        //Add the rest of the GUI elements
         JMenu bkMenu = new JMenu("Background");
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
         JMenu editMenu = new JMenu("Edit");
         JButton viewBillboards = new JButton("View Billboards");
+        JMenu menuLogout = new JMenu("Logout");
 
         /*Adding menu */
         menuBar.add(fileMenu);
         menuBar.add(editMenu);
         menuBar.add(viewBillboards);
+        menuBar.add(Box.createHorizontalGlue());
+        menuBar.add(menuLogout);
         /*Under file */
         JMenuItem importMenu = new JMenuItem("Import");
         JMenuItem exportMenu = new JMenuItem("Export");
         JMenuItem saveAndSchedule = new JMenuItem("Schedule and Save");
-        JMenuItem menuLogout = new JMenuItem("Logout");
+
         JMenuItem colorYellow = new JMenuItem("Yellow");
         JMenuItem colorBlue = new JMenuItem("Blue");
         JMenuItem colorRed = new JMenuItem("Red");
 
-
         fileMenu.add(importMenu);
         fileMenu.add(exportMenu);
         fileMenu.add(saveAndSchedule);
-        fileMenu.add(menuLogout);
+
         bkMenu.add(colorYellow);
         bkMenu.add(colorBlue);
         bkMenu.add(colorRed);
 
         /*Under edit */
-
         JMenuItem menuImageLoad = new JMenuItem("Upload Image");
         JMenuItem editUserPermission = new JMenuItem("Edit Users");
         JMenuItem changePassMenu = new JMenuItem("Change Password");
@@ -109,6 +113,7 @@ public class GUI extends Component {
         editMenu.add(menuImageLoad);
         editMenu.add(bkMenu);
 
+        /* Random testing stuff */
         JLabel resultLabel = new JLabel(" ");
         JLabel label = new JLabel("Type message and press enter");
         JTextField tf = new JTextField(10); // accepts up to 10 characters
@@ -139,6 +144,8 @@ public class GUI extends Component {
          * There's also, the ability to go to other frames like View Billboards, schedule etc.
          * @param aEvent from these buttons: 1.Upload Image 2.Edit Users 3.Schedule 4. Typing text etc
          */
+
+        //Upload an image
         menuImageLoad.addActionListener(e -> {
             //selectFile();
 
@@ -181,16 +188,28 @@ public class GUI extends Component {
             //session1.setVisible(true);
         });
 
-        menuLogout.addActionListener(e -> {
+        menuLogout.addMenuListener(new MenuListener() {
+            @Override
+            public void menuSelected(MenuEvent e) {
+                try {
+                    ClientRequests.LogOut();
+                } catch (IOException | ClassNotFoundException e1){
+                    JOptionPane.showMessageDialog(frame, e1.getMessage());
+                } finally {
+                    JOptionPane.showMessageDialog(frame, "You have successfully logged out.");
+                    frame.dispose();
+                    Login returnToLogin = new Login();
+                }
+            }
 
-            try {
-                ClientRequests.LogOut();
-            } catch (IOException | ClassNotFoundException e1){
-                JOptionPane.showMessageDialog(frame, e1.getMessage());
-            } finally {
-                JOptionPane.showMessageDialog(frame, "You have successfully logged out.");
-                frame.dispose();
-                Login returnToLogin = new Login();
+            @Override
+            public void menuDeselected(MenuEvent e) {
+
+            }
+
+            @Override
+            public void menuCanceled(MenuEvent e) {
+
             }
         });
 

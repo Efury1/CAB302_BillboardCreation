@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.sql.Blob;
 
 /**
  * Used to create an instance of a billboard, and allows access to each element of it.
@@ -12,7 +13,7 @@ public class Billboard {
     private String BMessageColour;
     private String BDescriptionColour;
     private String BImageLink;
-    private String BBlobData;
+    private Blob BBlobData;
     private boolean scheduled;
 
     /**
@@ -20,7 +21,7 @@ public class Billboard {
      * @param name Name of billboard
      * @param owner Owner/creator of billboard
      */
-    public Billboard(String name, String owner){
+    public Billboard(String name, String owner){ //Billboard new Billboard = Billboard("BB1", "staff");
         BName = name;
         BOwner = owner;
         scheduled = false;
@@ -57,7 +58,7 @@ public class Billboard {
      * @return true if image is present, otherwise false
      */
     public boolean hasImage(){
-        if((getBBlobData() == "" || getBBlobData() == null) && (getBImageLink() == "" || getBImageLink() == null)){
+        if(getBBlobData() == null && (getBImageLink() == "" || getBImageLink() == null)){
             return false;
         }
         else{
@@ -216,7 +217,7 @@ public class Billboard {
      * Returns blob data of image -- only 1 of two image types allowed
      * @return blob data for image
      */
-    public String getBBlobData() {
+    public Blob getBBlobData() {
         return BBlobData;
     }
 
@@ -224,7 +225,7 @@ public class Billboard {
      * Adds blob data and deletes any url link
      * @param BBlobData blob data for image
      */
-    public void setBBlobData(String BBlobData) {
+    public void setBBlobData(Blob BBlobData) {
         this.BBlobData = BBlobData;
     }
 
@@ -235,13 +236,13 @@ public class Billboard {
     public void importAllInfo() throws IOException, ClassNotFoundException {
         Object[] billboardData = ClientRequests.GetBillboardInfo(getBName());
 
-        if(billboardData.length==6) {
-            setBMessage(billboardData[0].toString());
-            setBDescription(billboardData[1].toString());
-            setBBlobData(billboardData[2].toString());
-            setBBackgroundColour(billboardData[3].toString());
-            setBMessageColour(billboardData[4].toString());
-            setBDescriptionColour(billboardData[5].toString());
+        if (billboardData.length == 6) {
+            setBMessage(billboardData[0].toString());               //Title
+            setBDescription(billboardData[1].toString());           //Description
+            setBBlobData((Blob) billboardData[2]);                   //Picture
+            setBBackgroundColour(billboardData[3].toString());      //Background colour
+            setBMessageColour(billboardData[4].toString());         //Title Colour
+            setBDescriptionColour(billboardData[5].toString());     //Description colour
         }
     }
 }
