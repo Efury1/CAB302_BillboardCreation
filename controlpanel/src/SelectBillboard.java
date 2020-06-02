@@ -5,11 +5,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class SelectBillboard {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
         showSelectionScreen();
     }
 
@@ -17,7 +18,7 @@ public class SelectBillboard {
      * Opens a new window showing a JList of billboards that can be viewed, edited, or deleted
      * @throws IOException
      */
-    public static void showSelectionScreen() throws IOException {
+    public static void showSelectionScreen() throws IOException, ClassNotFoundException {
         String token = "";
         JFrame frame = new JFrame("Control Panel");
         int FRAME_WIDTH = 1000;
@@ -25,19 +26,20 @@ public class SelectBillboard {
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Import billboards from database (placeholder code)
-        Billboard b1 = new Billboard("EOFYParty", "Sam");
-        Billboard b2 = new Billboard("May1Fundraiser", "Esther");
-        Billboard b3 = new Billboard("MyBillboard1", "Sam");
-        Billboard b4 = new Billboard("BirthdayMessage", "Dave");
-        int totalBoards = 4;
+
+//        Billboard b1 = new Billboard("EOFYParty", "Sam");
+//        Billboard b2 = new Billboard("May1Fundraiser", "Esther");
+//        Billboard b3 = new Billboard("MyBillboard1", "Sam");
+//        Billboard b4 = new Billboard("BirthdayMessage", "Dave");
+        int totalBoards = 0;
         ArrayList<Billboard> billboards = new ArrayList<Billboard>();
-        billboards.add(b1);
-        billboards.add(b2);
-        billboards.add(b3);
-        billboards.add(b4);
+//        billboards.add(b1);
+//        billboards.add(b2);
+//        billboards.add(b3);
+//        billboards.add(b4);
         String[] requestData = {};
         //TODO Uncomment section when SendReceive is working
-        /*Object[] billboardData = ClientRequests.ListBillboards();
+        Object[] billboardData = ClientRequests.ListBillboards();
 
         //unpack data, create billboard from data, and append billboard to array of billboards
         for(int i = 0; i<billboardData.length; i++){
@@ -46,7 +48,7 @@ public class SelectBillboard {
             String billboardCreator = billboardData[i].toString();
             billboards.add(new Billboard(billboardName, billboardCreator));
             totalBoards++;
-        }*/
+        }
 
         JPanel buttonPanel = new JPanel();
         JButton BView = new JButton("View");
@@ -101,11 +103,12 @@ public class SelectBillboard {
                 Billboard selectedBillboard = billboards.get(billboardList.getSelectedIndex());
                 //selectedBillboard.setBMessage("Testing...");
                 //selectedBillboard.setBDescription("Test description");
-                /*try {
+                try {
                     selectedBillboard.importAllInfo();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }*/
+                } catch (IOException | ClassNotFoundException ex) {
+                    JOptionPane.showMessageDialog(frame,"Could not display billboard: " + selectedBillboard.getBName());
+                }
+
                 if(selectedBillboard.hasMessage()==false && selectedBillboard.hasDescription()==false && selectedBillboard.hasImage()==false){
                     //Does not show billboard with nothing on it
                     JOptionPane.showMessageDialog(frame,"There are no elements to display in this billboard");
@@ -113,8 +116,8 @@ public class SelectBillboard {
                 else {
                     try {
                         ViewBillboard.showBillboard(selectedBillboard);
-                    } catch (IOException ex) {
-                        ex.printStackTrace(); //TODO remove printStackTrace()
+                    } catch (IOException | SQLException ex) {
+                        JOptionPane.showMessageDialog(frame,"Could not display billboard: " + selectedBillboard.getBName()); //TODO check this works
                     }
                 }
             }

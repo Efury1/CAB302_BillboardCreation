@@ -261,17 +261,17 @@ public class GUI extends Component {
             }
         });
 
-
+        //View Billboards
         viewBillboards.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
 
-                SelectBillboard session1 = new SelectBillboard();
+                SelectBillboard billboardSelector = new SelectBillboard();
                 try {
-                    session1.showSelectionScreen();
-                } catch (IOException ex) {
-                    ex.printStackTrace(); //TODO remove printStackTrace
+                    billboardSelector.showSelectionScreen();
+                } catch (IOException | ClassNotFoundException ex) {
+                    JOptionPane.showMessageDialog(frame, ex.getMessage());
                 }
             }
         });

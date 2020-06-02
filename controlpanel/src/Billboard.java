@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.sql.Blob;
+import java.sql.SQLException;
 
 /**
  * Used to create an instance of a billboard, and allows access to each element of it.
@@ -32,7 +33,7 @@ public class Billboard {
      * @return true if message is not blank or null, otherwise false
      */
     public boolean hasMessage(){
-        if(getBMessage() == "" || getBMessage() == null){
+        if(getBMessage().equals("") || getBMessage().equals(null)){
             return false;
         }
         else{
@@ -45,7 +46,7 @@ public class Billboard {
      * @return true if description is not blank or null, otherwise false
      */
     public boolean hasDescription(){
-        if(getBDescription() == "" || getBDescription() == null){
+        if(getBDescription().equals("") || getBDescription().equals(null)){
             return false;
         }
         else{
@@ -57,12 +58,16 @@ public class Billboard {
      * Returns whether the billboard contains an image
      * @return true if image is present, otherwise false
      */
-    public boolean hasImage(){
-        if(getBBlobData() == null && (getBImageLink() == "" || getBImageLink() == null)){
+    public boolean hasImage() {
+        try{
+            if(getBBlobData().length() == 0) { //&& (getBImageLink().equals("") || getBImageLink() == null)){
+                return false;
+            }
+            else {
+                return true;
+            }
+        } catch (SQLException dbError) {
             return false;
-        }
-        else{
-            return true;
         }
     }
 
