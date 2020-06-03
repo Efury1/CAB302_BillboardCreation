@@ -22,14 +22,15 @@ import java.util.Map;
 import java.util.function.BooleanSupplier;
 /* Main screen */
 /**
- * @author Eliza & Lauren & Lachie
- * @version last edited 31.05.20
  * Worked on designing GUI() screen.
  * Implemented action listeners that allows screen to pick up text
  * and change color of background.
  * Linked functionality to billboard (@author Lauren).
  * Renamed functions to understandable names (@author Lachie).
  * Implemented Logout function and revised login function (@author Lachie).
+ * @author Eliza Fury
+ * @author Lauren Howlett
+ * @author Lachlan Munt
  */
 
 /*Note: we may need threading when it comes to refreshing the ratios.
