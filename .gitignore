@@ -19,14 +19,15 @@
 *.tar.gz
 *.rar
 
-!mariadb-java-client-2.6.0.jar
-
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-Assignment Specification.pdf
 .vscode/settings.json
-.idea/CAB302-Assignment1.iml
-.idea/misc.xml
-.idea/CAB302-Assignment1.iml
-controlpanel/controlpanel.iml
-server/server.iml
+
+# specific files to ignore
+!mariadb-java-client-2.6.0.jar
+Assignment Specification.pdf
+*.iml
+*.xml
+
+# directories to ignore
+JavaDoc/
