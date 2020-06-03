@@ -33,7 +33,7 @@ public class Billboard {
      * @return true if message is not blank or null, otherwise false
      */
     public boolean hasMessage(){
-        if(getBMessage().equals("") || getBMessage().equals(null)){
+        if(getBMessage() == "" || getBMessage() == null){
             return false;
         }
         else{
@@ -46,7 +46,7 @@ public class Billboard {
      * @return true if description is not blank or null, otherwise false
      */
     public boolean hasDescription(){
-        if(getBDescription().equals("") || getBDescription().equals(null)){
+        if(getBDescription() == "" || getBDescription() == null){
             return false;
         }
         else{
@@ -60,7 +60,7 @@ public class Billboard {
      */
     public boolean hasImage() {
         try{
-            if(getBBlobData().length() == 0) { //&& (getBImageLink().equals("") || getBImageLink() == null)){
+            if(getBBlobData() == null || getBBlobData().length() == 0) { //&& (getBImageLink().equals("") || getBImageLink() == null)){
                 return false;
             }
             else {

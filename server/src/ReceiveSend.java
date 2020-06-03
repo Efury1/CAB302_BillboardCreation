@@ -32,7 +32,7 @@ public class ReceiveSend {
 
         Integer functionID = objectInputStream.readInt();
         String token = objectInputStream.readUTF();
-        Object[] clientData;
+        Object[] clientData = new Object[]{};
         Object[] replyData;
 
         if(functionID == 15){                   // Log Out (only have to remove the session token)
@@ -41,7 +41,12 @@ public class ReceiveSend {
         }
         else if (functionID == 1)               //The login request (bypass token validation)
         {
-            clientData = ReceiveData(objectInputStream, functionID);
+            try {
+                clientData = ReceiveData(objectInputStream, functionID);
+            } catch (ClassNotFoundException e) {
+                replyData = ProcessRequests.RelayError("Data object error: ");
+                System.err.println(e);
+            }
             try {
                 replyData = ProcessRequests.ProcessRequest(functionID, tokenCache, clientData);
             } catch (SQLException e) {
@@ -53,7 +58,12 @@ public class ReceiveSend {
         {
             if (tokenCache.ValidateToken(token)) //Validate their token
             {
-                clientData = ReceiveData(objectInputStream, functionID);
+                try {
+                    clientData = ReceiveData(objectInputStream, functionID);
+                } catch (ClassNotFoundException e) {
+                    replyData = ProcessRequests.RelayError("Data object error: ");
+                    System.err.println(e);
+                }
                 try {
                     replyData = ProcessRequests.ProcessRequest(functionID, tokenCache, clientData);
                 } catch (SQLException e) {
@@ -73,7 +83,7 @@ public class ReceiveSend {
         System.out.println("Reply: ");
         for (Object yeehaw:replyData)
         {
-            System.out.println(yeehaw.toString());
+            //System.out.println(yeehaw.toString());
         }
         System.out.println("=========================================================");
 
@@ -86,7 +96,7 @@ public class ReceiveSend {
         objectOutputStream.close();
     }
 
-    public static Object[] ReceiveData(ObjectInputStream objectInputStream, Integer functionID) throws IOException {
+    public static Object[] ReceiveData(ObjectInputStream objectInputStream, Integer functionID) throws IOException, ClassNotFoundException {
         Integer length = GetDataLength(functionID);
         Object[] incomingData = new Object[length];
         switch (functionID)
@@ -110,7 +120,7 @@ public class ReceiveSend {
                 incomingData[0] = objectInputStream.readUTF();  //  billboard name
                 incomingData[1] = objectInputStream.readUTF();  //  title
                 incomingData[2] = objectInputStream.readUTF();  //  description
-                incomingData[3] = objectInputStream.read();     //  picture data
+                incomingData[3] = objectInputStream.readObject();     //  picture data
                 incomingData[4] = objectInputStream.readUTF();  //  background colour
                 incomingData[5] = objectInputStream.readUTF();  //  title colour
                 incomingData[6] = objectInputStream.readUTF();  //  description colour
