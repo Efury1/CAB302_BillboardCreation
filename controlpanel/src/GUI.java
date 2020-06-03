@@ -477,8 +477,7 @@ public class GUI extends Component {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         String uName = textField.getText();
-                        String pass = passwordField.getText();  //  getText() is deprecated for JPasswordField (find other method)
-                        /*Tutor will now be able to login in with name and password */
+                        String pass = passwordField.getText();  //  TODO getText() is deprecated for JPasswordField (find other method)
                         try {
                             ClientRequests.CreateUser(uName, permCreate.isSelected(), permEditBB.isSelected(), permUsers.isSelected(), permSchedule.isSelected(), pass);
                             JOptionPane.showMessageDialog(confirmFrame, "You have successfully created user: " + uName + ".");
@@ -731,8 +730,8 @@ public class GUI extends Component {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String uName = textField.getText();
-                String pass = passwordField.getText();  //  getText() is deprecated for JPasswordField (find other method)
-                String confpass = confpasswordField.getText();
+                String pass = passwordField.getText();  //  TODO getText() is deprecated for JPasswordField (find other method)
+                String confpass = confpasswordField.getText();  //  TODO getText() is deprecated for JPasswordField (find other method)
                 try {
                     if (!pass.equals("")) {
                         if (confpass.equals(pass)) {
