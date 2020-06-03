@@ -12,8 +12,14 @@ public class InitDatabase {
 
     //  Constructor of InitDatabase
     public static void InitialiseDB() throws SQLException {
-        Connection myConnection = InitDBConnection.getInstance();
-        Statement myStatement = myConnection.createStatement();
+        Statement myStatement;
+        Connection myConnection;
+        try {
+            myConnection = InitDBConnection.getInstance();
+            myStatement = myConnection.createStatement();
+        } catch (SQLException | NullPointerException e){
+            throw new SQLException(e);
+        }
 
         //Admin details
 

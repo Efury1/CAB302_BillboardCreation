@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+/**
+ * An instance of the calendar containing all scheduled billboards for the week.
+ */
 public class ScheduleModel {
     private Calendar cal;
     private LocalDate now;

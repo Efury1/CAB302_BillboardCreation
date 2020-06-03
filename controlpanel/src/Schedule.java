@@ -7,7 +7,10 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
-
+/**
+ * This class handles the panel for scheduling billboards.
+ * Displays the billboards and has options to manipulate their schedules.
+ */
 class Schedule {
 
     public Schedule() {

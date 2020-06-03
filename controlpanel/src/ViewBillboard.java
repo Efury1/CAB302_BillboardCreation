@@ -3,9 +3,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Blob;
+import java.sql.SQLException;
 
+/**
+ * Handles displaying the billboards.
+ */
 public class ViewBillboard {
     public static void main(String args[]) throws IOException {
 
@@ -15,17 +21,18 @@ public class ViewBillboard {
         String imageURL = "https://vignette.wikia.nocookie.net/habitrpg/images/9/92/Summer-Splash-Starfish.png/revision/latest?cb=20150702105822";
         //showBillboard(TestBill);
         //MessageImageInfo("Hello", imageURL, "Info");
-        ImageAndInfo(imageURL, "Here is a starfish");
+        //ImageAndInfo(imageURL, "Here is a starfish");
     }
 
     /**
      * Given a billboard, chooses which function should be called to display it and calls this function
      * @param b billboard to be displayed
      */
-    public static void showBillboard(Billboard b) throws IOException {
+    public static void showBillboard(Billboard b) throws IOException, SQLException {
+        //TODO Add colour support
         if(b.hasMessage()&&b.hasDescription()&&b.hasImage()){
             //All three elements present
-            MessageImageInfo(b.getBMessage(), b.getBImageLink(), b.getBDescription());
+            MessageImageInfo(b.getBMessage(), b.getBBlobData(), b.getBDescription());
         }
         else{
             if(b.hasMessage()&&b.hasDescription()){
@@ -35,12 +42,12 @@ public class ViewBillboard {
             else {
                 if(b.hasDescription()&&b.hasImage()){
                     //Info and image only
-                    ImageAndInfo(b.getBImageLink(), b.getBDescription());
+                    ImageAndInfo(b.getBBlobData(), b.getBDescription());
                 }
                 else{
                     if(b.hasMessage()&&b.hasImage()){
                         //Message and image only
-                        MessageAndImage(b.getBMessage(), b.getBImageLink());
+                        MessageAndImage(b.getBMessage(), b.getBBlobData());
                     }
                     else{
                         if(b.hasMessage()){
@@ -50,7 +57,7 @@ public class ViewBillboard {
                         else{
                             if(b.hasImage()){
                                 //Image only
-                                Image(b.getBImageLink());
+                                Image(b.getBBlobData());
                             }
                             else{
                                 if(b.hasDescription()){
@@ -206,7 +213,7 @@ public class ViewBillboard {
      * @param infoText Info text to display
      * @throws IOException
      */
-    public static void MessageImageInfo(String messageText, String imageString, String infoText) throws IOException {
+    public static void MessageImageInfo(String messageText, Blob imageString, String infoText) throws IOException, SQLException {
         JFrame frame = new JFrame("View Billboard");
         frame.setSize(1000, 700);
 
@@ -219,11 +226,15 @@ public class ViewBillboard {
         JPanel imagePanel = new JPanel();
         imagePanel.setLayout(new GridBagLayout());
 
-        URL imageURL = new URL(imageString);
+        //URL imageURL = new URL(imageString);
         //Turns URL to bufferedImage
-        BufferedImage decodedImage = ImageIO.read(imageURL);
+        //BufferedImage decodedImage = ImageIO.read(imageURL);
         //Turns bufferedImage to icon
-        ImageIcon iconImage = new ImageIcon(decodedImage);
+        //ImageIcon iconImage = new ImageIcon(decodedImage);
+
+        ImageIcon iconImage = new ImageIcon();
+
+        iconImage = ConvertToImageIcon(imageString);
 
         JLabel image = new JLabel(iconImage, JLabel.CENTER);
         imagePanel.add(image);
@@ -252,7 +263,7 @@ public class ViewBillboard {
      * @param imageString URL of image to display
      * @throws IOException
      */
-    public static void MessageAndImage(String messageText, String imageString) throws IOException {
+    public static void MessageAndImage(String messageText, Blob imageString) throws IOException, SQLException {
         JFrame frame = new JFrame("View Billboard");
         frame.setLayout(new GridBagLayout());
         frame.setSize(1000, 700);
@@ -304,11 +315,13 @@ public class ViewBillboard {
         gbc.gridy = 1;
         imagePanel.setLayout(new GridBagLayout());
 
-        URL imageURL = new URL(imageString);
+        //URL imageURL = new URL(imageString);
         //Turns URL to bufferedImage
-        BufferedImage decodedImage = ImageIO.read(imageURL);
+        //BufferedImage decodedImage = ImageIO.read(imageURL);
         //Turns bufferedImage to icon
-        ImageIcon iconImage = new ImageIcon(decodedImage);
+        //ImageIcon iconImage = new ImageIcon(decodedImage);
+
+        ImageIcon iconImage = ConvertToImageIcon(imageString);
 
         JLabel image = new JLabel(iconImage, JLabel.CENTER);
         imagePanel.add(image);
@@ -327,7 +340,7 @@ public class ViewBillboard {
      * @param imageLink URL of image to be displayed
      * @throws IOException
      */
-    public static void Image(String imageLink) throws IOException {
+    public static void Image(Blob imageLink) throws IOException, SQLException {
         JFrame frame1 = new JFrame("View Billboard");
         frame1.setSize(1000, 700);
 
@@ -339,13 +352,15 @@ public class ViewBillboard {
         imagePanel.setLayout(new GridBagLayout());
 
 
-        URL imageURL = new URL(imageLink);
+        //URL imageURL = new URL(imageLink);
         //Turns URL to bufferedImage
-        BufferedImage decodedImage = ImageIO.read(imageURL);
+        //BufferedImage decodedImage = ImageIO.read(imageURL);
         //Turns bufferedImage to icon
-        ImageIcon iconImage = new ImageIcon(decodedImage);
+        //ImageIcon iconImage = new ImageIcon(decodedImage);
 
-        JLabel image = new JLabel(iconImage, JLabel.CENTER);
+        ImageIcon imageIcon = ConvertToImageIcon(imageLink);
+
+        JLabel image = new JLabel(imageIcon, JLabel.CENTER);
 
         imagePanel.add(image);
 
@@ -357,23 +372,41 @@ public class ViewBillboard {
     }
 
     /**
+     * Converts a BLOB from the server into a displayable Image Icon.
+     * @param imageBlob The Blob Object of the picture to display
+     * @return An ImageIcon Object to use with the GUI.
+     * @throws SQLException
+     * @throws IOException
+     */
+    private static ImageIcon ConvertToImageIcon(Blob imageBlob) throws SQLException, IOException {
+        InputStream inputStream = imageBlob.getBinaryStream();
+        BufferedImage bufferedImage = ImageIO.read(inputStream);
+        Image image = bufferedImage;
+        return new ImageIcon(image);
+    }
+
+    /**
      * Shows billboard with image and info only
      * @param imageString URL of image to display
      * @param infoText Text of information to display
      * @throws IOException
      */
-    public static void ImageAndInfo(String imageString, String infoText) throws IOException {
+    public static void ImageAndInfo(Blob imageString, String infoText) throws IOException, SQLException {
         JFrame frame = new JFrame("View Billboard");
         frame.setSize(1000, 700);
 
         JPanel imagePanel = new JPanel();
         imagePanel.setLayout(new GridBagLayout());
 
-        URL imageURL = new URL(imageString);
+        //URL imageURL = new URL(imageString);
         //Turns URL to bufferedImage
-        BufferedImage decodedImage = ImageIO.read(imageURL);
+        //BufferedImage decodedImage = ImageIO.read(imageURL);
         //Turns bufferedImage to icon
-        ImageIcon iconImage = new ImageIcon(decodedImage);
+        //ImageIcon iconImage = new ImageIcon(decodedImage);
+
+        ImageIcon iconImage = new ImageIcon();
+
+        iconImage = ConvertToImageIcon(imageString);
 
         JLabel image = new JLabel(iconImage, JLabel.CENTER);
         imagePanel.add(image);
