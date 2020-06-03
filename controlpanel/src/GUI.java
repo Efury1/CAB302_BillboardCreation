@@ -267,13 +267,8 @@ public class GUI extends Component {
         {
             public void actionPerformed(ActionEvent e)
             {
-
-                SelectBillboard billboardSelector = new SelectBillboard();
-                try {
-                    billboardSelector.showSelectionScreen();
-                } catch (IOException | ClassNotFoundException ex) {
-                    JOptionPane.showMessageDialog(frame, ex.getMessage());
-                }
+                SelectBillboard billboardSelector = new SelectBillboard(username, permCreate, permEditBB);
+                billboardSelector.showSelectionScreen();
             }
         });
 

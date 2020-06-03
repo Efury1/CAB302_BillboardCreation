@@ -99,6 +99,9 @@ public class SendReceive {
                 objectOutputStream.writeUTF((String)dataToSend[0]);   //  billboard name
                 objectOutputStream.writeUTF((String)dataToSend[1]);   //  title
                 objectOutputStream.writeUTF((String)dataToSend[2]);   //  description
+                //if ((Blob)dataToSend[3] == null) {
+                //    dataToSend[3] = "";
+                //}
                 objectOutputStream.writeObject((Blob)dataToSend[3]);  //  picture data
                 objectOutputStream.writeUTF((String)dataToSend[4]);   //  background colour
                 objectOutputStream.writeUTF((String)dataToSend[5]);   //  title colour
