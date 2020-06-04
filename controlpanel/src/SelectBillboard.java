@@ -163,24 +163,9 @@ public class SelectBillboard {
             }
         });
 
-        BEdit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //Edit billboard
-                //TODO Get all data about billboard from database
-                Billboard selectedBillboard = billboards.get(billboardList.getSelectedIndex());
-                /*try {
-                    selectedBillboard.importAllInfo();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }*/
-            }
-        });
-
         BDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO Delete billboard including from database
                 Billboard selectedBillboard = billboards.get(billboardList.getSelectedIndex());
 
                 if (selectedBillboard.getBOwner().equals(username)) {
@@ -207,7 +192,22 @@ public class SelectBillboard {
         BEdit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 Billboard selectedBillboard = billboards.get(billboardList.getSelectedIndex());
+
+                if (selectedBillboard.getBOwner().equals(username)) {
+                    if (permCreate) {
+
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "You do not have permissions to edit your own billboards.");
+                    }
+                } else if (permEdit){
+
+                } else {
+                    JOptionPane.showMessageDialog(frame, "You do not have permissions to edit other users billboards.");
+                    return;
+                }
+
                 try {
                     selectedBillboard.importAllInfo();
                 } catch (IOException | ClassNotFoundException ex) {
@@ -246,7 +246,7 @@ public class SelectBillboard {
                 BBNameLabel.setBounds(50, st, 193, 52);
                 contentPane.add(BBNameLabel);
 
-                JTextField BBNameField = new JTextField(selectedBillboard.getBName());                        //TODO FIELD//
+                JTextField BBNameField = new JTextField(selectedBillboard.getBName());
                 BBNameField.setBounds(50, st+sp, 200, 20);
                 BBNameField.setEnabled(false);
                 contentPane.add(BBNameField);
@@ -274,7 +274,7 @@ public class SelectBillboard {
                 if (selectedBillboard.hasMessage()) {
                     titleBool = selectedBillboard.getBMessage();
                 }
-                JTextField BBTitleField = new JTextField(titleBool);                       //TODO FIELD//
+                JTextField BBTitleField = new JTextField(titleBool);
                 BBTitleField.setBounds(50, st+sp*3, 200, 20);
                 contentPane.add(BBTitleField);
                 BBTitleField.setColumns(10);
@@ -283,7 +283,7 @@ public class SelectBillboard {
                 BBTitleColLabel.setBounds(x2, st+sp*2, 193, 52);
                 contentPane.add(BBTitleColLabel);
 
-                JButton BBTitleColField = new JButton();                       //TODO FIELD//
+                JButton BBTitleColField = new JButton();
                 BBTitleColField.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -302,7 +302,7 @@ public class SelectBillboard {
                 if (selectedBillboard.hasDescription()) {
                     descBool = selectedBillboard.getBDescription();
                 }
-                JTextField BBDescField = new JTextField(descBool);                      //TODO FIELD//
+                JTextField BBDescField = new JTextField(descBool);
                 BBDescField.setBounds(50, st+sp*5, 200, 20);
                 contentPane.add(BBDescField);
                 BBDescField.setColumns(10);
@@ -311,7 +311,7 @@ public class SelectBillboard {
                 BBDescColLabel.setBounds(x2, st+sp*4, 193, 52);
                 contentPane.add(BBDescColLabel);
 
-                JButton BBDescColField = new JButton();                      //TODO FIELD//
+                JButton BBDescColField = new JButton();
                 BBDescColField.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -325,7 +325,7 @@ public class SelectBillboard {
                 BBPicLabel.setBounds(50, st+sp*6, 193, 52);
                 contentPane.add(BBPicLabel);
 
-                JButton BBPicField = new JButton();                      //TODO FIELD//
+                JButton BBPicField = new JButton();
                 BBPicField.setBounds(50, st+sp*7, 200, 20);
                 contentPane.add(BBPicField);
 
@@ -343,7 +343,7 @@ public class SelectBillboard {
                             try{
                                 File selectedFile = file.getSelectedFile();
                                 String path = selectedFile.getAbsolutePath();
-                                imageBlob = ReadImage(selectedFile);                                                                  //TODO /////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                imageBlob = ReadImage(selectedFile);
 
                             } catch (Exception ex) { JOptionPane.showMessageDialog(frame, ex); }
                         }
@@ -421,7 +421,7 @@ public class SelectBillboard {
                 BBNameLabel.setBounds(50, st, 193, 52);
                 contentPane.add(BBNameLabel);
 
-                JTextField BBNameField = new JTextField();                        //TODO FIELD//
+                JTextField BBNameField = new JTextField();
                 BBNameField.setBounds(50, st+sp, 200, 20);
                 contentPane.add(BBNameField);
                 BBNameField.setColumns(10);
@@ -430,7 +430,7 @@ public class SelectBillboard {
                 BBBackLabel.setBounds(x2, st, 193, 52);
                 contentPane.add(BBBackLabel);
 
-                JButton BBBackField = new JButton();//TODO FIELD//
+                JButton BBBackField = new JButton();
                 BBBackField.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -444,7 +444,7 @@ public class SelectBillboard {
                 BBTitleLabel.setBounds(50, st+sp*2, 193, 52);
                 contentPane.add(BBTitleLabel);
 
-                JTextField BBTitleField = new JTextField();                       //TODO FIELD//
+                JTextField BBTitleField = new JTextField();
                 BBTitleField.setBounds(50, st+sp*3, 200, 20);
                 contentPane.add(BBTitleField);
                 BBTitleField.setColumns(10);
@@ -453,7 +453,7 @@ public class SelectBillboard {
                 BBTitleColLabel.setBounds(x2, st+sp*2, 193, 52);
                 contentPane.add(BBTitleColLabel);
 
-                JButton BBTitleColField = new JButton();                       //TODO FIELD//
+                JButton BBTitleColField = new JButton();
                 BBTitleColField.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -468,7 +468,7 @@ public class SelectBillboard {
                 BBDescLabel.setBounds(50, st+sp*4, 193, 52);
                 contentPane.add(BBDescLabel);
 
-                JTextField BBDescField = new JTextField();                      //TODO FIELD//
+                JTextField BBDescField = new JTextField();
                 BBDescField.setBounds(50, st+sp*5, 200, 20);
                 contentPane.add(BBDescField);
                 BBDescField.setColumns(10);
@@ -477,7 +477,7 @@ public class SelectBillboard {
                 BBDescColLabel.setBounds(x2, st+sp*4, 193, 52);
                 contentPane.add(BBDescColLabel);
 
-                JButton BBDescColField = new JButton();                      //TODO FIELD//
+                JButton BBDescColField = new JButton();
                 BBDescColField.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -491,7 +491,7 @@ public class SelectBillboard {
                 BBPicLabel.setBounds(50, st+sp*6, 193, 52);
                 contentPane.add(BBPicLabel);
 
-                JButton BBPicField = new JButton();                      //TODO FIELD//
+                JButton BBPicField = new JButton();
                 BBPicField.setBounds(50, st+sp*7, 200, 20);
                 contentPane.add(BBPicField);
 
@@ -509,7 +509,7 @@ public class SelectBillboard {
                             try{
                                 File selectedFile = file.getSelectedFile();
                                 String path = selectedFile.getAbsolutePath();
-                                imageBlob = ReadImage(selectedFile);                                                                  //TODO /////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                imageBlob = ReadImage(selectedFile);
 
                             } catch (Exception ex) { JOptionPane.showMessageDialog(frame, ex); }
                         }
@@ -533,6 +533,8 @@ public class SelectBillboard {
                             JOptionPane.showMessageDialog(frame,"Billboard Created!");
                             frame.setVisible(false);
                             frame.dispose();
+                            confirmFrame.setVisible(false);
+                            confirmFrame.dispose();
                             showSelectionScreen();
                         } catch (IOException | ClassNotFoundException error){
                             JOptionPane.showMessageDialog(frame,error.getMessage());
