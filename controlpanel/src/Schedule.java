@@ -5,11 +5,13 @@ import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.text.DateFormatter;
 
 /**
  * This class handles the panel for scheduling billboards.
@@ -104,29 +106,88 @@ class Schedule {
 
                 //  Model for JSpinner: repeatFreqSpinner
                 SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(0, 0, 480, 1);
+                SpinnerNumberModel defaultSpinnerModel = new SpinnerNumberModel(0, 0, 480, 1);
                 //  Make a new frame/window
                 JFrame scheduleNew = new JFrame();
 
                 //  Declare swing items in JFrame
                 JComboBox endDayCB = new JComboBox(days);   //  END day combo box
                 JComboBox startDayCB = new JComboBox(days); //  START day combo box
-                JSpinner durationSpinner = new JSpinner();  //  duration spinner
+                JSpinner durationSpinner = new JSpinner(defaultSpinnerModel);  //  duration spinner
                 JSpinner repeatFreqSpinner = new JSpinner(spinnerNumberModel);  //  repeat frequency spinner
                 JLabel startTimeLabel = new JLabel("Start Time");   //  Start time label
-                JTextField startTimeTextField = new JTextField("Start Time");   //  Start time text field
-                JCheckBox repeatBool = new JCheckBox("Repeats");    //  Repeat check box
+                //JTextField startTimeTextField = new JTextField("00:00:00");   //  Start time text field
 
-                //  Adding the elements to the JFrame..
-                scheduleNew.add(startDayCB, BorderLayout.WEST);
-                scheduleNew.add(endDayCB, BorderLayout.CENTER);
-                scheduleNew.add(durationSpinner, BorderLayout.EAST);
-                scheduleNew.add(repeatFreqSpinner, BorderLayout.EAST);
-                scheduleNew.add(startTimeLabel, BorderLayout.EAST);
-                scheduleNew.add(repeatBool, BorderLayout.EAST);
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, 9);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+
+                SpinnerDateModel spinnerDateModel = new SpinnerDateModel();
+                spinnerDateModel.setValue(calendar.getTime());
+
+                //spinnerDateModel.setStart(calendar.getTime());
+                //calendar.set(Calendar.HOUR_OF_DAY, 17);
+                //spinnerDateModel.setEnd(calendar.getTime());
+
+                JSpinner startTimeSpinner = new JSpinner(spinnerDateModel);
+
+                JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(startTimeSpinner, "HH:mm:ss");
+                DateFormatter formatter = (DateFormatter)dateEditor.getTextField().getFormatter();
+                formatter.setAllowsInvalid(false);
+                formatter.setOverwriteMode(true);
+                startTimeSpinner.setEditor(dateEditor);
+
+
+                JCheckBox repeatBool = new JCheckBox("Repeats");    //  Repeat check box
+                JLabel startDayLabel = new JLabel("Start Day:");
+                JLabel endDayLabel = new JLabel("End Day:");
+                JLabel durationLabel = new JLabel("Duration:");
+                JLabel frequencyLabel = new JLabel("Repeat Frequency:");
+                JLabel blank = new JLabel("");
+                JButton confirmButton = new JButton("Confirm");
+
+                //  Adding the elements to the JPanel..
+                JPanel optionsPanel = new JPanel();
+                optionsPanel.setLayout(new GridLayout(3, 5, 5, 0));
+                //startDayCB.setBounds(50, 200, 100, 100);
+                //endDayCB.setBounds(150, 100, 100, 100);
+                //durationSpinner.setBounds(50, 200, 100, 100);
+                //repeatFreqSpinner.setBounds(50, 250, 100, 100);
+                //startTimeLabel.setBounds(50, 300, 100, 100);
+                //repeatBool.setBounds(50, 350, 100, 100);
+
+                optionsPanel.add(startTimeLabel);
+                optionsPanel.add(startDayLabel);
+                optionsPanel.add(endDayLabel);
+                optionsPanel.add(durationLabel);
+                optionsPanel.add(frequencyLabel);
+                optionsPanel.add(blank);
+
+                optionsPanel.add(startTimeSpinner);
+                optionsPanel.add(startDayCB);
+                optionsPanel.add(endDayCB);
+                optionsPanel.add(durationSpinner);
+                optionsPanel.add(repeatFreqSpinner);
+                optionsPanel.add(repeatBool);
+                optionsPanel.add(blank);
+                optionsPanel.add(blank);
+
+                optionsPanel.add(confirmButton);
+
+                //TODO Action listener Database
+                confirmButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+
+                    }
+                });
+
+                scheduleNew.add(optionsPanel);
 
                 //  Properties of the frame/window
-                scheduleNew.setSize(500, 500);
-                scheduleNew.setResizable(true);
+                scheduleNew.setSize(700, 100);
+                scheduleNew.setResizable(false);
                 scheduleNew.setVisible(true);
                 scheduleNew.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 
