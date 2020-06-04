@@ -83,7 +83,9 @@ public class ReceiveSend {
         System.out.println("Reply: ");
         for (Object yeehaw:replyData)
         {
-            //System.out.println(yeehaw.toString());
+            if (yeehaw != null) {
+                System.out.println(yeehaw.toString());
+            }
         }
         System.out.println("=========================================================");
 

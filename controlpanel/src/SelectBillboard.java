@@ -25,6 +25,9 @@ public class SelectBillboard {
     private static boolean permCreate;
     private static boolean permEdit;
 
+    private static Color Background;
+    private static Color Description;
+    private static Color Title;
 
     static Blob imageBlob = null;
 
@@ -135,6 +138,7 @@ public class SelectBillboard {
                 }
             }
         });
+        //"Could not display billboard: " + selectedBillboard.getBName()
 
         BView.addActionListener(new ActionListener() {
             @Override
@@ -146,7 +150,8 @@ public class SelectBillboard {
                 try {
                     selectedBillboard.importAllInfo();
                 } catch (IOException | ClassNotFoundException ex) {
-                    JOptionPane.showMessageDialog(frame,"Could not display billboard: " + selectedBillboard.getBName());
+                    JOptionPane.showMessageDialog(frame, ex);
+                    ex.printStackTrace();
                 }
 
                 if(selectedBillboard.hasMessage()==false && selectedBillboard.hasDescription()==false && selectedBillboard.hasImage()==false){
@@ -168,10 +173,17 @@ public class SelectBillboard {
             public void actionPerformed(ActionEvent e) {
                 Billboard selectedBillboard = billboards.get(billboardList.getSelectedIndex());
 
-                if (selectedBillboard.getBOwner().equals(username)) {
+                if (permEdit){
 
-                } else if (permEdit){
+                }
+                else if (selectedBillboard.getBOwner().equals(username)) {
 
+                    if (permCreate) {
+
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "You do not have permissions to delete your own billboards.");
+                        return;
+                    }
                 } else {
                     JOptionPane.showMessageDialog(frame, "You do not have permissions to delete other users billboards.");
                     return;
@@ -195,14 +207,16 @@ public class SelectBillboard {
 
                 Billboard selectedBillboard = billboards.get(billboardList.getSelectedIndex());
 
-                if (selectedBillboard.getBOwner().equals(username)) {
+                if (permEdit){
+
+                }
+                else if (selectedBillboard.getBOwner().equals(username)) {
                     if (permCreate) {
 
                     } else {
                         JOptionPane.showMessageDialog(frame, "You do not have permissions to edit your own billboards.");
+                        return;
                     }
-                } else if (permEdit){
-
                 } else {
                     JOptionPane.showMessageDialog(frame, "You do not have permissions to edit other users billboards.");
                     return;
@@ -216,9 +230,9 @@ public class SelectBillboard {
                 }
                 Color defaultColour = new Color(Color.BLACK.getRGB());
 
-                Color Background = defaultColour;
-                Color Description = defaultColour;
-                Color Title = defaultColour;
+                Background = defaultColour;
+                Description = defaultColour;
+                Title = defaultColour;
 
                 JFrame confirmFrame = new JFrame("Edit Billboard");
                 confirmFrame.setDefaultCloseOperation(confirmFrame.EXIT_ON_CLOSE);
@@ -260,7 +274,7 @@ public class SelectBillboard {
                 BBBackField.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        Color Background = ColorPanel.showDialog(BBBackField, "Select Background Colour", defaultColour);
+                        Background = ColorPanel.showDialog(BBBackField, "Select Background Colour", defaultColour);
                     }
                 });
                 BBBackField.setBounds(x2, st+sp, 110, 20);
@@ -288,7 +302,7 @@ public class SelectBillboard {
                     @Override
                     public void actionPerformed(ActionEvent e) {
 
-                        Color Title = ColorPanel.showDialog(BBTitleColField, "Select Title Colour", defaultColour);
+                        Title = ColorPanel.showDialog(BBTitleColField, "Select Title Colour", defaultColour);
                     }
                 });
                 BBTitleColField.setBounds(x2, st+sp*3, 110, 20);
@@ -315,7 +329,7 @@ public class SelectBillboard {
                 BBDescColField.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        Color Description = ColorPanel.showDialog(BBDescColField, "Select Description Colour", defaultColour);
+                        Description = ColorPanel.showDialog(BBDescColField, "Select Description Colour", defaultColour);
                     }
                 });
                 BBDescColField.setBounds(x2, st+sp*5, 110, 20);
@@ -359,8 +373,17 @@ public class SelectBillboard {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         String hexBackground = Integer.toHexString(Background.getRGB() & 0xFFFFFF);
+                        while (hexBackground.length() < 6) {
+                            hexBackground = "0" + hexBackground;
+                        }
                         String hexTitle = Integer.toHexString(Title.getRGB() & 0xFFFFFF);
+                        while (hexTitle.length() < 6) {
+                            hexTitle = "0" + hexTitle;
+                        }
                         String hexDescription = Integer.toHexString(Description.getRGB() & 0xFFFFFF);
+                        while (hexDescription.length() < 6) {
+                            hexDescription = "0" + hexDescription;
+                        }
                         try {
                             ClientRequests.CreateEditBillboard(BBNameField.getText(), BBTitleField.getText(), BBDescField.getText(), imageBlob, hexBackground, hexTitle, hexDescription, username);
                             System.out.println(hexBackground + "\n" + hexDescription + "\n" + hexTitle);
@@ -391,9 +414,9 @@ public class SelectBillboard {
 
                 Color defaultColour = new Color(Color.BLACK.getRGB());
 
-                Color Background = defaultColour;
-                Color Description = defaultColour;
-                Color Title = defaultColour;
+                Background = defaultColour;
+                Description = defaultColour;
+                Title = defaultColour;
 
                 JFrame confirmFrame = new JFrame("Add Billboard");
                 confirmFrame.setDefaultCloseOperation(confirmFrame.EXIT_ON_CLOSE);
@@ -434,7 +457,7 @@ public class SelectBillboard {
                 BBBackField.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        Color Background = ColorPanel.showDialog(BBBackField, "Select Background Colour", defaultColour);
+                        Background = ColorPanel.showDialog(BBBackField, "Select Background Colour", defaultColour);
                     }
                 });
                 BBBackField.setBounds(x2, st+sp, 110, 20);
@@ -458,7 +481,7 @@ public class SelectBillboard {
                     @Override
                     public void actionPerformed(ActionEvent e) {
 
-                        Color Title = ColorPanel.showDialog(BBTitleColField, "Select Title Colour", defaultColour);
+                        Title = ColorPanel.showDialog(BBTitleColField, "Select Title Colour", defaultColour);
                     }
                 });
                 BBTitleColField.setBounds(x2, st+sp*3, 110, 20);
@@ -481,7 +504,7 @@ public class SelectBillboard {
                 BBDescColField.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        Color Description = ColorPanel.showDialog(BBDescColField, "Select Description Colour", defaultColour);
+                        Description = ColorPanel.showDialog(BBDescColField, "Select Description Colour", defaultColour);
                     }
                 });
                 BBDescColField.setBounds(x2, st+sp*5, 110, 20);
@@ -525,8 +548,17 @@ public class SelectBillboard {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         String hexBackground = Integer.toHexString(Background.getRGB() & 0xFFFFFF);
+                        while (hexBackground.length() < 6) {
+                            hexBackground = "0" + hexBackground;
+                        }
                         String hexTitle = Integer.toHexString(Title.getRGB() & 0xFFFFFF);
+                        while (hexTitle.length() < 6) {
+                            hexTitle = "0" + hexTitle;
+                        }
                         String hexDescription = Integer.toHexString(Description.getRGB() & 0xFFFFFF);
+                        while (hexDescription.length() < 6) {
+                            hexDescription = "0" + hexDescription;
+                        }
                         try {
                             ClientRequests.CreateEditBillboard(BBNameField.getText(), BBTitleField.getText(), BBDescField.getText(), imageBlob, hexBackground, hexTitle, hexDescription, username);
                             System.out.println(hexBackground + "\n" + hexDescription + "\n" + hexTitle);

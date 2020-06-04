@@ -21,37 +21,37 @@ public class ViewBillboard {
         //TODO Add colour support
         if(b.hasMessage()&&b.hasDescription()&&b.hasImage()){
             //All three elements present
-            MessageImageInfo(b.getBMessage(), b.getBBlobData(), b.getBDescription());
+            MessageImageInfo(b.getBMessage(), b.getBBlobData(), b.getBDescription(), b.getBMessageColour(), b.getBDescriptionColour(), b.getBBackgroundColour());
         }
         else{
             if(b.hasMessage()&&b.hasDescription()){
                 //Message and info only
-                MessageAndInfo(b.getBMessage(), b.getBDescription());
+                MessageAndInfo(b.getBMessage(), b.getBDescription(), b.getBMessageColour(), b.getBDescriptionColour(), b.getBBackgroundColour());
             }
             else {
                 if(b.hasDescription()&&b.hasImage()){
                     //Info and image only
-                    ImageAndInfo(b.getBBlobData(), b.getBDescription());
+                    ImageAndInfo(b.getBBlobData(), b.getBDescription(), b.getBDescriptionColour(), b.getBBackgroundColour());
                 }
                 else{
                     if(b.hasMessage()&&b.hasImage()){
                         //Message and image only
-                        MessageAndImage(b.getBMessage(), b.getBBlobData());
+                        MessageAndImage(b.getBMessage(), b.getBBlobData(), b.getBMessageColour(), b.getBBackgroundColour());
                     }
                     else{
                         if(b.hasMessage()){
                             //Message only
-                            Message(b.getBMessage());
+                            Message(b.getBMessage(), b.getBMessageColour(), b.getBBackgroundColour());
                         }
                         else{
                             if(b.hasImage()){
                                 //Image only
-                                Image(b.getBBlobData());
+                                Image(b.getBBlobData(), b.getBBackgroundColour());
                             }
                             else{
                                 if(b.hasDescription()){
                                     //Info only
-                                    Info(b.getBDescription());
+                                    Info(b.getBDescription(), b.getBDescriptionColour(), b.getBBackgroundColour());
                                 }
                             }
                         }
@@ -65,18 +65,21 @@ public class ViewBillboard {
      * Displays billboard with only Message element
      * @param messageText Text of message to be displayed on billboard
      */
-    public static void Message(String messageText){
+    public static void Message(String messageText, String messageColour, String backgroundColour){
         JFrame frame1 = new JFrame("View Billboard");
         frame1.setSize(1000, 700);
+        frame1.setForeground(ConvertToRGB(backgroundColour));
 
         Dimension messageDim = frame1.getSize();
         double w = messageDim.width;
 
         JPanel messagePanel = new JPanel();
+        messagePanel.setBackground(ConvertToRGB(backgroundColour));
         messagePanel.setLayout(new GridBagLayout());
 
 
         JLabel message = new JLabel(messageText, JLabel.CENTER);
+        message.setForeground(ConvertToRGB(messageColour));
         messagePanel.add(message);
 
         Font TitleFont = message.getFont();
@@ -104,9 +107,10 @@ public class ViewBillboard {
      * Displays billboard with only Information element
      * @param rawInfoText Text of information to be displayed on billboard
      */
-    public static void Info(String rawInfoText){
+    public static void Info(String rawInfoText, String infoColour, String backgroundColour){
         JFrame frame1 = new JFrame("View Billboard");
         frame1.setSize(1000, 700);
+        frame1.setForeground(ConvertToRGB(backgroundColour));
 
         //Wraps in HTML tags so can span multiple lines
         String infoText = "<html>"+ rawInfoText+"</html>";
@@ -115,10 +119,12 @@ public class ViewBillboard {
         double w = infoDim.width;
 
         JPanel infoPanel = new JPanel();
+        infoPanel.setBackground(ConvertToRGB(backgroundColour));
         infoPanel.setLayout(new GridBagLayout());
 
 
         JLabel info = new JLabel(infoText, JLabel.CENTER);
+        info.setForeground(ConvertToRGB(infoColour));
         infoPanel.add(info);
 
         Font TitleFont = info.getFont();
@@ -147,18 +153,21 @@ public class ViewBillboard {
      * @param messageText Text of message to be displayed on billboard
      * @param infoText Text of information to be displayed on billboard
      */
-    public static void MessageAndInfo(String messageText, String infoText){
+    public static void MessageAndInfo(String messageText, String infoText, String messageColour, String infoColour, String backgroundColour){
         JFrame frame = new JFrame("View Billboard");
         frame.setSize(1000, 700);
+        frame.setForeground(ConvertToRGB(backgroundColour));
 
         Dimension messageDim = frame.getSize();
         double w = messageDim.width;
 
         JPanel messagePanel = new JPanel();
+        messagePanel.setBackground(ConvertToRGB(backgroundColour));
         messagePanel.setLayout(new GridBagLayout());
 
 
         JLabel message = new JLabel(messageText, JLabel.CENTER);
+        message.setForeground(ConvertToRGB(messageColour));
         messagePanel.add(message);
 
         Font TitleFont = message.getFont();
@@ -177,9 +186,11 @@ public class ViewBillboard {
 
 
         JPanel infoPanel = new JPanel();
+        infoPanel.setBackground(ConvertToRGB(backgroundColour));
         infoPanel.setLayout(new GridBagLayout());
 
         JLabel info = new JLabel(infoText);
+        info.setForeground(ConvertToRGB(infoColour));
         infoPanel.add(info);
 
 
@@ -195,6 +206,10 @@ public class ViewBillboard {
 
     }
 
+    private static Color ConvertToRGB(String hexColour) {
+        return new Color(Integer.valueOf(hexColour.substring(0, 2), 16), Integer.valueOf(hexColour.substring(2, 4), 16), Integer.valueOf(hexColour.substring(4, 6), 16));
+    }
+
     /**
      * Displays billboard with Message, Image and Info
      * @param messageText Message text to display
@@ -202,18 +217,23 @@ public class ViewBillboard {
      * @param infoText Info text to display
      * @throws IOException
      */
-    public static void MessageImageInfo(String messageText, Blob imageString, String infoText) throws IOException, SQLException {
+
+    public static void MessageImageInfo(String messageText, Blob imageString, String infoText, String messageColour, String infoColour, String backgroundColour) throws IOException, SQLException {
         JFrame frame = new JFrame("View Billboard");
         frame.setSize(1000, 700);
+        Container c = frame.getContentPane();
+        c.setBackground(ConvertToRGB(backgroundColour));
 
         JPanel messagePanel = new JPanel();
         messagePanel.setLayout(new GridBagLayout());
-
+        messagePanel.setBackground(ConvertToRGB(backgroundColour));
         JLabel message = new JLabel(messageText, JLabel.CENTER);
+        message.setForeground(ConvertToRGB(messageColour));
         messagePanel.add(message);
 
         JPanel imagePanel = new JPanel();
         imagePanel.setLayout(new GridBagLayout());
+        imagePanel.setBackground(ConvertToRGB(backgroundColour));
 
         //URL imageURL = new URL(imageString);
         //Turns URL to bufferedImage
@@ -230,8 +250,10 @@ public class ViewBillboard {
 
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new GridBagLayout());
+        infoPanel.setBackground(ConvertToRGB(backgroundColour));
 
         JLabel info = new JLabel(infoText);
+        info.setForeground(ConvertToRGB(infoColour));
         infoPanel.add(info);
 
 
@@ -252,8 +274,9 @@ public class ViewBillboard {
      * @param imageString URL of image to display
      * @throws IOException
      */
-    public static void MessageAndImage(String messageText, Blob imageString) throws IOException, SQLException {
+    public static void MessageAndImage(String messageText, Blob imageString, String messageColour, String backgroundColour) throws IOException, SQLException {
         JFrame frame = new JFrame("View Billboard");
+        frame.setForeground(ConvertToRGB(backgroundColour));
         frame.setLayout(new GridBagLayout());
         frame.setSize(1000, 700);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -265,6 +288,7 @@ public class ViewBillboard {
 
 
         JPanel messagePanel = new JPanel();
+        messagePanel.setBackground(ConvertToRGB(backgroundColour));
         gbc.weighty = 0.33;
         gbc.weightx = 1;
         gbc.fill = GridBagConstraints.VERTICAL;
@@ -275,6 +299,7 @@ public class ViewBillboard {
 
 
         JLabel message = new JLabel(messageText, JLabel.CENTER);
+        message.setForeground(ConvertToRGB(messageColour));
         messagePanel.add(message);
 
         Font TitleFont = message.getFont();
@@ -298,6 +323,7 @@ public class ViewBillboard {
 
 
         JPanel imagePanel = new JPanel();
+        imagePanel.setBackground(ConvertToRGB(backgroundColour));
         gbc.weighty = 0.66;
         gbc.fill = GridBagConstraints.VERTICAL;
         gbc.gridx = 0;
@@ -329,15 +355,17 @@ public class ViewBillboard {
      * @param imageLink URL of image to be displayed
      * @throws IOException
      */
-    public static void Image(Blob imageLink) throws IOException, SQLException {
+    public static void Image(Blob imageLink, String backgroundColour) throws IOException, SQLException {
         JFrame frame1 = new JFrame("View Billboard");
         frame1.setSize(1000, 700);
+        frame1.setForeground(ConvertToRGB(backgroundColour));
 
 
         Dimension imageDim = frame1.getSize();
         double w = imageDim.width;
 
         JPanel imagePanel = new JPanel();
+        imagePanel.setBackground(ConvertToRGB(backgroundColour));
         imagePanel.setLayout(new GridBagLayout());
 
 
@@ -380,11 +408,13 @@ public class ViewBillboard {
      * @param infoText Text of information to display
      * @throws IOException
      */
-    public static void ImageAndInfo(Blob imageString, String infoText) throws IOException, SQLException {
+    public static void ImageAndInfo(Blob imageString, String infoText, String infoColour, String backgroundColour) throws IOException, SQLException {
         JFrame frame = new JFrame("View Billboard");
         frame.setSize(1000, 700);
+        frame.setForeground(ConvertToRGB(backgroundColour));
 
         JPanel imagePanel = new JPanel();
+        imagePanel.setBackground(ConvertToRGB(backgroundColour));
         imagePanel.setLayout(new GridBagLayout());
 
         //URL imageURL = new URL(imageString);
@@ -401,9 +431,11 @@ public class ViewBillboard {
         imagePanel.add(image);
 
         JPanel infoPanel = new JPanel();
+        infoPanel.setBackground(ConvertToRGB(backgroundColour));
         infoPanel.setLayout(new GridBagLayout());
 
         JLabel info = new JLabel(infoText);
+        info.setForeground(ConvertToRGB(infoColour));
         infoPanel.add(info);
 
 
