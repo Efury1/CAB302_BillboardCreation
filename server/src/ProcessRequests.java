@@ -302,12 +302,19 @@ public class ProcessRequests {
         Statement commit = myConnection.createStatement();
         commit.execute("BEGIN WORK");
 
-        //Make SQL statement to delete a billboard
+        //Make SQL statement to delete a billboard from the schedule
+        PreparedStatement deleteSchedule = myConnection.prepareStatement("DELETE FROM billboard_schedule WHERE billboard_name = ?");
+        deleteSchedule.setString(1, billboardName);
+
+        //Make SQL statement to delete a billboard from the owner table
         PreparedStatement deleteUserBillboard = myConnection.prepareStatement("DELETE FROM user_billboards WHERE billboard_name = ?");
         deleteUserBillboard.setString(1, billboardName);
+
+        //Finally delete the billboard itself
         PreparedStatement deleteBillboard = myConnection.prepareStatement("DELETE FROM billboards WHERE billboard_name = ?");
         deleteBillboard.setString(1, billboardName);
 
+        deleteSchedule.executeUpdate();
         if(deleteUserBillboard.executeUpdate() > 0){
             if (deleteBillboard.executeUpdate() > 0)
             {
@@ -323,6 +330,9 @@ public class ProcessRequests {
         {
             serverReply = RelayError("Could not find the billboard to delete.");
         }
+
+        deleteSchedule.close();
+        deleteUserBillboard.close();
         deleteBillboard.close();
         return serverReply;
     }
@@ -341,7 +351,7 @@ public class ProcessRequests {
         int length = 0;
 
         //Query database for the schedule of all billboards
-        PreparedStatement billboardScheduleList = myConnection.prepareStatement("SELECT billboard_schedule.billboard_name, user_billboards.username, schedule_ts, start_date, end_date, start_time, duration, repeats, repeat_frequency FROM schedules INNER JOIN billboard_schedule ON schedules.schedule_ID = billboard_schedule.schedule_ID INNER JOIN user_billboards ON billboard_schedule.billboard_name = user_billboards.billboard_name");
+        PreparedStatement billboardScheduleList = myConnection.prepareStatement("SELECT billboard_schedule.billboard_name, user_billboards.username, schedule_ts, start_date, end_date, start_time, duration, repeats, repeat_frequency FROM schedules INNER JOIN billboard_schedule ON schedules.schedule_ID = billboard_schedule.schedule_ID INNER JOIN user_billboards ON billboard_schedule.billboard_name = user_billboards.billboard_name ORDER BY schedule_ts");
         ResultSet scheduledBillboards = billboardScheduleList.executeQuery();
         billboardScheduleList.close();
 

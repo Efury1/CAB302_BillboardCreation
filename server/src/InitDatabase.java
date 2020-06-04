@@ -60,8 +60,8 @@ public class InitDatabase {
                 "CREATE TABLE IF NOT EXISTS schedules (" +
                 "schedule_ID INT PRIMARY KEY NOT NULL AUTO_INCREMENT, " +
                 "schedule_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP," +
-                "start_date DATE NOT NULL, " +
-                "end_date DATE NOT NULL, " +
+                "start_date VARCHAR(255) NOT NULL, " +
+                "end_date VARCHAR(255) NOT NULL, " +
                 "start_time TIME NOT NULL, " +
                 "duration INT NOT NULL, " +
                 "repeats BOOLEAN NOT NULL, " +
