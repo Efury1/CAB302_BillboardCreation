@@ -94,21 +94,18 @@ class Schedule {
             public void actionPerformed(ActionEvent e)
             {
                 String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
-
-                //  Model for JComboBox: endDayCB
-                ComboBoxModel[] models = new ComboBoxModel[5];
-                //  from https://stackoverflow.com/a/3191882
-                models[0] = new DefaultComboBoxModel(new String[] {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"});
-                models[1] = new DefaultComboBoxModel(new String[] {"Tuesday", "Wednesday", "Thursday", "Friday"});
-                models[2] = new DefaultComboBoxModel(new String[] {"Wednesday", "Thursday", "Friday"});
-                models[3] = new DefaultComboBoxModel(new String[] {"Thursday", "Friday"});
-                models[4] = new DefaultComboBoxModel(new String[] {"Friday"});
-
-                //  Model for JSpinner: repeatFreqSpinner
-                SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(0, 0, 480, 1);
-                SpinnerNumberModel defaultSpinnerModel = new SpinnerNumberModel(0, 0, 480, 1);
                 //  Make a new frame/window
                 JFrame scheduleNew = new JFrame();
+
+                //  Model for JComboBox: endDayCB and JSpinners: durationSpinner & repeatFreqSpinner
+                SpinnerNumberModel defaultSpinnerModel = new SpinnerNumberModel(0, 0, 480, 1);
+                SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(0, 0, 480, 1);
+                ComboBoxModel[] models = new ComboBoxModel[5];
+                for (int i = 0; i < days.length; i++)
+                {
+                    //  from https://stackoverflow.com/a/3191882
+                    models[i] = new DefaultComboBoxModel(Arrays.copyOfRange(days, i, days.length));
+                }
 
                 //  Declare swing items in JFrame
                 JComboBox endDayCB = new JComboBox(days);   //  END day combo box
