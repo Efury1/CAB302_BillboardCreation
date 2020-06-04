@@ -13,17 +13,6 @@ import java.sql.SQLException;
  * Handles displaying the billboards.
  */
 public class ViewBillboard {
-    public static void main(String args[]) throws IOException {
-
-        Billboard TestBill = new Billboard("testBillboard", "testUser");
-        TestBill.setBMessage("Test text");
-        TestBill.setBDescription("Test description");
-        String imageURL = "https://vignette.wikia.nocookie.net/habitrpg/images/9/92/Summer-Splash-Starfish.png/revision/latest?cb=20150702105822";
-        //showBillboard(TestBill);
-        //MessageImageInfo("Hello", imageURL, "Info");
-        //ImageAndInfo(imageURL, "Here is a starfish");
-    }
-
     /**
      * Given a billboard, chooses which function should be called to display it and calls this function
      * @param b billboard to be displayed

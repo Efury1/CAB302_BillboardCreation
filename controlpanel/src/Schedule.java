@@ -12,7 +12,6 @@ import javax.swing.*;
  * Displays the billboards and has options to manipulate their schedules.
  */
 class Schedule {
-
     public Schedule() {
 
         JFrame scheduleFrame;
@@ -103,17 +102,7 @@ class Schedule {
                 CBillboard.setResizable(true);
                 CBillboard.setVisible(true);
                 CBillboard.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-
             }
-
         });
-
-
-    }
-
-
-    public static void main(String[] args) {
-        Schedule jc = new Schedule();
-
     }
 }
