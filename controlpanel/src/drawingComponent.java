@@ -1,8 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 
 public class drawingComponent extends JComponent {
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
     final static int cellWidth = 70;
@@ -10,17 +17,25 @@ public class drawingComponent extends JComponent {
     final static int textHeight = 24;
 
 >>>>>>> Stashed changes
+=======
+    final int width = 70;
+    final int spacing2 = 60;
+
+>>>>>>> Testing-branch
     public drawingComponent() {
         repaint();
     }
 
     public void paintComponent(Graphics g) {
+<<<<<<< HEAD
 <<<<<<< Updated upstream
         Graphics2D g2 = (Graphics2D) g;
         g2.setColor(Color.GREEN);
         g2.fillRect(50, 50, 100, 100);
 =======
         //  TODO debug code
+=======
+>>>>>>> Testing-branch
         try {
             ClientRequests.Login("staff", "today123");
         } catch (IOException e) {
@@ -28,6 +43,38 @@ public class drawingComponent extends JComponent {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+<<<<<<< HEAD
+=======
+        //try {
+        //    ClientRequests.ScheduleBillboard("ohfuck", "10:16:00", 90, true, 120, "Tuesday", "Wednesday");
+        //    ClientRequests.ScheduleBillboard("yousuck", "12:00:00", 30, true, 120, "Thursday", "Friday");
+        //} catch (IOException e) {
+        //    e.printStackTrace();
+        //} catch (ClassNotFoundException e) {
+        //    e.printStackTrace();
+        //}
+//        Graphics2D g2 = (Graphics2D) g;
+//
+//        g2.setColor(Color.LIGHT_GRAY);
+//        g2.drawLine(70, 24, 70, 540);
+//        g2.drawLine(70+ widthx, 24, 70+ widthx, 540);
+//        g2.drawLine(70+ widthx *2, 24, 70+ widthx *2, 540);
+//        g2.drawLine(70+ widthx *3, 24, 70+ widthx *3, 540);
+//        g2.drawLine(70+ widthx *4, 24, 70+ widthx *4, 540);
+//        g2.drawLine(70+ widthx *5, 24, 70+ widthx *5, 540);
+//
+//        g2.drawLine(27, 75, 473, 75);
+//        g2.drawLine(27, 75+spacing2, 473, 75+spacing2);
+//        g2.drawLine(27, 75+spacing2*2, 473, 75+spacing2*2);
+//        g2.drawLine(27, 75+spacing2*3, 473, 75+spacing2*3);
+//        g2.drawLine(27, 75+spacing2*4, 473, 75+spacing2*4);
+//        g2.drawLine(27, 75+spacing2*5, 473, 75+spacing2*5);
+//        g2.drawLine(27, 75+spacing2*6, 473, 75+spacing2*6);
+//        g2.drawLine(27, 75+spacing2*7, 473, 75+spacing2*7);
+//
+//        GetDataFromServer(g2, 3, 120, 75);
+        //g.fillRect(0, 0, 100, 100);
+>>>>>>> Testing-branch
 
         Color[] colours = {Color.BLACK, Color.BLUE, Color.GREEN, Color.RED, Color.YELLOW, Color.darkGray, Color.CYAN, Color.MAGENTA, Color.ORANGE, Color.PINK};
         int currentColour = 0;
@@ -82,15 +129,26 @@ public class drawingComponent extends JComponent {
                     minutesFrom9 = (date.getHours() * 60 + date.getMinutes()) - 540;
                     Integer scheduleTimer = minutesFrom9;
 
+<<<<<<< HEAD
                     if(minutesFrom9 >= 0) {
                         while (startDay <= endDay) {
                             //draw a bunch of rectangles
                             g.fillRect((startDay* cellWidth), minutesFrom9 + textHeight, cellWidth, duration);
+=======
+                    if(minutesFrom9 > 0) {
+                        while (startDay <= endDay) {
+                            //draw a bunch of rectangles
+                            g.fillRect((startDay*width), minutesFrom9, width, duration);
+>>>>>>> Testing-branch
 
                             if(repeats){
                                 scheduleTimer += repeatFrequency;
                                 while(scheduleTimer < 480){
+<<<<<<< HEAD
                                     g.fillRect((startDay* cellWidth), scheduleTimer + textHeight, cellWidth, duration);
+=======
+                                    g.fillRect((startDay*width), scheduleTimer, width, duration);
+>>>>>>> Testing-branch
                                     scheduleTimer += repeatFrequency;
                                 }
                             }
@@ -101,6 +159,7 @@ public class drawingComponent extends JComponent {
                 }
             }
         }
+<<<<<<< HEAD
         DrawGrid(g);
     }
 
@@ -130,5 +189,11 @@ public class drawingComponent extends JComponent {
         g2.drawLine(27, textHeight + cellHeight * 7, 420, textHeight + cellHeight * 7);
         g2.drawLine(27, textHeight + cellHeight * 8, 420, textHeight + cellHeight * 8);
 >>>>>>> Stashed changes
+=======
+    }
+
+    public void GetDataFromServer(Graphics2D g2, int day, int minutes, int startTime) {
+        g2.fillRect(width * day, startTime, width, minutes);
+>>>>>>> Testing-branch
     }
 }

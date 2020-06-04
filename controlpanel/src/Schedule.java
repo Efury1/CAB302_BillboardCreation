@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 
 /**
  * This class handles the panel for scheduling billboards.
@@ -27,26 +28,27 @@ class Schedule {
 
         //JPanels
         daysPanel = new JPanel();
-        daysPanel.setLayout(new GridLayout(1, 2));
-        daysPanel.setBorder(BorderFactory.createTitledBorder("Schedule Billboard"));
+        daysPanel.setLayout(new BorderLayout());
+        //daysPanel.setBounds(0, 0, 50, 50);
 
         eventsPanel = new JPanel();
 
-        JPanel btn = new JPanel(new GridLayout(1, 5, 1, 1));
-        btn.add(new JLabel("   "));
-        btn.add(new JLabel("Mon"));
-        btn.add(new JLabel("Tues"));
-        btn.add(new JLabel("Wed"));
-        btn.add(new JLabel("Thur"));
-        btn.add(new JLabel("Fri"));
+        JPanel days = new JPanel(new GridLayout(0, 7, 0, 0));
+        days.add(new JLabel("   ", SwingConstants.CENTER));
+        days.add(new JLabel("Mon", SwingConstants.CENTER));
+        days.add(new JLabel("Tues", SwingConstants.CENTER));
+        days.add(new JLabel("Wed", SwingConstants.CENTER));
+        days.add(new JLabel("Thur", SwingConstants.CENTER));
+        days.add(new JLabel("Fri", SwingConstants.CENTER));
+        days.add(new JLabel("   ", SwingConstants.CENTER));
         //btn.add(new JLabel("Sat"));
         //btn.add(new JLabel("Sun"));
-        daysPanel.add(btn);
-
+        daysPanel.add(days, BorderLayout.PAGE_START);
 
         timesPanel = new JPanel();
         timesPanel.setLayout(new GridLayout(9, 1));
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
         JPanel timePanel = new JPanel(new GridLayout(9, 1, 1, 1));
         timePanel.add(new JLabel("09:00"));
@@ -61,6 +63,10 @@ class Schedule {
         timesPanel.add(timePanel);
 =======
         JPanel times = new JPanel(new GridLayout(9, 1, 1, 1));
+=======
+        JPanel times = new JPanel(new GridLayout(9, 1, 1, 1));
+        times.add(new JLabel("09:00"));
+>>>>>>> Testing-branch
         times.add(new JLabel("10:00"));
         times.add(new JLabel("11:00"));
         times.add(new JLabel("12:00"));
@@ -69,9 +75,13 @@ class Schedule {
         times.add(new JLabel("15:00"));
         times.add(new JLabel("16:00"));
         times.add(new JLabel("17:00"));
+<<<<<<< HEAD
         times.add(new JLabel("18:00"));
         timesPanel.add(times, BorderLayout.PAGE_START);
 >>>>>>> Stashed changes
+=======
+        timesPanel.add(times, BorderLayout.PAGE_START);
+>>>>>>> Testing-branch
 
         //JPanel btnPanel = new JPanel(new GridLayout(1, 1, 2, 2));
         //btnPanel.add(new JButton("   "));
@@ -99,7 +109,7 @@ class Schedule {
 
         scheduleFrame.add(daysPanel, BorderLayout.NORTH);
         scheduleFrame.add(eventsPanel, BorderLayout.SOUTH);
-        scheduleFrame.add(timePanel, BorderLayout.WEST);
+        scheduleFrame.add(times, BorderLayout.WEST);
         scheduleFrame.setVisible(true);
 
         create.addActionListener(new ActionListener() {
@@ -133,7 +143,7 @@ class Schedule {
                 CBillboard.add(titlePanel, BorderLayout.NORTH);
                 CBillboard.add(datePanel, BorderLayout.CENTER);
                 CBillboard.add(savePanel, BorderLayout.SOUTH);
-                CBillboard.add(timePanel, BorderLayout.WEST);
+                CBillboard.add(times, BorderLayout.WEST);
                 CBillboard.setSize(300, 150);
                 CBillboard.setResizable(true);
                 CBillboard.setVisible(true);
