@@ -34,11 +34,6 @@ public class SelectBillboard {
         this.permEdit = permEdit;
     }
 
-
-    public static void main(String[] args)  {
-        showSelectionScreen();
-    }
-
     private static Blob ReadImage(File selectedFile) throws IOException, SQLException {
         BufferedImage image = ImageIO.read(selectedFile);
         ByteArrayOutputStream Output = new ByteArrayOutputStream();
