@@ -47,6 +47,7 @@ class Schedule {
         timesPanel = new JPanel();
         timesPanel.setLayout(new GridLayout(9, 1));
 
+<<<<<<< Updated upstream
         JPanel timePanel = new JPanel(new GridLayout(9, 1, 1, 1));
         timePanel.add(new JLabel("09:00"));
         timePanel.add(new JLabel("10:00"));
@@ -58,6 +59,19 @@ class Schedule {
         timePanel.add(new JLabel("16:00"));
         timePanel.add(new JLabel("17:00"));
         timesPanel.add(timePanel);
+=======
+        JPanel times = new JPanel(new GridLayout(9, 1, 1, 1));
+        times.add(new JLabel("10:00"));
+        times.add(new JLabel("11:00"));
+        times.add(new JLabel("12:00"));
+        times.add(new JLabel("13:00"));
+        times.add(new JLabel("14:00"));
+        times.add(new JLabel("15:00"));
+        times.add(new JLabel("16:00"));
+        times.add(new JLabel("17:00"));
+        times.add(new JLabel("18:00"));
+        timesPanel.add(times, BorderLayout.PAGE_START);
+>>>>>>> Stashed changes
 
         //JPanel btnPanel = new JPanel(new GridLayout(1, 1, 2, 2));
         //btnPanel.add(new JButton("   "));
