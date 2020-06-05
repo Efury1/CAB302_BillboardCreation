@@ -229,8 +229,9 @@ public class SelectBillboard {
                     return;
                 }
                 Color defaultColour = new Color(Color.BLACK.getRGB());
+                Color defaultBackgroundColour = new Color(Color.WHITE.getRGB());
 
-                Background = defaultColour;
+                Background = defaultBackgroundColour;
                 Description = defaultColour;
                 Title = defaultColour;
 
@@ -270,7 +271,7 @@ public class SelectBillboard {
                 BBBackLabel.setBounds(x2, st, 193, 52);
                 contentPane.add(BBBackLabel);
 
-                JButton BBBackField = new JButton();//TODO FIELD//
+                JButton BBBackField = new JButton();
                 BBBackField.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -372,6 +373,10 @@ public class SelectBillboard {
                 confirmButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        if(BBDescField.getText().trim() == "" && BBTitleField.getText().trim() == "" && imageBlob == null){
+                            JOptionPane.showMessageDialog(frame,"Please include at least one attribute");
+                            return;
+                        }
                         String hexBackground = Integer.toHexString(Background.getRGB() & 0xFFFFFF);
                         while (hexBackground.length() < 6) {
                             hexBackground = "0" + hexBackground;
@@ -533,26 +538,28 @@ public class SelectBillboard {
         BBPicLabel.setBounds(50, st+sp*6, 193, 52);
         contentPane.add(BBPicLabel);
 
-        JButton BBPicField = new JButton();
-        BBPicField.setBounds(50, st+sp*7, 200, 20);
-        contentPane.add(BBPicField);
-
-        BBPicField.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser file = new JFileChooser();
-                file.setCurrentDirectory(new File("."));
-                String[] extensions = ImageIO.getReaderFileSuffixes();
-                file.setFileFilter(new FileNameExtensionFilter("Image files", extensions));
-                int result = file.showSaveDialog(null);
-                if(result == JFileChooser.APPROVE_OPTION)
-                {
-                    try{
-                        if (menuOption==0) {
-                            File selectedFile = file.getSelectedFile();
-                            String path = selectedFile.getAbsolutePath();
-                            imageBlob = ReadImage(selectedFile);
+                confirmButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if(BBNameField.getText().trim().equals("")){
+                            JOptionPane.showMessageDialog(frame,"Billboard must have a name");
+                            return;
+                        }
+                         else if(BBDescField.getText().trim().equals("") && BBTitleField.getText().trim().equals("") && imageBlob == null){
+                            JOptionPane.showMessageDialog(frame,"Please include at least one attribute");
+                            return;
+                        }
+                        String hexBackground = Integer.toHexString(Background.getRGB() & 0xFFFFFF);
+                        while (hexBackground.length() < 6) {
+                            hexBackground = "0" + hexBackground;
+                        }
+                        String hexTitle = Integer.toHexString(Title.getRGB() & 0xFFFFFF);
+                        while (hexTitle.length() < 6) {
+                            hexTitle = "0" + hexTitle;
+                        }
+                        String hexDescription = Integer.toHexString(Description.getRGB() & 0xFFFFFF);
+                        while (hexDescription.length() < 6) {
+                            hexDescription = "0" + hexDescription;
                         }
                         else if (menuOption == 1)
                         {
@@ -598,6 +605,7 @@ public class SelectBillboard {
                     JOptionPane.showMessageDialog(frame,error.getMessage());
                     }
                 }
+                
         });
         //  Screen set up
         confirmFrame.setDefaultCloseOperation(confirmFrame.HIDE_ON_CLOSE);
