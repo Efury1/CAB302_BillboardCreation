@@ -93,25 +93,6 @@ public class GUI extends Component {
         fileMenu.add(importMenu);
         fileMenu.add(exportMenu);
 
-        importMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFrame popup = new JFrame();
-                popup.setVisible(true);
-                popup.setSize(200, 200);
-
-                JLabel test3 = new JLabel();
-                test3.setBounds(50, 30, 100, 50);
-
-                JTextField test2 = new JTextField();
-                test2.setBounds(50, 100, 100, 25);
-
-                popup.add(test2);
-                popup.add(test3);
-            }
-        });
-
-
         scheduleBillboards.setEnabled(permSchedule);
 
         /*Under edit */
