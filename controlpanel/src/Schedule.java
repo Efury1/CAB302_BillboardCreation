@@ -178,8 +178,8 @@ class Schedule {
                 JFrame scheduleNew = new JFrame("Add a billboard to schedule");
 
                 //  Model for JComboBox: endDayCB and JSpinners: durationSpinner & repeatFreqSpinner
-                SpinnerNumberModel defaultSpinnerModel = new SpinnerNumberModel(0, 0, 480, 1);
-                SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(0, 0, 480, 1);
+                SpinnerNumberModel defaultSpinnerModel = new SpinnerNumberModel(1, 1, 480, 1);
+                SpinnerNumberModel spinnerNumberModel = new SpinnerNumberModel(2, 2, 480, 1);
                 ComboBoxModel[] models = new ComboBoxModel[5];
                 for (int i = 0; i < days.length; i++)
                 {
