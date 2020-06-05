@@ -9,10 +9,12 @@ import java.io.IOException;
 import java.sql.Blob;
 
 public class XMLHandler {
-    public static void main(String[] args)
+    public static String[] exportData;
+
+    public XMLHandler(String path)
     {
         //  Read the XML document
-        Document document = ImportXMLFromFile("C:/Users/Ethan/IdeaProjects/CAB302-Assignment1/billboards/10.xml");
+        Document document = ImportXMLFromFile(path);
         if (ValidateDoc(document))
         {
             //  Split the file into its constituent parts
@@ -47,13 +49,11 @@ public class XMLHandler {
 
     /**
      * Imports an XML file and stores it in memory as a document tree to be used by other XMLHandler methods.
-     * @param directoryOfXML Directory of the input file.
+     * @param path Directory of the input file.
      * @return A document tree of type Document.
      */
-    public static Document ImportXMLFromFile(String directoryOfXML)
+    public static Document ImportXMLFromFile(String path)
     {
-        //  Read the file into memory
-        File input = new File(directoryOfXML);
         //  Document builder factory api used to parse xml tags
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 
@@ -67,7 +67,7 @@ public class XMLHandler {
 
         Document document = null;
         try {
-            document = documentBuilder.parse(directoryOfXML);
+            document = documentBuilder.parse(path);
         } catch (SAXException e) {
             System.err.println("2Invalid XML format or structure.");
             e.printStackTrace();
@@ -100,9 +100,9 @@ public class XMLHandler {
      * 4 - informationColour
      * 5 - pictureData
      */
-    public static String[] ParseXMLData(Node node)
+    public static void ParseXMLData(Node node)
     {
-        String[] exportData = new String[6];
+        exportData = new String[6];
 
         //  billboard colour
         try {
@@ -176,7 +176,6 @@ public class XMLHandler {
                 }
             }
         }
-        return exportData;
     }   //  end ParseXMLData()
 
 

@@ -2,7 +2,6 @@ import javax.sql.rowset.serial.SerialBlob;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
@@ -12,13 +11,9 @@ import java.io.*;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import java.io.File;
-import java.sql.Array;
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BooleanSupplier;
 /* Main screen */
 /**
  * Worked on designing GUI() screen.
@@ -96,6 +91,31 @@ public class GUI extends Component {
         JMenuItem colorYellow = new JMenuItem("Yellow");
         JMenuItem colorBlue = new JMenuItem("Blue");
         JMenuItem colorRed = new JMenuItem("Red");
+
+        //  IMPORTING XML FROM FILE
+        importMenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                XMLHandler xmlHandler;
+                JFileChooser file = new JFileChooser();
+                file.setCurrentDirectory(null);
+                file.setFileFilter(new FileNameExtensionFilter("xml files (*.xml)", "xml"));
+                int result = file.showSaveDialog(null);
+                if(result == JFileChooser.APPROVE_OPTION)
+                {
+                    try{
+                        File selectedFile = file.getSelectedFile();
+                        String path = selectedFile.getAbsolutePath();
+                        xmlHandler = new XMLHandler(path);
+                        SelectBillboard.BillboardAddWindow(SelectBillboard.frame, xmlHandler.exportData, 1);
+                    } catch (Exception ex) { JOptionPane.showMessageDialog(frame, ex); }
+                }
+            }
+        });
+
+
+
+
 
         fileMenu.add(importMenu);
         fileMenu.add(exportMenu);

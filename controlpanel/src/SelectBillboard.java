@@ -1,7 +1,6 @@
 import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.swing.*;
-import javax.swing.colorchooser.AbstractColorChooserPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -14,7 +13,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Blob;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -28,6 +26,9 @@ public class SelectBillboard {
     private static Color Background;
     private static Color Description;
     private static Color Title;
+
+    public static JButton BAdd;
+    public static JFrame frame;
 
     static Blob imageBlob = null;
 
@@ -52,7 +53,7 @@ public class SelectBillboard {
     public static void showSelectionScreen() {
 
         String token = "";
-        JFrame frame = new JFrame("Control Panel");
+        frame = new JFrame("Control Panel");
         int FRAME_WIDTH = 1000;
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -89,14 +90,13 @@ public class SelectBillboard {
 
         JPanel buttonPanel = new JPanel();
 
-        //TODO "Add Billboard" Button
         JButton BView = new JButton("View");
 
         JButton BEdit = new JButton("Edit");
 
         JButton BDelete = new JButton("Delete");
 
-        JButton BAdd = new JButton("Add");
+        BAdd = new JButton("Add");
 
         buttonPanel.add(BView);
         buttonPanel.add(BEdit);
@@ -407,178 +407,15 @@ public class SelectBillboard {
             }
         });
 
+
+
+
         BAdd.addActionListener(new ActionListener() {
-
             @Override
-            public void actionPerformed(ActionEvent e) {
-
-                Color defaultColour = new Color(Color.BLACK.getRGB());
-
-                Background = defaultColour;
-                Description = defaultColour;
-                Title = defaultColour;
-
-                JFrame confirmFrame = new JFrame("Add Billboard");
-                confirmFrame.setDefaultCloseOperation(confirmFrame.EXIT_ON_CLOSE);
-                confirmFrame.setBounds(100, 100, 500, 400);
-                confirmFrame.setResizable(false);
-                JPanel contentPane = new JPanel();
-                confirmFrame.setContentPane(contentPane);
-                contentPane.setLayout(null);
-
-                JLabel createUserLabel = new JLabel("Add Billboard...");
-                Font font = createUserLabel.getFont();
-                Map attributes = font.getAttributes();
-                attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-                createUserLabel.setFont(font.deriveFont(attributes));
-                createUserLabel.setBounds(50, 20, 120, 40);
-                contentPane.add(createUserLabel);
-
-                JColorChooser ColorPanel = new JColorChooser(defaultColour);
-
-                final int st = 35; //starting point
-                final int sp = 35; //spacing
-                final int x2 = 300; //second x
-
-                JLabel BBNameLabel = new JLabel("Billboard Name:");
-                BBNameLabel.setBounds(50, st, 193, 52);
-                contentPane.add(BBNameLabel);
-
-                JTextField BBNameField = new JTextField();
-                BBNameField.setBounds(50, st+sp, 200, 20);
-                contentPane.add(BBNameField);
-                BBNameField.setColumns(10);
-
-                JLabel BBBackLabel = new JLabel("Background Colour:");
-                BBBackLabel.setBounds(x2, st, 193, 52);
-                contentPane.add(BBBackLabel);
-
-                JButton BBBackField = new JButton();
-                BBBackField.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        Background = ColorPanel.showDialog(BBBackField, "Select Background Colour", defaultColour);
-                    }
-                });
-                BBBackField.setBounds(x2, st+sp, 110, 20);
-                contentPane.add(BBBackField);
-
-                JLabel BBTitleLabel = new JLabel("Billboard Title:");
-                BBTitleLabel.setBounds(50, st+sp*2, 193, 52);
-                contentPane.add(BBTitleLabel);
-
-                JTextField BBTitleField = new JTextField();
-                BBTitleField.setBounds(50, st+sp*3, 200, 20);
-                contentPane.add(BBTitleField);
-                BBTitleField.setColumns(10);
-
-                JLabel BBTitleColLabel = new JLabel("Title Colour:");
-                BBTitleColLabel.setBounds(x2, st+sp*2, 193, 52);
-                contentPane.add(BBTitleColLabel);
-
-                JButton BBTitleColField = new JButton();
-                BBTitleColField.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-
-                        Title = ColorPanel.showDialog(BBTitleColField, "Select Title Colour", defaultColour);
-                    }
-                });
-                BBTitleColField.setBounds(x2, st+sp*3, 110, 20);
-                contentPane.add(BBTitleColField);
-
-                JLabel BBDescLabel = new JLabel("Description:");
-                BBDescLabel.setBounds(50, st+sp*4, 193, 52);
-                contentPane.add(BBDescLabel);
-
-                JTextField BBDescField = new JTextField();
-                BBDescField.setBounds(50, st+sp*5, 200, 20);
-                contentPane.add(BBDescField);
-                BBDescField.setColumns(10);
-
-                JLabel BBDescColLabel = new JLabel("Description Colour:");
-                BBDescColLabel.setBounds(x2, st+sp*4, 193, 52);
-                contentPane.add(BBDescColLabel);
-
-                JButton BBDescColField = new JButton();
-                BBDescColField.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        Description = ColorPanel.showDialog(BBDescColField, "Select Description Colour", defaultColour);
-                    }
-                });
-                BBDescColField.setBounds(x2, st+sp*5, 110, 20);
-                contentPane.add(BBDescColField);
-
-                JLabel BBPicLabel = new JLabel("Picture:");
-                BBPicLabel.setBounds(50, st+sp*6, 193, 52);
-                contentPane.add(BBPicLabel);
-
-                JButton BBPicField = new JButton();
-                BBPicField.setBounds(50, st+sp*7, 200, 20);
-                contentPane.add(BBPicField);
-
-                BBPicField.addActionListener(new ActionListener() {
-
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        JFileChooser file = new JFileChooser();
-                        file.setCurrentDirectory(new File("."));
-                        String[] extensions = ImageIO.getReaderFileSuffixes();
-                        file.setFileFilter(new FileNameExtensionFilter("Image files", extensions));
-                        int result = file.showSaveDialog(null);
-                        if(result == JFileChooser.APPROVE_OPTION)
-                        {
-                            try{
-                                File selectedFile = file.getSelectedFile();
-                                String path = selectedFile.getAbsolutePath();
-                                imageBlob = ReadImage(selectedFile);
-
-                            } catch (Exception ex) { JOptionPane.showMessageDialog(frame, ex); }
-                        }
-                    }
-                });
-
-                JButton confirmButton = new JButton("Confirm");
-                confirmButton.setBounds(50, st+sp*8, 100, 30);
-                contentPane.add(confirmButton);
-                confirmButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
-                confirmButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        String hexBackground = Integer.toHexString(Background.getRGB() & 0xFFFFFF);
-                        while (hexBackground.length() < 6) {
-                            hexBackground = "0" + hexBackground;
-                        }
-                        String hexTitle = Integer.toHexString(Title.getRGB() & 0xFFFFFF);
-                        while (hexTitle.length() < 6) {
-                            hexTitle = "0" + hexTitle;
-                        }
-                        String hexDescription = Integer.toHexString(Description.getRGB() & 0xFFFFFF);
-                        while (hexDescription.length() < 6) {
-                            hexDescription = "0" + hexDescription;
-                        }
-                        try {
-                            ClientRequests.CreateEditBillboard(BBNameField.getText(), BBTitleField.getText(), BBDescField.getText(), imageBlob, hexBackground, hexTitle, hexDescription, username);
-                            System.out.println(hexBackground + "\n" + hexDescription + "\n" + hexTitle);
-                            JOptionPane.showMessageDialog(frame,"Billboard Created!");
-                            frame.setVisible(false);
-                            frame.dispose();
-                            confirmFrame.setVisible(false);
-                            confirmFrame.dispose();
-                            showSelectionScreen();
-                        } catch (IOException | ClassNotFoundException error){
-                            JOptionPane.showMessageDialog(frame,error.getMessage());
-                            }
-                        }
-                });
-                //  Screen set up
-                confirmFrame.setDefaultCloseOperation(confirmFrame.HIDE_ON_CLOSE);
-                confirmFrame.setTitle("Billboard Create");
-                confirmFrame.setVisible(true);
-                confirmFrame.setSize(700, 500);
-                confirmFrame.setResizable(false);
+            public void actionPerformed(ActionEvent e)
+            {
+                String[] exportData = new String[6];
+                BillboardAddWindow(frame, exportData, 0);
             }
         });
         frame.getContentPane().add(BorderLayout.SOUTH, buttonPanel);
@@ -586,5 +423,187 @@ public class SelectBillboard {
         frame.getContentPane().add(BorderLayout.EAST, labelPanel);
         frame.setSize(1000, 700);
         frame.setVisible(true);
+    }
+
+    public static void BillboardAddWindow(JFrame frame, String[] exportData, Integer menuOption) {
+        Color defaultColour = new Color(Color.BLACK.getRGB());
+
+        Background = defaultColour;
+        Description = defaultColour;
+        Title = defaultColour;
+
+        JFrame confirmFrame = new JFrame("Add Billboard");
+        confirmFrame.setDefaultCloseOperation(confirmFrame.EXIT_ON_CLOSE);
+        confirmFrame.setBounds(100, 100, 500, 400);
+        confirmFrame.setResizable(false);
+        JPanel contentPane = new JPanel();
+        confirmFrame.setContentPane(contentPane);
+        contentPane.setLayout(null);
+
+        JLabel createUserLabel = new JLabel("Add Billboard...");
+        Font font = createUserLabel.getFont();
+        Map attributes = font.getAttributes();
+        attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        createUserLabel.setFont(font.deriveFont(attributes));
+        createUserLabel.setBounds(50, 20, 120, 40);
+        contentPane.add(createUserLabel);
+
+        JColorChooser ColorPanel = new JColorChooser(defaultColour);
+
+        final int st = 35; //starting point
+        final int sp = 35; //spacing
+        final int x2 = 300; //second x
+
+
+
+
+
+
+        JLabel BBNameLabel = new JLabel("Billboard Name:");
+        BBNameLabel.setBounds(50, st, 193, 52);
+        contentPane.add(BBNameLabel);
+
+        JTextField BBNameField = new JTextField();
+        BBNameField.setBounds(50, st+sp, 200, 20);
+        contentPane.add(BBNameField);
+        BBNameField.setColumns(10);
+
+        JLabel BBBackLabel = new JLabel("Background Colour:");
+        BBBackLabel.setBounds(x2, st, 193, 52);
+        contentPane.add(BBBackLabel);
+
+        JButton BBBackField = new JButton();
+        BBBackField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Background = ColorPanel.showDialog(BBBackField, "Select Background Colour", defaultColour);
+            }
+        });
+        BBBackField.setBounds(x2, st+sp, 110, 20);
+        contentPane.add(BBBackField);
+
+        JLabel BBTitleLabel = new JLabel("Billboard Title:");
+        BBTitleLabel.setBounds(50, st+sp*2, 193, 52);
+        contentPane.add(BBTitleLabel);
+
+        JTextField BBTitleField = new JTextField(exportData[1]);
+        BBTitleField.setBounds(50, st+sp*3, 200, 20);
+        contentPane.add(BBTitleField);
+        BBTitleField.setColumns(10);
+
+        JLabel BBTitleColLabel = new JLabel("Title Colour:");
+        BBTitleColLabel.setBounds(x2, st+sp*2, 193, 52);
+        contentPane.add(BBTitleColLabel);
+
+        JButton BBTitleColField = new JButton();
+        BBTitleColField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                Title = ColorPanel.showDialog(BBTitleColField, "Select Title Colour", defaultColour);
+            }
+        });
+        BBTitleColField.setBounds(x2, st+sp*3, 110, 20);
+        contentPane.add(BBTitleColField);
+
+        JLabel BBDescLabel = new JLabel("Description:");
+        BBDescLabel.setBounds(50, st+sp*4, 193, 52);
+        contentPane.add(BBDescLabel);
+
+        JTextField BBDescField = new JTextField(exportData[3]);
+        BBDescField.setBounds(50, st+sp*5, 200, 20);
+        contentPane.add(BBDescField);
+        BBDescField.setColumns(10);
+
+        JLabel BBDescColLabel = new JLabel("Description Colour:");
+        BBDescColLabel.setBounds(x2, st+sp*4, 193, 52);
+        contentPane.add(BBDescColLabel);
+
+        JButton BBDescColField = new JButton();
+        BBDescColField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Description = ColorPanel.showDialog(BBDescColField, "Select Description Colour", defaultColour);
+            }
+        });
+        BBDescColField.setBounds(x2, st+sp*5, 110, 20);
+        contentPane.add(BBDescColField);
+
+        JLabel BBPicLabel = new JLabel("Picture:");
+        BBPicLabel.setBounds(50, st+sp*6, 193, 52);
+        contentPane.add(BBPicLabel);
+
+        JButton BBPicField = new JButton();
+        BBPicField.setBounds(50, st+sp*7, 200, 20);
+        contentPane.add(BBPicField);
+
+        BBPicField.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser file = new JFileChooser();
+                file.setCurrentDirectory(new File("."));
+                String[] extensions = ImageIO.getReaderFileSuffixes();
+                file.setFileFilter(new FileNameExtensionFilter("Image files", extensions));
+                int result = file.showSaveDialog(null);
+                if(result == JFileChooser.APPROVE_OPTION)
+                {
+                    try{
+                        if (menuOption==0) {
+                            File selectedFile = file.getSelectedFile();
+                            String path = selectedFile.getAbsolutePath();
+                            imageBlob = ReadImage(selectedFile);
+                        }
+                        else if (menuOption == 1)
+                        {
+                            // TODO convert string to blob
+                            //  imageBlob = (Blob) exportData[5];
+                        }
+
+                    } catch (Exception ex) { JOptionPane.showMessageDialog(frame, ex); }
+                }
+            }
+        });
+
+        JButton confirmButton = new JButton("Confirm");
+        confirmButton.setBounds(50, st+sp*8, 100, 30);
+        contentPane.add(confirmButton);
+        confirmButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        confirmButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String hexBackground = Integer.toHexString(Background.getRGB() & 0xFFFFFF);
+                while (hexBackground.length() < 6) {
+                    hexBackground = "0" + hexBackground;
+                }
+                String hexTitle = Integer.toHexString(Title.getRGB() & 0xFFFFFF);
+                while (hexTitle.length() < 6) {
+                    hexTitle = "0" + hexTitle;
+                }
+                String hexDescription = Integer.toHexString(Description.getRGB() & 0xFFFFFF);
+                while (hexDescription.length() < 6) {
+                    hexDescription = "0" + hexDescription;
+                }
+                try {
+                    ClientRequests.CreateEditBillboard(BBNameField.getText(), BBTitleField.getText(), BBDescField.getText(), imageBlob, hexBackground, hexTitle, hexDescription, username);
+                    System.out.println(hexBackground + "\n" + hexDescription + "\n" + hexTitle);
+                    JOptionPane.showMessageDialog(frame,"Billboard Created!");
+                    frame.setVisible(false);
+                    frame.dispose();
+                    confirmFrame.setVisible(false);
+                    confirmFrame.dispose();
+                    showSelectionScreen();
+                } catch (IOException | ClassNotFoundException error){
+                    JOptionPane.showMessageDialog(frame,error.getMessage());
+                    }
+                }
+        });
+        //  Screen set up
+        confirmFrame.setDefaultCloseOperation(confirmFrame.HIDE_ON_CLOSE);
+        confirmFrame.setTitle("Billboard Create");
+        confirmFrame.setVisible(true);
+        confirmFrame.setSize(700, 500);
+        confirmFrame.setResizable(false);
     }
 }
