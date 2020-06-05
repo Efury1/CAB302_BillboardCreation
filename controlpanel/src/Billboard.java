@@ -249,5 +249,19 @@ public class Billboard {
             setBMessageColour(billboardData[4].toString());         //Title Colour
             setBDescriptionColour(billboardData[5].toString());     //Description colour
         }
+
+        Boolean scheduled = false;
+        Object[] scheduleData = new Object[0];
+        try {
+            scheduleData = ClientRequests.ViewSchedule();
+        } catch (IOException | ClassNotFoundException e){
+            //do nothing
+        }
+        for(int i = 0; i < scheduleData.length; i+=9){
+            if(getBName().equals(scheduleData[i])){
+                scheduled = true;
+            }
+        }
+        setScheduled(scheduled);
     }
 }
