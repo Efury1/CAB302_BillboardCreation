@@ -13,6 +13,7 @@ import java.sql.SQLException;
  * Handles displaying the billboards.
  */
 public class ViewBillboard {
+    public static JFrame frame;
     /**
      * Given a billboard, chooses which function should be called to display it and calls this function
      * @param b billboard to be displayed
@@ -66,11 +67,11 @@ public class ViewBillboard {
      * @param messageText Text of message to be displayed on billboard
      */
     public static void Message(String messageText, String messageColour, String backgroundColour){
-        JFrame frame1 = new JFrame("View Billboard");
-        frame1.setSize(1000, 700);
-        frame1.setForeground(ConvertToRGB(backgroundColour));
+        frame = new JFrame("View Billboard");
+        frame.setSize(1000, 700);
+        frame.setForeground(ConvertToRGB(backgroundColour));
 
-        Dimension messageDim = frame1.getSize();
+        Dimension messageDim = frame.getSize();
         double w = messageDim.width;
 
         JPanel messagePanel = new JPanel();
@@ -96,11 +97,11 @@ public class ViewBillboard {
         message.setFont(new Font("Serif", Font.PLAIN, messageSize - 2));
         messageWidth = message.getFontMetrics(message.getFont()).stringWidth(messageText);
 
-        frame1.add(messagePanel);
+        frame.add(messagePanel);
 
-        frame1.pack();
-        frame1.setSize(1000, 700);
-        frame1.setVisible(true);
+        frame.pack();
+        frame.setSize(1000, 700);
+        frame.setVisible(true);
     }
 
     /**
@@ -108,14 +109,14 @@ public class ViewBillboard {
      * @param rawInfoText Text of information to be displayed on billboard
      */
     public static void Info(String rawInfoText, String infoColour, String backgroundColour){
-        JFrame frame1 = new JFrame("View Billboard");
-        frame1.setSize(1000, 700);
-        frame1.setForeground(ConvertToRGB(backgroundColour));
+        frame = new JFrame("View Billboard");
+        frame.setSize(1000, 700);
+        frame.setForeground(ConvertToRGB(backgroundColour));
 
         //Wraps in HTML tags so can span multiple lines
         String infoText = "<html>"+ rawInfoText+"</html>";
 
-        Dimension infoDim = frame1.getSize();
+        Dimension infoDim = frame.getSize();
         double w = infoDim.width;
 
         JPanel infoPanel = new JPanel();
@@ -141,11 +142,11 @@ public class ViewBillboard {
         info.setFont(new Font("Serif", Font.PLAIN, infoSize - 2));
         infoWidth = info.getFontMetrics(info.getFont()).stringWidth(infoText);
 
-        frame1.add(infoPanel);
+        frame.add(infoPanel);
 
-        frame1.pack();
-        frame1.setSize(1000, 700);
-        frame1.setVisible(true);
+        frame.pack();
+        frame.setSize(1000, 700);
+        frame.setVisible(true);
     }
 
     /**
@@ -154,7 +155,7 @@ public class ViewBillboard {
      * @param infoText Text of information to be displayed on billboard
      */
     public static void MessageAndInfo(String messageText, String infoText, String messageColour, String infoColour, String backgroundColour){
-        JFrame frame = new JFrame("View Billboard");
+        frame = new JFrame("View Billboard");
         frame.setSize(1000, 700);
         frame.setForeground(ConvertToRGB(backgroundColour));
 
@@ -202,12 +203,14 @@ public class ViewBillboard {
         frame.pack();
         frame.setSize(1000, 700);
         frame.setVisible(true);
-
-
     }
 
     private static Color ConvertToRGB(String hexColour) {
         return new Color(Integer.valueOf(hexColour.substring(0, 2), 16), Integer.valueOf(hexColour.substring(2, 4), 16), Integer.valueOf(hexColour.substring(4, 6), 16));
+    }
+
+    public static void CloseBillboard(){
+
     }
 
     /**
@@ -219,7 +222,7 @@ public class ViewBillboard {
      */
 
     public static void MessageImageInfo(String messageText, Blob imageString, String infoText, String messageColour, String infoColour, String backgroundColour) throws IOException, SQLException {
-        JFrame frame = new JFrame("View Billboard");
+        frame = new JFrame("View Billboard");
         frame.setSize(1000, 700);
         Container c = frame.getContentPane();
         c.setBackground(ConvertToRGB(backgroundColour));
@@ -275,7 +278,7 @@ public class ViewBillboard {
      * @throws IOException
      */
     public static void MessageAndImage(String messageText, Blob imageString, String messageColour, String backgroundColour) throws IOException, SQLException {
-        JFrame frame = new JFrame("View Billboard");
+        frame = new JFrame("View Billboard");
         frame.setForeground(ConvertToRGB(backgroundColour));
         frame.setLayout(new GridBagLayout());
         frame.setSize(1000, 700);
@@ -356,12 +359,12 @@ public class ViewBillboard {
      * @throws IOException
      */
     public static void Image(Blob imageLink, String backgroundColour) throws IOException, SQLException {
-        JFrame frame1 = new JFrame("View Billboard");
-        frame1.setSize(1000, 700);
-        frame1.setForeground(ConvertToRGB(backgroundColour));
+        frame = new JFrame("View Billboard");
+        frame.setSize(1000, 700);
+        frame.setForeground(ConvertToRGB(backgroundColour));
 
 
-        Dimension imageDim = frame1.getSize();
+        Dimension imageDim = frame.getSize();
         double w = imageDim.width;
 
         JPanel imagePanel = new JPanel();
@@ -381,11 +384,11 @@ public class ViewBillboard {
 
         imagePanel.add(image);
 
-        frame1.add(imagePanel);
+        frame.add(imagePanel);
 
-        frame1.pack();
-        frame1.setSize(1000, 700);
-        frame1.setVisible(true);
+        frame.pack();
+        frame.setSize(1000, 700);
+        frame.setVisible(true);
     }
 
     /**
@@ -409,7 +412,7 @@ public class ViewBillboard {
      * @throws IOException
      */
     public static void ImageAndInfo(Blob imageString, String infoText, String infoColour, String backgroundColour) throws IOException, SQLException {
-        JFrame frame = new JFrame("View Billboard");
+        frame = new JFrame("View Billboard");
         frame.setSize(1000, 700);
         frame.setForeground(ConvertToRGB(backgroundColour));
 
