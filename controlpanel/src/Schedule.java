@@ -24,7 +24,6 @@ class Schedule {
     private static Integer repeatFreq = 0;
 
     public Schedule() {
-
         JFrame scheduleFrame;
         JPanel daysPanel, buttonsPanel, eventsPanel, timesPanel;
         JTextArea events;
@@ -39,9 +38,6 @@ class Schedule {
         //JPanels
         daysPanel = new JPanel();
         daysPanel.setLayout(new BorderLayout());
-        //daysPanel.setBounds(0, 0, 50, 50);
-
-        eventsPanel = new JPanel();
 
         JPanel days = new JPanel(new GridLayout(0, 7, 0, 0));
         days.add(new JLabel("   ", SwingConstants.CENTER));
@@ -51,8 +47,6 @@ class Schedule {
         days.add(new JLabel("Thur", SwingConstants.CENTER));
         days.add(new JLabel("Fri", SwingConstants.CENTER));
         days.add(new JLabel("   ", SwingConstants.CENTER));
-        //btn.add(new JLabel("Sat"));
-        //btn.add(new JLabel("Sun"));
         daysPanel.add(days, BorderLayout.PAGE_START);
 
         timesPanel = new JPanel();
