@@ -49,24 +49,9 @@ public class BillboardViewer {
 
             System.out.println("Checking for a new billboard to display...");
 
-            //TODO delete this paragraph of code below (hardcodes date)
-            SimpleDateFormat sdf2 = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
-            String dateInString = "04-06-2020 11:32:56";
-            try {
-                date = sdf2.parse(dateInString);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            calendar.setTime(date);
+            calendar = Calendar.getInstance();
             timeToCheck = Calendar.getInstance();
-            timeToCheck.setTime(date);
             timeToCheck2 = Calendar.getInstance();
-            timeToCheck2.setTime(date);
-
-            //TODO uncomment after deleting the above
-//            calendar = Calendar.getInstance();
-//            timeToCheck = Calendar.getInstance();
-//            timeToCheck2 = Calendar.getInstance();
 
             //Get the new schedule data
             Object[] scheduleData = new Object[]{};

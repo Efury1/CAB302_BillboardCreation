@@ -89,7 +89,6 @@ public class SelectBillboard {
 
         JPanel buttonPanel = new JPanel();
 
-        //TODO "Add Billboard" Button
         JButton BView = new JButton("View");
 
         JButton BEdit = new JButton("Edit");
@@ -229,8 +228,9 @@ public class SelectBillboard {
                     return;
                 }
                 Color defaultColour = new Color(Color.BLACK.getRGB());
+                Color defaultBackgroundColour = new Color(Color.WHITE.getRGB());
 
-                Background = defaultColour;
+                Background = defaultBackgroundColour;
                 Description = defaultColour;
                 Title = defaultColour;
 
@@ -270,7 +270,7 @@ public class SelectBillboard {
                 BBBackLabel.setBounds(x2, st, 193, 52);
                 contentPane.add(BBBackLabel);
 
-                JButton BBBackField = new JButton();//TODO FIELD//
+                JButton BBBackField = new JButton();
                 BBBackField.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -372,6 +372,10 @@ public class SelectBillboard {
                 confirmButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        if(BBDescField.getText().trim() == "" && BBTitleField.getText().trim() == "" && imageBlob == null){
+                            JOptionPane.showMessageDialog(frame,"Please include at least one attribute");
+                            return;
+                        }
                         String hexBackground = Integer.toHexString(Background.getRGB() & 0xFFFFFF);
                         while (hexBackground.length() < 6) {
                             hexBackground = "0" + hexBackground;
@@ -547,6 +551,14 @@ public class SelectBillboard {
                 confirmButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        if(BBNameField.getText().trim().equals("")){
+                            JOptionPane.showMessageDialog(frame,"Billboard must have a name");
+                            return;
+                        }
+                         else if(BBDescField.getText().trim().equals("") && BBTitleField.getText().trim().equals("") && imageBlob == null){
+                            JOptionPane.showMessageDialog(frame,"Please include at least one attribute");
+                            return;
+                        }
                         String hexBackground = Integer.toHexString(Background.getRGB() & 0xFFFFFF);
                         while (hexBackground.length() < 6) {
                             hexBackground = "0" + hexBackground;
