@@ -53,17 +53,16 @@ public class GUI extends Component {
 
         //Create the frame elements
         JFrame frame = new JFrame("Control Panel Review");
-        frame.setBounds(30, 30, 1000, 800);
+        frame.setBounds(30, 30, 700, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel panel = new JPanel();
         JPanel panel1 = new JPanel();
 
         JPanel infoPanel = new JPanel();
-        JLabel info = new JLabel(" ");
-        jt = new JTextArea(80, 20);
+
+        jt = new JTextArea("Notes: ", 80, 20);
         infoPanel.add(jt);
 
-        JButton submitButton = new JButton("Submit");
 
         //Try to get the user's permissions, if they couldn't be retrieved, exit the GUI and prompt for login
         if (!GetUserPerms()) {
@@ -73,7 +72,6 @@ public class GUI extends Component {
         }
 
         //Add the rest of the GUI elements
-        JMenu bkMenu = new JMenu("Background");
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
         JMenu editMenu = new JMenu("Edit");
@@ -91,56 +89,37 @@ public class GUI extends Component {
         /*Under file */
         JMenuItem importMenu = new JMenuItem("Import");
         JMenuItem exportMenu = new JMenuItem("Export");
-        JMenuItem saveAndSchedule = new JMenuItem("Schedule and Save");
-
-        JMenuItem colorYellow = new JMenuItem("Yellow");
-        JMenuItem colorBlue = new JMenuItem("Blue");
-        JMenuItem colorRed = new JMenuItem("Red");
 
         fileMenu.add(importMenu);
         fileMenu.add(exportMenu);
-        fileMenu.add(saveAndSchedule);
+
+        importMenu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame popup = new JFrame();
+                popup.setVisible(true);
+                popup.setSize(200, 200);
+
+                JLabel test3 = new JLabel();
+                test3.setBounds(50, 30, 100, 50);
+
+                JTextField test2 = new JTextField();
+                test2.setBounds(50, 100, 100, 25);
+
+                popup.add(test2);
+                popup.add(test3);
+            }
+        });
+
 
         scheduleBillboards.setEnabled(permSchedule);
 
-        bkMenu.add(colorYellow);
-        bkMenu.add(colorBlue);
-        bkMenu.add(colorRed);
-
         /*Under edit */
-        JMenuItem menuImageLoad = new JMenuItem("Upload Image");
         JMenuItem editUserPermission = new JMenuItem("Edit Users");
         JMenuItem changePassMenu = new JMenuItem("Change Password");
         editUserPermission.setEnabled(permUsers);
         editMenu.add(editUserPermission);
         editMenu.add(changePassMenu);
-        editMenu.add(menuImageLoad);
-        editMenu.add(bkMenu);
-
-        /* Random testing stuff */
-        JLabel resultLabel = new JLabel(" ");
-        JLabel label = new JLabel("Type message and press enter");
-        JTextField tf = new JTextField(10); // accepts up to 10 characters
-        JLabel label1 = new JLabel("Type information");
-        //To button b where I want it.
-        JLabel spacer = new JLabel("                                                                                             ");
-        JLabel imagel = new JLabel(" ");
-        panel.add(label); // Components Added using Flow Layout
-        panel.add(tf);
-        panel.add(imagel);
-        //panel.add(color);
-        JRadioButton r1 = new JRadioButton("Yellow");
-        JRadioButton r2 = new JRadioButton("Blue");
-        JRadioButton r3 = new JRadioButton("Red");
-        panel.add(r1);
-        panel.add(r2);
-        panel.add(r3);
-        panel.add(spacer);
-        panel.add(submitButton);
-        panel1.add(resultLabel);
-        panel1.add(info);
-
-
 
         /* actionPerformed */
         /**
@@ -156,47 +135,12 @@ public class GUI extends Component {
             }
         });
 
-        //Upload an image
-        menuImageLoad.addActionListener(e -> {
-            //selectFile();
-
-                JFileChooser file = new JFileChooser();
-                file.setCurrentDirectory(new File("."));
-                String[] extensions = ImageIO.getReaderFileSuffixes();
-                file.setFileFilter(new FileNameExtensionFilter("Image files", extensions));
-                int result = file.showSaveDialog(null);
-                if(result == JFileChooser.APPROVE_OPTION)
-                {
-                    try{
-                        File selectedFile = file.getSelectedFile();
-                        String path = selectedFile.getAbsolutePath();
-                        Blob imageBlob = ReadImage(selectedFile);
-
-                        ImageIcon icon = ConvertToImageIcon(imageBlob);
-                        imagel.setIcon(icon);
-
-                    } catch (Exception ex) { JOptionPane.showMessageDialog(this, ex); }
-                }
-        });
-
-
-
         editUserPermission.addActionListener(e -> {
             editUsers();
         });
 
         changePassMenu.addActionListener(e -> {
             ChangePassword(username);
-        });
-
-        saveAndSchedule.addActionListener(e -> {
-            ScheduleModel cal = new ScheduleModel();
-            this.setSize(700, 400);
-            this.setVisible(true);
-
-            //Schedule session1 = new Schedule();
-            //SaveSchedule session2 = new SaveSchedule();
-            //session1.setVisible(true);
         });
 
         menuLogout.addMenuListener(new MenuListener() {
@@ -224,54 +168,6 @@ public class GUI extends Component {
             }
         });
 
-
-
-        String testing = tf.getText();
-        tf.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                String text = tf.getText();
-                resultLabel.setText(text);
-
-            }
-        });
-
-
-
-        class Listener extends JPanel implements ActionListener {
-            public void actionPerformed(ActionEvent event) {
-                Color color = null;
-                if (event.getSource() == colorYellow) {
-                    color = Color.YELLOW;
-                    colorYellow.setBackground(color);
-                    panel1.setBackground(color);
-                } else if (event.getSource() == colorBlue) {
-                    color = Color.BLUE;
-                    colorBlue.setBackground(color);
-                    panel1.setBackground(color);
-                } else if (event.getSource() == colorRed) {
-                    color = Color.RED;
-                    colorRed.setBackground(color);
-                    panel1.setBackground(color);
-                }
-                setBackground(color);
-                repaint();
-            }
-        }
-
-        submitButton.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                String s = e.getActionCommand();
-                if(s.equals("Submit")) {
-                    info.setText(jt.getText());
-                }
-                //SelectBillboard session1 = new SelectBillboard();
-                //session1.showSelectionScreen();
-            }
-        });
-
         //View Billboards
         viewBillboards.addActionListener(new ActionListener()
         {
@@ -281,10 +177,6 @@ public class GUI extends Component {
                 billboardSelector.showSelectionScreen();
             }
         });
-
-        colorYellow.addActionListener(new Listener());
-        colorBlue.addActionListener(new Listener());
-        colorBlue.addActionListener(new Listener());
 
 
         //Adding Components to the frame.
