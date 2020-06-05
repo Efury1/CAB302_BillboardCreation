@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.text.View;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.sql.SQLException;
@@ -123,13 +124,16 @@ public class BillboardViewer {
                     }
                 }
             }
-            if(candidateBoardName == "" || candidateBoardOwner == ""){
+            if(candidateBoardName == "" || candidateBoardOwner == ""){ //If no valid billboard was scheduled at this time, show the default
                 ShowDefaultBB();
             } else {
-                Billboard billboardToShow = new Billboard(candidateBoardName, candidateBoardOwner);
+                Billboard billboardToShow = new Billboard(candidateBoardName, candidateBoardOwner); //Create and get the info of the board to display
                 try {
-                    billboardToShow.importAllInfo();
+                    billboardToShow.importAllInfo(); //Get the billboards data from the server
                     ViewBillboard.showBillboard(billboardToShow);
+                    ViewBillboard.frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    ViewBillboard.frame.setUndecorated(true);
+                    ViewBillboard.frame.setVisible(true);
                 } catch (IOException | ClassNotFoundException | SQLException e) {
                     ShowDefaultBB();
                 }
@@ -159,6 +163,9 @@ public class BillboardViewer {
         defaultBB.setBMessageColour("0000FF");
         try {
             ViewBillboard.showBillboard(defaultBB);
+            ViewBillboard.frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            ViewBillboard.frame.setUndecorated(true);
+            ViewBillboard.frame.setVisible(true);
         } catch (IOException | SQLException e) {
             System.err.println("Could not display default Billboard: " + e);
         }
