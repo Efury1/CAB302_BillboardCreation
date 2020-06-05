@@ -73,11 +73,11 @@ public class drawingComponent extends JComponent {
                     if(minutesFrom9 >= 0) {
                         while (startDay <= endDay) {
                             //draw a bunch of rectangles
-                            g.fillRect((startDay* cellWidth), minutesFrom9 + textHeight, cellWidth, duration);
+                            g.fillRect(((startDay+1)* cellWidth), minutesFrom9 + textHeight, cellWidth, duration);
                             if(repeats){
                                 scheduleTimer += repeatFrequency;
                                 while(scheduleTimer < 480) {
-                                    g.fillRect((startDay* cellWidth), scheduleTimer + textHeight, cellWidth, duration);
+                                    g.fillRect(((startDay+1)* cellWidth), scheduleTimer + textHeight, cellWidth, duration);
                                     scheduleTimer += repeatFrequency;
                                 }
                             }

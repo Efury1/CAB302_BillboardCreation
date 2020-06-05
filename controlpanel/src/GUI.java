@@ -78,12 +78,14 @@ public class GUI extends Component {
         JMenu fileMenu = new JMenu("File");
         JMenu editMenu = new JMenu("Edit");
         JButton viewBillboards = new JButton("View Billboards");
+        JButton scheduleBillboards = new JButton("Schedule Billboards");
         JMenu menuLogout = new JMenu("Logout");
 
         /*Adding menu */
         menuBar.add(fileMenu);
         menuBar.add(editMenu);
         menuBar.add(viewBillboards);
+        menuBar.add(scheduleBillboards);
         menuBar.add(Box.createHorizontalGlue());
         menuBar.add(menuLogout);
         /*Under file */
@@ -98,6 +100,8 @@ public class GUI extends Component {
         fileMenu.add(importMenu);
         fileMenu.add(exportMenu);
         fileMenu.add(saveAndSchedule);
+
+        scheduleBillboards.setEnabled(permSchedule);
 
         bkMenu.add(colorYellow);
         bkMenu.add(colorBlue);
@@ -144,6 +148,13 @@ public class GUI extends Component {
          * There's also, the ability to go to other frames like View Billboards, schedule etc.
          * @param aEvent from these buttons: 1.Upload Image 2.Edit Users 3.Schedule 4. Typing text etc
          */
+
+        scheduleBillboards.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Schedule schedule = new Schedule();
+            }
+        });
 
         //Upload an image
         menuImageLoad.addActionListener(e -> {
